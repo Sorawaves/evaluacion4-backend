@@ -1,0 +1,102 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Sucursales{% endblock %}
+
+{% block content %}
+<div class="container-fluid" style="padding: 3rem 2rem;">
+    <div class="row mb-4">
+        <div class="col-md-8">
+            <h2 style="font-weight: 300; color: #495057;">Sucursales</h2>
+            <p style="color: #6c757d;">Gestiona las sucursales de {{ user.company.name }}</p>
+        </div>
+        <div class="col-md-4 text-end">
+            <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#addBranchModal">
+                <i class="fas fa-plus"></i> Nueva Sucursal
+            </button>
+        </div>
+    </div>
+
+    <div class="row">
+        {% for branch in branches %}
+        <div class="col-md-6 col-lg-4 mb-4">
+            <div class="card h-100">
+                <div class="card-header">
+                    <h5 style="margin: 0; font-weight: 400;">{{ branch.name }}</h5>
+                </div>
+                <div class="card-body">
+                    <p style="font-size: 0.9rem; color: #6c757d; margin-bottom: 0.5rem;">
+                        <i class="fas fa-map-marker-alt"></i> {{ branch.address }}
+                    </p>
+                    <p style="font-size: 0.9rem; color: #6c757d; margin-bottom: 0.5rem;">
+                        <i class="fas fa-phone"></i> {{ branch.phone }}
+                    </p>
+                    <p style="font-size: 0.9rem; color: #6c757d;">
+                        <i class="fas fa-envelope"></i> {{ branch.email }}
+                    </p>
+                    <hr>
+                    <div class="d-flex justify-content-between align-items-center">
+                        <span class="badge" style="background: {% if branch.is_active %}var(--pastel-mint){% else %}var(--medium-gray){% endif %}; color: #495057;">
+                            {% if branch.is_active %}Activa{% else %}Inactiva{% endif %}
+                        </span>
+                        <small style="color: #6c757d;">Creada: {{ branch.created_at|date:"d/m/Y" }}</small>
+                    </div>
+                </div>
+                <div class="card-footer" style="background: var(--soft-gray);">
+                    <a href="{% url 'inventory' %}?branch={{ branch.id }}" class="btn btn-sm btn-outline-primary">
+                        <i class="fas fa-boxes"></i> Ver Inventario
+                    </a>
+                </div>
+            </div>
+        </div>
+        {% empty %}
+        <div class="col-12">
+            <div class="alert alert-info">
+                <i class="fas fa-info-circle"></i> No hay sucursales registradas. Crea la primera sucursal.
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+</div>
+
+<!-- Modal Agregar Sucursal -->
+<div class="modal fade" id="addBranchModal" tabindex="-1">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Nueva Sucursal</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+            </div>
+            <form method="post">
+                {% csrf_token %}
+                <div class="modal-body">
+                    <div class="mb-3">
+                        <label class="form-label">Nombre de la Sucursal *</label>
+                        <input type="text" name="name" class="form-control" required>
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label">Dirección *</label>
+                        <input type="text" name="address" class="form-control" required>
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label">Teléfono</label>
+                        <input type="tel" name="phone" class="form-control" pattern="[0-9\s\+\-\(\)]+">
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label">Correo</label>
+                        <input type="email" name="email" class="form-control">
+                    </div>
+                    <div class="form-check">
+                        <input type="checkbox" name="is_active" class="form-check-input" id="is_active" checked>
+                        <label class="form-check-label" for="is_active">Sucursal Activa</label>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+                    <button type="submit" class="btn btn-primary">Guardar Sucursal</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+{% endblock %}

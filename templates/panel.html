@@ -1,0 +1,139 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Dashboard{% endblock %}
+
+{% block content %}
+<div class="container-fluid" style="padding: 3rem 2rem;">
+    <!-- Header -->
+    <div class="row mb-5">
+        <div class="col-12">
+            <p style="font-size: 0.85rem; letter-spacing: 2px; text-transform: uppercase; color: #6c757d; margin-bottom: 0.5rem;">Panel de Control</p>
+            <h1 style="font-size: 2rem; font-weight: 300; color: #495057; margin-bottom: 0.5rem;">Dashboard</h1>
+            <p style="color: #6c757d; font-size: 0.95rem;">Bienvenida, {{ user.username }} <span style="color: #adb5bd;">&middot;</span> {{ user.get_role_display }}</p>
+        </div>
+    </div>
+
+    <!-- Stats Cards -->
+    <div class="row g-4 mb-5">
+        {% if user.role == 'SUPER_ADMIN' %}
+            <div class="col-md-3">
+                <div class="stat-card">
+                    <div class="stat-label">Empresas</div>
+                    <div class="stat-value">{{ companies_count|default:0 }}</div>
+                </div>
+            </div>
+            <div class="col-md-3">
+                <div class="stat-card">
+                    <div class="stat-label">Suscripciones Activas</div>
+                    <div class="stat-value">{{ active_subscriptions|default:0 }}</div>
+                </div>
+            </div>
+        {% endif %}
+
+        {% if user.role in 'ADMIN_CLIENTE,GERENTE' %}
+            <div class="col-md-3">
+                <div class="stat-card">
+                    <div class="stat-label">Productos</div>
+                    <div class="stat-value">{{ products_count|default:0 }}</div>
+                </div>
+            </div>
+            <div class="col-md-3">
+                <div class="stat-card">
+                    <div class="stat-label">Sucursales</div>
+                    <div class="stat-value">{{ branches_count|default:0 }}</div>
+                </div>
+            </div>
+            <div class="col-md-3">
+                <div class="stat-card" style="border-color: var(--pastel-peach);">
+                    <div class="stat-label">Stock Bajo</div>
+                    <div class="stat-value" style="color: var(--accent-rose);">{{ low_stock|default:0 }}</div>
+                </div>
+            </div>
+        {% endif %}
+
+        {% if user.role == 'VENDEDOR' %}
+            <div class="col-md-4">
+                <div class="stat-card">
+                    <div class="stat-label">Ventas Hoy</div>
+                    <div class="stat-value">{{ sales_today|default:0 }}</div>
+                </div>
+            </div>
+        {% endif %}
+    </div>
+
+    <!-- Quick Actions -->
+    <div class="row mb-5">
+        <div class="col-12">
+            <div class="card">
+                <div class="card-header">
+                    Acciones Rápidas
+                </div>
+                <div class="card-body">
+                    <div class="row g-3">
+                        {% if user.role in 'ADMIN_CLIENTE,GERENTE,VENDEDOR' %}
+                            <div class="col-md-3">
+                                <a href="{% url 'pos' %}" class="btn btn-primary w-100">Nueva Venta</a>
+                            </div>
+                        {% endif %}
+                        {% if user.role in 'ADMIN_CLIENTE,GERENTE' %}
+                            <div class="col-md-3">
+                                <a href="{% url 'product_catalog' %}" class="btn btn-outline-primary w-100">Ver Productos</a>
+                            </div>
+                            <div class="col-md-3">
+                                <a href="{% url 'inventory' %}" class="btn btn-outline-primary w-100">Ver Inventario</a>
+                            </div>
+                            <div class="col-md-3">
+                                <a href="{% url 'reports' %}" class="btn btn-outline-primary w-100">Reportes</a>
+                            </div>
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Recent Activity -->
+    <div class="row">
+        <div class="col-md-6 mb-4">
+            <div class="card h-100">
+                <div class="card-header">Actividad Reciente</div>
+                <div class="card-body">
+                    <div style="border-left: 2px solid var(--pastel-rose); padding-left: 1.5rem;">
+                        <div style="margin-bottom: 1.5rem;">
+                            <div style="font-size: 0.9rem; color: #495057; margin-bottom: 0.3rem;">Nueva venta registrada</div>
+                            <small style="color: #6c757d;">Hace 5 minutos</small>
+                            <div style="margin-top: 0.3rem;"><span class="badge" style="background: var(--pastel-mint);">$45.990</span></div>
+                        </div>
+                        <div style="margin-bottom: 1.5rem;">
+                            <div style="font-size: 0.9rem; color: #495057; margin-bottom: 0.3rem;">Producto agregado</div>
+                            <small style="color: #6c757d;">Hace 15 minutos</small>
+                        </div>
+                        <div>
+                            <div style="font-size: 0.9rem; color: #495057; margin-bottom: 0.3rem;">Orden enviada</div>
+                            <small style="color: #6c757d;">Hace 1 hora</small>
+                            <div style="margin-top: 0.3rem;"><span class="badge" style="background: var(--pastel-lavender);">#ORD-001</span></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-6 mb-4">
+            <div class="card h-100">
+                <div class="card-header">Notificaciones</div>
+                <div class="card-body">
+                    <div style="padding: 1rem; background: var(--pastel-peach); margin-bottom: 1rem; border-left: 3px solid var(--accent-rose);">
+                        <div style="font-size: 0.9rem; color: #495057; margin-bottom: 0.3rem;">Atención</div>
+                        <div style="font-size: 0.85rem; color: #6c757d;">Hay {{ low_stock|default:5 }} productos con stock bajo. <a href="{% url 'inventory' %}" style="color: var(--accent-rose);">Ver ahora</a></div>
+                    </div>
+                    <div style="padding: 1rem; background: var(--pastel-mint); border-left: 3px solid var(--accent-lavender);">
+                        <div style="font-size: 0.9rem; color: #495057; margin-bottom: 0.3rem;">Suscripción</div>
+                        <div style="font-size: 0.85rem; color: #6c757d;">Tu plan {{ user.company.subscription.plan_name }} está activo.</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

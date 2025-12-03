@@ -1,0 +1,30 @@
+# Django Framework
+Django==4.2.7
+
+# Django REST Framework y extensiones
+djangorestframework==3.14.0
+djangorestframework-simplejwt==5.3.0
+
+# Filtros y búsquedas
+django-filter==23.5
+
+# Documentación API
+drf-yasg==1.21.7
+
+# CORS Headers
+django-cors-headers==4.3.1
+
+# PostgreSQL adapter (para migración futura a AWS RDS)
+psycopg2-binary==2.9.9
+
+# Gunicorn para deployment en AWS
+gunicorn==21.2.0
+
+# Variables de entorno (opcional, recomendado para producción)
+python-decouple==3.8
+
+# Pillow para manejo de imágenes (opcional)
+Pillow==10.1.0
+
+# Whitenoise para servir archivos estáticos (útil para deployment)
+whitenoise==6.6.0

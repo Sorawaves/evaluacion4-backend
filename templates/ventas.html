@@ -1,0 +1,59 @@
+{% extends 'base.html' %}
+{% block title %}Ventas - TemucoSoft POS {% endblock %}
+
+{% block content %}
+<div class="container-fluid py-4">
+    <h1 class="fw-bold mb-4" style="color: #e91e8c;">
+        <i class="fas fa-cash-register"></i> Registro de Ventas
+    </h1>
+
+    <div class="card">
+        <div class="card-header">
+            <div class="row align-items-center">
+                <div class="col">
+                    <h5 class="mb-0">Últimas Ventas POS</h5>
+                </div>
+                <div class="col-auto">
+                    <a href="{% url 'pos' %}" class="btn btn-primary btn-sm">
+                        <i class="fas fa-plus"></i> Nueva Venta
+                    </a>
+                </div>
+            </div>
+        </div>
+        <div class="card-body">
+            <table class="table table-hover">
+                <thead>
+                    <tr>
+                        <th>#ID</th>
+                        <th>Sucursal</th>
+                        <th>Vendedor</th>
+                        <th>Método Pago</th>
+                        <th>Total</th>
+                        <th>Fecha</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for sale in sales %}
+                        <tr>
+                            <td><strong>#{{ sale.id }}</strong></td>
+                            <td>{{ sale.branch.name }}</td>
+                            <td>{{ sale.user.username }}</td>
+                            <td>
+                                <span class="badge bg-info">{{ sale.get_payment_method_display }}</span>
+                            </td>
+                            <td style="color: #e91e8c; font-weight: bold;">
+                                ${{ sale.total_amount|floatformat:0 }}
+                            </td>
+                            <td>{{ sale.created_at|date:"d/m/Y H:i" }}</td>
+                        </tr>
+                    {% empty %}
+                        <tr>
+                            <td colspan="6" class="text-center text-muted">No hay ventas registradas</td>
+                        </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+{% endblock %}

@@ -1,0 +1,70 @@
+{% extends 'base.html' %}
+{% block title %}Reportes{% endblock %}
+
+{% block content %}
+<div class="container-fluid" style="padding: 3rem 2rem;">
+    <div class="row mb-5">
+        <div class="col-12">
+            <p style="font-size: 0.85rem; letter-spacing: 2px; text-transform: uppercase; color: #6c757d; margin-bottom: 0.5rem;">Análisis</p>
+            <h1 style="font-size: 2rem; font-weight: 300; color: #495057;">Reportes</h1>
+        </div>
+    </div>
+
+    <div class="row g-4">
+        <!-- Stock Bajo -->
+        <div class="col-md-6">
+            <div class="card h-100">
+                <div class="card-header">Stock Bajo</div>
+                <div class="card-body">
+                    {% if low_stock %}
+                        <table class="table" style="margin-bottom: 0;">
+                            <thead>
+                                <tr>
+                                    <th>Producto</th>
+                                    <th>Sucursal</th>
+                                    <th>Stock</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for item in low_stock %}
+                                    <tr>
+                                        <td>{{ item.product.name }}</td>
+                                        <td>{{ item.branch.name }}</td>
+                                        <td>
+                                            <span class="badge" style="background: var(--pastel-peach); color: var(--accent-rose);">{{ item.stock }}</span>
+                                        </td>
+                                    </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    {% else %}
+                        <p style="color: #6c757d; text-align: center; padding: 2rem 0;">Todo el stock está en niveles óptimos</p>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+
+        <!-- Ventas del Mes -->
+        <div class="col-md-6">
+            <div class="card h-100">
+                <div class="card-header">Ventas del Mes</div>
+                <div class="card-body">
+                    <div class="row text-center" style="margin-bottom: 2rem;">
+                        <div class="col-6">
+                            <div class="stat-value" style="color: var(--accent-rose);">{{ monthly_sales.count|default:0 }}</div>
+                            <div class="stat-label">Ventas</div>
+                        </div>
+                        <div class="col-6">
+                            <div class="stat-value" style="color: var(--accent-lavender);">${{ monthly_sales.total|default:0|floatformat:0 }}</div>
+                            <div class="stat-label">Total</div>
+                        </div>
+                    </div>
+                    <a href="/api/reports/sales/?format=json" class="btn btn-outline-primary w-100" target="_blank">
+                        Exportar Reporte
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

@@ -1,0 +1,156 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}TemucoSoft POS{% endblock %}
+
+{% block content %}
+<!-- Hero minimalista -->
+<div class="hero-section">
+    <div class="container">
+        <div class="row justify-content-center">
+            <div class="col-lg-8 text-center" style="padding: 3rem 0;">
+                <p style="font-size: 0.9rem; letter-spacing: 2px; text-transform: uppercase; color: #6c757d; margin-bottom: 1.5rem;">Sistema de Gestión Empresarial</p>
+                <h1 style="font-size: 2.8rem; font-weight: 300; line-height: 1.4; margin-bottom: 1.5rem; color: #495057;">
+                    Punto de venta y comercio electrónico
+                </h1>
+                <p style="font-size: 1.1rem; color: #6c757d; margin-bottom: 2.5rem; max-width: 600px; margin-left: auto; margin-right: auto;">
+                    Una solución integrada para administrar ventas, inventario y clientes de forma eficiente.
+                </p>
+                <div>
+                    {% if user.is_authenticated %}
+                        <a href="{% url 'dashboard' %}" class="btn btn-primary me-2">Ir al Dashboard</a>
+                        <a href="{% url 'product_catalog' %}" class="btn btn-outline-primary">Ver Catálogo</a>
+                    {% else %}
+                        <a href="{% url 'login' %}" class="btn btn-primary me-2">Iniciar Sesión</a>
+                        <a href="{% url 'product_catalog' %}" class="btn btn-outline-primary">Explorar Productos</a>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Características -->
+<div style="padding: 5rem 0; background: white;">
+    <div class="container">
+        <div class="row justify-content-center mb-5">
+            <div class="col-lg-8 text-center">
+                <p style="font-size: 0.85rem; letter-spacing: 2px; text-transform: uppercase; color: #6c757d; margin-bottom: 1rem;">Funcionalidades</p>
+                <h2 style="font-size: 2rem; font-weight: 300; color: #495057;">Características principales</h2>
+            </div>
+        </div>
+        
+        <div class="row g-5">
+            <div class="col-md-4">
+                <div style="padding: 2rem; text-align: center;">
+                    <div class="feature-icon">
+                        <i class="fas fa-cash-register"></i>
+                    </div>
+                    <h4 style="font-size: 1.1rem; font-weight: 400; margin-bottom: 1rem; color: #495057;">Punto de Venta</h4>
+                    <p style="color: #6c757d; font-size: 0.95rem; line-height: 1.8;">
+                        Procesa transacciones desde múltiples sucursales con diversos métodos de pago.
+                    </p>
+                </div>
+            </div>
+            
+            <div class="col-md-4">
+                <div style="padding: 2rem; text-align: center;">
+                    <div class="feature-icon">
+                        <i class="fas fa-shopping-cart"></i>
+                    </div>
+                    <h4 style="font-size: 1.1rem; font-weight: 400; margin-bottom: 1rem; color: #495057;">Comercio Electrónico</h4>
+                    <p style="color: #6c757d; font-size: 0.95rem; line-height: 1.8;">
+                        Catálogo online sincronizado con inventario y gestión completa de pedidos.
+                    </p>
+                </div>
+            </div>
+            
+            <div class="col-md-4">
+                <div style="padding: 2rem; text-align: center;">
+                    <div class="feature-icon">
+                        <i class="fas fa-chart-bar"></i>
+                    </div>
+                    <h4 style="font-size: 1.1rem; font-weight: 400; margin-bottom: 1rem; color: #495057;">Reportes</h4>
+                    <p style="color: #6c757d; font-size: 0.95rem; line-height: 1.8;">
+                        Análisis de ventas, stock y rendimiento del negocio en tiempo real.
+                    </p>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<hr class="section-divider" style="margin: 0;">
+
+<!-- Planes -->
+<div style="padding: 5rem 0; background: #fafbfc;">
+    <div class="container">
+        <div class="row justify-content-center mb-5">
+            <div class="col-lg-8 text-center">
+                <p style="font-size: 0.85rem; letter-spacing: 2px; text-transform: uppercase; color: #6c757d; margin-bottom: 1rem;">Suscripciones</p>
+                <h2 style="font-size: 2rem; font-weight: 300; color: #495057; margin-bottom: 0.5rem;">Planes disponibles</h2>
+            </div>
+        </div>
+
+        <div class="row g-4">
+            <div class="col-md-4">
+                <div class="card" style="padding: 2.5rem 2rem;">
+                    <h5 style="font-weight: 400; margin-bottom: 1rem; color: #495057; font-size: 1rem; letter-spacing: 1px;">Básico</h5>
+                    <div style="margin-bottom: 2rem;">
+                        <span style="font-size: 2.2rem; font-weight: 300; color: #495057;">$9.990</span>
+                        <span style="color: #6c757d; font-size: 0.9rem;">/mes</span>
+                    </div>
+                    <div style="color: #6c757d; font-size: 0.9rem; line-height: 2;">
+                        <div>1 sucursal</div>
+                        <div>100 productos</div>
+                        <div>2 usuarios</div>
+                        <div>Soporte por email</div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-md-4">
+                <div class="card" style="padding: 2.5rem 2rem; border-color: var(--pastel-rose);">
+                    <div style="display: inline-block; padding: 0.3rem 0.8rem; background: var(--pastel-blush); color: #495057; font-size: 0.75rem; letter-spacing: 1px; margin-bottom: 1rem;">MÁS ELEGIDO</div>
+                    <h5 style="font-weight: 400; margin-bottom: 1rem; color: #495057; font-size: 1rem; letter-spacing: 1px;">Estándar</h5>
+                    <div style="margin-bottom: 2rem;">
+                        <span style="font-size: 2.2rem; font-weight: 300; color: #495057;">$19.990</span>
+                        <span style="color: #6c757d; font-size: 0.9rem;">/mes</span>
+                    </div>
+                    <div style="color: #6c757d; font-size: 0.9rem; line-height: 2;">
+                        <div>3 sucursales</div>
+                        <div>500 productos</div>
+                        <div>5 usuarios</div>
+                        <div>Soporte prioritario</div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-md-4">
+                <div class="card" style="padding: 2.5rem 2rem; background: var(--pastel-blush); border-color: var(--pastel-blush);">
+                    <h5 style="font-weight: 400; margin-bottom: 1rem; color: #495057; font-size: 1rem; letter-spacing: 1px;">Premium</h5>
+                    <div style="margin-bottom: 2rem;">
+                        <span style="font-size: 2.2rem; font-weight: 300; color: #495057;">$39.990</span>
+                        <span style="color: #6c757d; font-size: 0.9rem;">/mes</span>
+                    </div>
+                    <div style="color: #6c757d; font-size: 0.9rem; line-height: 2;">
+                        <div>Sucursales ilimitadas</div>
+                        <div>Productos ilimitados</div>
+                        <div>Usuarios ilimitados</div>
+                        <div>Soporte 24/7</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- CTA -->
+<div style="padding: 5rem 0; background: white; border-top: 1px solid var(--medium-gray);">
+    <div class="container text-center">
+        <h3 style="font-size: 1.8rem; font-weight: 300; margin-bottom: 1rem; color: #495057;">Comienza ahora</h3>
+        <p style="color: #6c757d; margin-bottom: 2rem; font-size: 0.95rem;">Sin compromisos a largo plazo</p>
+        <a href="{% url 'login' %}" class="btn btn-primary">Iniciar sesión</a>
+    </div>
+</div>
+{% endblock %}

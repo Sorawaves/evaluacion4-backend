@@ -1,0 +1,238 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}POS - Punto de Venta{% endblock %}
+
+{% block content %}
+<div class="container-fluid" style="padding: 3rem 2rem;">
+    <div class="row mb-4">
+        <div class="col-12">
+            <h2 style="font-weight: 300; color: #495057;">Punto de Venta (POS)</h2>
+            <p style="color: #6c757d; font-size: 0.95rem;">Vendedor: {{ user.username }}</p>
+        </div>
+    </div>
+
+    <div class="row">
+        <!-- Productos -->
+        <div class="col-md-7">
+            <div class="card mb-4">
+                <div class="card-header">
+                    <div class="row align-items-center">
+                        <div class="col">Productos Disponibles</div>
+                        <div class="col-auto">
+                            <input type="text" class="form-control form-control-sm" placeholder="Buscar producto..." id="buscar-producto">
+                        </div>
+                    </div>
+                </div>
+                <div class="card-body" style="max-height: 600px; overflow-y: auto;">
+                    <div class="row g-3" id="products-grid">
+                        {% for product in products %}
+                        <div class="col-md-4">
+                            <div class="card h-100 product-card" onclick="addToCart({{ product.id }}, '{{ product.name }}', {{ product.price }})">
+                                <div class="card-body text-center">
+                                    <div style="font-size: 2rem; color: var(--pastel-lavender); margin-bottom: 0.5rem;">
+                                        <i class="fas fa-box"></i>
+                                    </div>
+                                    <h6 style="font-size: 0.9rem; margin-bottom: 0.5rem;">{{ product.name }}</h6>
+                                    <p style="font-size: 1.2rem; font-weight: 600; color: var(--accent-rose); margin-bottom: 0.5rem;">
+                                        ${{ product.price|floatformat:0 }}
+                                    </p>
+                                    <small style="color: #6c757d;">Stock: {{ product.current_stock }}</small>
+                                </div>
+                            </div>
+                        </div>
+                        {% empty %}
+                        <div class="col-12 text-center py-5">
+                            <p style="color: #6c757d;">No hay productos disponibles</p>
+                        </div>
+                        {% endfor %}
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Carrito de Venta -->
+        <div class="col-md-5">
+            <div class="card sticky-top" style="top: 2rem;">
+                <div class="card-header">Venta Actual</div>
+                <div class="card-body">
+                    <div id="cart-items" style="max-height: 300px; overflow-y: auto; margin-bottom: 1rem;">
+                        <!-- Items dinámicos -->
+                    </div>
+                    
+                    <hr>
+                    
+                    <div class="mb-3">
+                        <div class="d-flex justify-content-between mb-2">
+                            <span>Subtotal:</span>
+                            <strong id="subtotal">$0</strong>
+                        </div>
+                        <div class="d-flex justify-content-between mb-2">
+                            <span>IVA (19%):</span>
+                            <strong id="tax">$0</strong>
+                        </div>
+                        <div class="d-flex justify-content-between" style="font-size: 1.3rem; color: var(--accent-rose);">
+                            <strong>TOTAL:</strong>
+                            <strong id="total">$0</strong>
+                        </div>
+                    </div>
+                    
+                    <div class="mb-3">
+                        <label class="form-label">Cliente (opcional)</label>
+                        <input type="text" class="form-control" id="customer-name" placeholder="Nombre del cliente">
+                    </div>
+                    
+                    <div class="mb-3">
+                        <label class="form-label">RUT Cliente (opcional)</label>
+                        <input type="text" class="form-control" id="customer-rut" placeholder="12345678-9" 
+                               pattern="^\d{7,8}-[\dkK]$" title="Formato: 12345678-9">
+                    </div>
+                    
+                    <div class="mb-3">
+                        <label class="form-label">Método de Pago</label>
+                        <select class="form-select" id="payment-method">
+                            <option value="EFECTIVO">Efectivo</option>
+                            <option value="TARJETA">Tarjeta</option>
+                            <option value="TRANSFERENCIA">Transferencia</option>
+                        </select>
+                    </div>
+                    
+                    <div class="d-grid gap-2">
+                        <button class="btn btn-success btn-lg" onclick="completeSale()">
+                            <i class="fas fa-check-circle"></i> Completar Venta
+                        </button>
+                        <button class="btn btn-outline-danger" onclick="clearCart()">
+                            <i class="fas fa-trash"></i> Limpiar
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+let cart = [];
+
+function addToCart(id, name, price) {
+    const existing = cart.find(item => item.id === id);
+    if (existing) {
+        existing.quantity++;
+    } else {
+        cart.push({ id, name, price, quantity: 1 });
+    }
+    updateCart();
+}
+
+function removeFromCart(id) {
+    cart = cart.filter(item => item.id !== id);
+    updateCart();
+}
+
+function updateQuantity(id, change) {
+    const item = cart.find(item => item.id === id);
+    if (item) {
+        item.quantity += change;
+        if (item.quantity <= 0) {
+            removeFromCart(id);
+        } else {
+            updateCart();
+        }
+    }
+}
+
+function updateCart() {
+    const cartItems = document.getElementById('cart-items');
+    cartItems.innerHTML = '';
+    
+    if (cart.length === 0) {
+        cartItems.innerHTML = '<p class="text-center text-muted">Carrito vacío</p>';
+    } else {
+        cart.forEach(item => {
+            cartItems.innerHTML += `
+                <div class="d-flex justify-content-between align-items-center mb-2 pb-2" style="border-bottom: 1px solid var(--soft-gray);">
+                    <div>
+                        <div style="font-size: 0.9rem;">${item.name}</div>
+                        <small style="color: #6c757d;">$${item.price.toLocaleString()} c/u</small>
+                    </div>
+                    <div class="d-flex align-items-center gap-2">
+                        <button class="btn btn-sm btn-outline-secondary" onclick="updateQuantity(${item.id}, -1)">-</button>
+                        <span style="min-width: 30px; text-align: center;">${item.quantity}</span>
+                        <button class="btn btn-sm btn-outline-secondary" onclick="updateQuantity(${item.id}, 1)">+</button>
+                        <button class="btn btn-sm btn-outline-danger" onclick="removeFromCart(${item.id})">
+                            <i class="fas fa-times"></i>
+                        </button>
+                    </div>
+                </div>
+            `;
+        });
+    }
+    
+    const subtotal = cart.reduce((sum, item) => sum + (item.price * item.quantity), 0);
+    const tax = subtotal * 0.19;
+    const total = subtotal + tax;
+    
+    document.getElementById('subtotal').textContent = '$' + subtotal.toLocaleString('es-CL');
+    document.getElementById('tax').textContent = '$' + Math.round(tax).toLocaleString('es-CL');
+    document.getElementById('total').textContent = '$' + Math.round(total).toLocaleString('es-CL');
+}
+
+function clearCart() {
+    if (confirm('¿Limpiar el carrito?')) {
+        cart = [];
+        updateCart();
+        document.getElementById('customer-name').value = '';
+        document.getElementById('customer-rut').value = '';
+    }
+}
+
+function completeSale() {
+    if (cart.length === 0) {
+        alert('⚠️ El carrito está vacío');
+        return;
+    }
+    
+    const customerName = document.getElementById('customer-name').value || 'Cliente General';
+    const customerRut = document.getElementById('customer-rut').value;
+    const paymentMethod = document.getElementById('payment-method').value;
+    
+    // Validar RUT si se ingresó
+    if (customerRut && !customerRut.match(/^\d{7,8}-[\dkK]$/)) {
+        alert('⚠️ Formato de RUT inválido. Use: 12345678-9');
+        return;
+    }
+    
+    const total = Math.round(cart.reduce((sum, item) => sum + (item.price * item.quantity), 0) * 1.19);
+    
+    // Aquí se haría el POST a /api/sales/
+    alert(`✅ Venta completada!\n\nCliente: ${customerName}\nTotal: $${total.toLocaleString('es-CL')}\nMétodo: ${paymentMethod}`);
+    
+    cart = [];
+    updateCart();
+    document.getElementById('customer-name').value = '';
+    document.getElementById('customer-rut').value = '';
+}
+
+// Búsqueda en tiempo real
+document.getElementById('buscar-producto')?.addEventListener('input', function(e) {
+    const search = e.target.value.toLowerCase();
+    document.querySelectorAll('.product-card').forEach(card => {
+        const text = card.textContent.toLowerCase();
+        card.closest('.col-md-4').style.display = text.includes(search) ? '' : 'none';
+    });
+});
+</script>
+
+<style>
+.product-card {
+    cursor: pointer;
+    transition: all 0.3s;
+    border: 1px solid var(--soft-gray);
+}
+.product-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+    border-color: var(--pastel-lavender);
+}
+</style>
+{% endblock %}

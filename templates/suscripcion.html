@@ -1,0 +1,169 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Suscripción{% endblock %}
+
+{% block content %}
+<div class="container" style="padding: 3rem 2rem;">
+    <div class="row mb-4">
+        <div class="col-12">
+            <h2 style="font-weight: 300; color: #495057;">Suscripción</h2>
+            <p style="color: #6c757d;">Información del plan de {{ user.company.name }}</p>
+        </div>
+    </div>
+
+    {% if subscription %}
+    <div class="row">
+        <div class="col-md-8">
+            <div class="card mb-4">
+                <div class="card-header">
+                    <h5 style="margin: 0; font-weight: 400;">Plan Actual</h5>
+                </div>
+                <div class="card-body">
+                    <div class="row">
+                        <div class="col-md-6 mb-3">
+                            <label style="font-size: 0.85rem; color: #6c757d; text-transform: uppercase; letter-spacing: 1px;">Plan</label>
+                            <h3 style="font-weight: 300; color: #495057; margin-top: 0.5rem;">{{ subscription.plan_name }}</h3>
+                        </div>
+                        <div class="col-md-6 mb-3">
+                            <label style="font-size: 0.85rem; color: #6c757d; text-transform: uppercase; letter-spacing: 1px;">Precio Mensual</label>
+                            <h3 style="font-weight: 300; color: var(--accent-rose); margin-top: 0.5rem;">
+                                ${{ subscription.price|floatformat:0 }}
+                            </h3>
+                        </div>
+                    </div>
+                    
+                    <hr>
+                    
+                    <div class="row">
+                        <div class="col-md-6 mb-3">
+                            <label style="font-size: 0.85rem; color: #6c757d;">Fecha de Inicio</label>
+                            <p style="margin: 0.5rem 0 0;">{{ subscription.start_date|date:"d/m/Y" }}</p>
+                        </div>
+                        <div class="col-md-6 mb-3">
+                            <label style="font-size: 0.85rem; color: #6c757d;">Fecha de Vencimiento</label>
+                            <p style="margin: 0.5rem 0 0;">{{ subscription.end_date|date:"d/m/Y" }}</p>
+                        </div>
+                    </div>
+                    
+                    <div class="row">
+                        <div class="col-md-6 mb-3">
+                            <label style="font-size: 0.85rem; color: #6c757d;">Máximo de Usuarios</label>
+                            <p style="margin: 0.5rem 0 0;">{{ subscription.max_users }} usuarios</p>
+                        </div>
+                        <div class="col-md-6 mb-3">
+                            <label style="font-size: 0.85rem; color: #6c757d;">Máximo de Sucursales</label>
+                            <p style="margin: 0.5rem 0 0;">{{ subscription.max_branches }} sucursales</p>
+                        </div>
+                    </div>
+                    
+                    <div class="row">
+                        <div class="col-md-6 mb-3">
+                            <label style="font-size: 0.85rem; color: #6c757d;">Estado</label>
+                            <p style="margin: 0.5rem 0 0;">
+                                <span class="badge" style="background: {% if subscription.active %}var(--pastel-mint){% else %}var(--pastel-peach){% endif %}; color: #495057; font-size: 0.9rem;">
+                                    {% if subscription.active %}Activa{% else %}Inactiva{% endif %}
+                                </span>
+                            </p>
+                        </div>
+                        <div class="col-md-6 mb-3">
+                            <label style="font-size: 0.85rem; color: #6c757d;">Auto-renovación</label>
+                            <p style="margin: 0.5rem 0 0;">
+                                <span class="badge" style="background: var(--pastel-lavender); color: #495057; font-size: 0.9rem;">
+                                    {% if subscription.auto_renew %}Activada{% else %}Desactivada{% endif %}
+                                </span>
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="card">
+                <div class="card-header">
+                    <h5 style="margin: 0; font-weight: 400;">Uso Actual</h5>
+                </div>
+                <div class="card-body">
+                    <div class="mb-4">
+                        <div class="d-flex justify-content-between mb-2">
+                            <span>Usuarios Activos</span>
+                            <strong>{{ current_users }} / {{ subscription.max_users }}</strong>
+                        </div>
+                        <div class="progress" style="height: 25px;">
+                            <div class="progress-bar" role="progressbar" 
+                                 style="width: {{ users_percentage }}%; background: var(--pastel-lavender);">
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="mb-4">
+                        <div class="d-flex justify-content-between mb-2">
+                            <span>Sucursales Activas</span>
+                            <strong>{{ current_branches }} / {{ subscription.max_branches }}</strong>
+                        </div>
+                        <div class="progress" style="height: 25px;">
+                            <div class="progress-bar" role="progressbar" 
+                                 style="width: {{ branches_percentage }}%; background: var(--pastel-rose);">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="col-md-4">
+            <div class="card">
+                <div class="card-header">
+                    <h5 style="margin: 0; font-weight: 400;">Acciones</h5>
+                </div>
+                <div class="card-body">
+                    <div class="d-grid gap-2">
+                        <button class="btn btn-primary" disabled>
+                            <i class="fas fa-arrow-up"></i> Mejorar Plan
+                        </button>
+                        <button class="btn btn-outline-primary" disabled>
+                            <i class="fas fa-credit-card"></i> Actualizar Pago
+                        </button>
+                        <button class="btn btn-outline-secondary" disabled>
+                            <i class="fas fa-file-invoice"></i> Ver Facturas
+                        </button>
+                    </div>
+                    <hr>
+                    <small style="color: #6c757d;">
+                        <i class="fas fa-info-circle"></i> 
+                        Las opciones de gestión de suscripción están disponibles próximamente.
+                    </small>
+                </div>
+            </div>
+            
+            <div class="card mt-4">
+                <div class="card-header">
+                    <h5 style="margin: 0; font-weight: 400;">Planes Disponibles</h5>
+                </div>
+                <div class="card-body">
+                    <div class="mb-3 pb-3" style="border-bottom: 1px solid var(--soft-gray);">
+                        <h6>Básico</h6>
+                        <p style="font-size: 0.9rem; color: #6c757d; margin-bottom: 0.5rem;">$9.990/mes</p>
+                        <small style="color: #6c757d;">3 usuarios, 1 sucursal</small>
+                    </div>
+                    <div class="mb-3 pb-3" style="border-bottom: 1px solid var(--soft-gray);">
+                        <h6>Estándar</h6>
+                        <p style="font-size: 0.9rem; color: #6c757d; margin-bottom: 0.5rem;">$29.990/mes</p>
+                        <small style="color: #6c757d;">10 usuarios, 3 sucursales</small>
+                    </div>
+                    <div>
+                        <h6>Premium</h6>
+                        <p style="font-size: 0.9rem; color: #6c757d; margin-bottom: 0.5rem;">$79.990/mes</p>
+                        <small style="color: #6c757d;">Ilimitado</small>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    {% else %}
+    <div class="alert alert-warning">
+        <i class="fas fa-exclamation-triangle"></i> 
+        No hay información de suscripción disponible para tu empresa.
+    </div>
+    {% endif %}
+</div>
+{% endblock %}

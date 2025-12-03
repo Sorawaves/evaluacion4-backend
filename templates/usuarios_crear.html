@@ -1,0 +1,136 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Crear Usuario{% endblock %}
+
+{% block content %}
+<div class="container" style="padding: 3rem 2rem;">
+    <div class="row justify-content-center">
+        <div class="col-md-8">
+            <div class="card">
+                <div class="card-header">
+                    <h4 style="font-weight: 300; margin: 0;">Crear Nuevo Usuario</h4>
+                </div>
+                <div class="card-body" style="padding: 2.5rem;">
+                    {% if messages %}
+                        {% for message in messages %}
+                            <div class="alert alert-{{ message.tags }} alert-dismissible fade show">
+                                {{ message }}
+                                <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+                            </div>
+                        {% endfor %}
+                    {% endif %}
+                    
+                    <form method="post">
+                        {% csrf_token %}
+                        
+                        <div class="row">
+                            <div class="col-md-6 mb-3">
+                                <label class="form-label">Nombre de Usuario *</label>
+                                <input type="text" name="username" class="form-control" required>
+                                <small class="text-muted">Sin espacios ni caracteres especiales</small>
+                            </div>
+                            <div class="col-md-6 mb-3">
+                                <label class="form-label">Correo *</label>
+                                <input type="email" name="email" class="form-control" required>
+                            </div>
+                        </div>
+                        
+                        <div class="row">
+                            <div class="col-md-6 mb-3">
+                                <label class="form-label">Nombre</label>
+                                <input type="text" name="first_name" class="form-control">
+                            </div>
+                            <div class="col-md-6 mb-3">
+                                <label class="form-label">Apellido</label>
+                                <input type="text" name="last_name" class="form-control">
+                            </div>
+                        </div>
+                        
+                        <div class="row">
+                            <div class="col-md-6 mb-3">
+                                <label class="form-label">RUT</label>
+                                <input type="text" name="rut" class="form-control" 
+                                       placeholder="12345678-9" 
+                                       pattern="^\d{7,8}-[\dkK]$"
+                                       title="Formato: 12345678-9">
+                                <small class="text-muted">Formato: 12345678-9</small>
+                            </div>
+                            <div class="col-md-6 mb-3">
+                                <label class="form-label">Teléfono</label>
+                                <input type="tel" name="phone" class="form-control" 
+                                       pattern="[0-9\s\+\-\(\)]+"
+                                       placeholder="+56 9 1234 5678">
+                            </div>
+                        </div>
+                        
+                        <div class="mb-3">
+                            <label class="form-label">Contraseña *</label>
+                            <input type="password" name="password" class="form-control" 
+                                   minlength="8" required 
+                                   id="password">
+                            <small class="text-muted">Mínimo 8 caracteres</small>
+                        </div>
+                        
+                        <div class="mb-3">
+                            <label class="form-label">Confirmar Contraseña *</label>
+                            <input type="password" name="password_confirm" class="form-control" 
+                                   minlength="8" required
+                                   id="password_confirm">
+                        </div>
+                        
+                        <div class="mb-3">
+                            <label class="form-label">Rol del Usuario *</label>
+                            <select name="role" class="form-select" required>
+                                <option value="">Seleccionar rol...</option>
+                                {% if user.role == 'SUPER_ADMIN' %}
+                                <option value="SUPER_ADMIN">Super Administrador</option>
+                                {% endif %}
+                                <option value="ADMIN_CLIENTE">Administrador Cliente</option>
+                                <option value="GERENTE">Gerente</option>
+                                <option value="VENDEDOR">Vendedor</option>
+                            </select>
+                        </div>
+                        
+                        {% if user.role == 'SUPER_ADMIN' %}
+                        <div class="mb-3">
+                            <label class="form-label">Empresa</label>
+                            <select name="company" class="form-select">
+                                <option value="">Sin empresa asignada</option>
+                                {% for company in companies %}
+                                <option value="{{ company.id }}">{{ company.name }}</option>
+                                {% endfor %}
+                            </select>
+                        </div>
+                        {% endif %}
+                        
+                        <div class="form-check mb-4">
+                            <input type="checkbox" name="is_active" class="form-check-input" id="is_active" checked>
+                            <label class="form-check-label" for="is_active">Usuario Activo</label>
+                        </div>
+                        
+                        <div class="d-grid gap-2">
+                            <button type="submit" class="btn btn-primary">Crear Usuario</button>
+                            <a href="{% url 'dashboard' %}" class="btn btn-outline-secondary">Cancelar</a>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+// Validar que las contraseñas coincidan
+document.querySelector('form').addEventListener('submit', function(e) {
+    const password = document.getElementById('password').value;
+    const confirm = document.getElementById('password_confirm').value;
+    
+    if (password !== confirm) {
+        e.preventDefault();
+        alert('⚠️ Las contraseñas no coinciden');
+        return false;
+    }
+});
+</script>
+{% endblock %}

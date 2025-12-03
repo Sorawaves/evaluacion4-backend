@@ -1,0 +1,77 @@
+{% extends 'base.html' %}
+{% block title %}Carrito{% endblock %}
+
+{% block content %}
+<div class="container" style="padding: 3rem 0;">
+    <div class="row mb-5">
+        <div class="col-12">
+            <p style="font-size: 0.85rem; letter-spacing: 2px; text-transform: uppercase; color: #6c757d; margin-bottom: 0.5rem;">Compras</p>
+            <h1 style="font-size: 2rem; font-weight: 300; color: #495057;">Mi Carrito</h1>
+        </div>
+    </div>
+
+    {% if cart_items %}
+        <div class="row">
+            <div class="col-md-8">
+                <div class="card">
+                    <div class="card-body" style="padding: 0;">
+                        <table class="table" style="margin-bottom: 0;">
+                            <thead>
+                                <tr>
+                                    <th>Producto</th>
+                                    <th>Precio</th>
+                                    <th>Cantidad</th>
+                                    <th>Subtotal</th>
+                                    <th>Acciones</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for item in cart_items %}
+                                    <tr>
+                                        <td>{{ item.product.name }}</td>
+                                        <td style="color: #6c757d;">${{ item.product.price }}</td>
+                                        <td>{{ item.quantity }}</td>
+                                        <td style="font-weight: 400;">${{ item.get_subtotal }}</td>
+                                        <td>
+                                            <form method="post" action="{% url 'cart-clear' %}" style="display:inline;">
+                                                {% csrf_token %}
+                                                <button type="submit" class="btn btn-sm" style="border: 1px solid var(--medium-gray); color: #6c757d;">Eliminar</button>
+                                            </form>
+                                        </td>
+                                    </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="card">
+                    <div class="card-header">Resumen</div>
+                    <div class="card-body">
+                        <div class="d-flex justify-content-between mb-2" style="color: #6c757d; font-size: 0.9rem;">
+                            <span>Subtotal:</span>
+                            <span>${{ total }}</span>
+                        </div>
+                        <div class="d-flex justify-content-between mb-3" style="color: #6c757d; font-size: 0.9rem;">
+                            <span>Envío:</span>
+                            <span>$5.000</span>
+                        </div>
+                        <hr class="section-divider">
+                        <div class="d-flex justify-content-between mb-4">
+                            <span style="font-weight: 400;">Total:</span>
+                            <span style="color: var(--accent-rose); font-size: 1.8rem; font-weight: 300;">${{ total|add:5000 }}</span>
+                        </div>
+                        <a href="{% url 'checkout' %}" class="btn btn-primary w-100">Proceder al Pago</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    {% else %}
+        <div style="padding: 4rem; text-align: center; background: var(--soft-gray);">
+            <p style="color: #6c757d; margin-bottom: 2rem;">Tu carrito está vacío</p>
+            <a href="{% url 'product_catalog' %}" class="btn btn-primary">Ir a comprar</a>
+        </div>
+    {% endif %}
+</div>
+{% endblock %}

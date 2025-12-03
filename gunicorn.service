@@ -1,0 +1,47 @@
+[Unit]
+Description=Gunicorn daemon para TemucoSoft POS + E-commerce
+Documentation=https://docs.gunicorn.org/
+After=network.target postgresql.service
+Wants=postgresql.service
+
+[Service]
+# Usuario y grupo que ejecutará el servicio
+User=ubuntu
+Group=www-data
+
+# Directorio de trabajo del proyecto Django
+WorkingDirectory=/home/ubuntu/evaluacion4-backend
+
+# Configurar PATH al entorno virtual
+Environment="PATH=/home/ubuntu/evaluacion4-backend/venv/bin"
+
+# Variables de entorno para Django
+Environment="DJANGO_SETTINGS_MODULE=temucosoft.settings"
+Environment="PYTHONUNBUFFERED=1"
+
+# Comando para iniciar Gunicorn
+ExecStart=/home/ubuntu/evaluacion4-backend/venv/bin/gunicorn \
+    --config /home/ubuntu/evaluacion4-backend/gunicorn_config.py \
+    --bind 0.0.0.0:8000 \
+    temucosoft.wsgi:application
+
+# Comando para recargar configuración
+ExecReload=/bin/kill -s HUP $MAINPID
+
+# Timeout para detener el servicio
+TimeoutStopSec=5
+
+# Reiniciar automáticamente si falla
+Restart=on-failure
+RestartSec=5
+
+# Archivo PID
+PIDFile=/var/run/gunicorn/gunicorn.pid
+RuntimeDirectory=gunicorn
+
+# Limitar recursos (opcional)
+# LimitNOFILE=4096
+
+[Install]
+# Iniciar con el sistema
+WantedBy=multi-user.target

@@ -1,0 +1,238 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Gestión de Empresas{% endblock %}
+
+{% block content %}
+<div class="container-fluid" style="padding: 3rem 2rem;">
+    <!-- Header -->
+    <div class="row mb-4">
+        <div class="col-12">
+            <p style="font-size: 0.85rem; letter-spacing: 2px; text-transform: uppercase; color: #6c757d; margin-bottom: 0.5rem;">Super Admin</p>
+            <h1 style="font-size: 2rem; font-weight: 300; color: #495057; margin-bottom: 0.5rem;">Gestión de Empresas</h1>
+            <p style="color: #6c757d; font-size: 0.95rem;">Administra las empresas clientes de la plataforma</p>
+        </div>
+    </div>
+
+    <!-- Stats Cards -->
+    <div class="row g-4 mb-4">
+        <div class="col-md-3">
+            <div class="stat-card">
+                <div class="stat-label">Total Empresas</div>
+                <div class="stat-value">{{ companies_count }}</div>
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="stat-card">
+                <div class="stat-label">Empresas Activas</div>
+                <div class="stat-value" style="color: var(--accent-mint);">{{ active_companies }}</div>
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="stat-card">
+                <div class="stat-label">Suscripciones Activas</div>
+                <div class="stat-value" style="color: var(--accent-lavender);">{{ active_subscriptions }}</div>
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="stat-card">
+                <div class="stat-label">Total Usuarios</div>
+                <div class="stat-value">{{ total_users }}</div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Nueva Empresa Button -->
+    <div class="row mb-4">
+        <div class="col-12">
+            <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#newCompanyModal">
+                + Nueva Empresa
+            </button>
+        </div>
+    </div>
+
+    <!-- Companies Table -->
+    <div class="row">
+        <div class="col-12">
+            <div class="card">
+                <div class="card-header">
+                    <h5 class="mb-0">Empresas Registradas</h5>
+                </div>
+                <div class="card-body">
+                    <div class="table-responsive">
+                        <table class="table table-hover">
+                            <thead>
+                                <tr>
+                                    <th>RUT</th>
+                                    <th>Nombre</th>
+                                    <th>Correo</th>
+                                    <th>Plan</th>
+                                    <th>Estado</th>
+                                    <th>Usuarios</th>
+                                    <th>Acciones</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for company in companies %}
+                                <tr>
+                                    <td><code>{{ company.rut }}</code></td>
+                                    <td>{{ company.name }}</td>
+                                    <td><small>{{ company.email }}</small></td>
+                                    <td>
+                                        {% if company.subscription %}
+                                            <span class="badge" style="background: var(--pastel-lavender);">
+                                                {{ company.subscription.plan_name }}
+                                            </span>
+                                        {% else %}
+                                            <span class="badge bg-secondary">Sin plan</span>
+                                        {% endif %}
+                                    </td>
+                                    <td>
+                                        {% if company.is_active %}
+                                            <span class="badge" style="background: var(--pastel-mint);">Activa</span>
+                                        {% else %}
+                                            <span class="badge bg-secondary">Inactiva</span>
+                                        {% endif %}
+                                    </td>
+                                    <td>{{ company.user_count }}</td>
+                                    <td>
+                                        <a href="#" class="btn btn-sm btn-outline-primary" 
+                                           data-bs-toggle="modal" 
+                                           data-bs-target="#editCompanyModal{{ company.id }}">
+                                            Editar
+                                        </a>
+                                        <a href="{% url 'superadmin_company_users' company.id %}" 
+                                           class="btn btn-sm btn-outline-secondary">
+                                            Usuarios
+                                        </a>
+                                    </td>
+                                </tr>
+                                {% empty %}
+                                <tr>
+                                    <td colspan="7" class="text-center text-muted py-4">
+                                        No hay empresas registradas
+                                    </td>
+                                </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Modal: Nueva Empresa -->
+<div class="modal fade" id="newCompanyModal" tabindex="-1">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Nueva Empresa Cliente</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+            </div>
+            <form method="POST" action="{% url 'superadmin_create_company' %}">
+                {% csrf_token %}
+                <div class="modal-body">
+                    <div class="mb-3">
+                        <label class="form-label">RUT</label>
+                        <input type="text" name="rut" class="form-control" placeholder="76.543.210-K" required>
+                        <small class="text-muted">Formato: 12.345.678-9</small>
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label">Nombre Empresa</label>
+                        <input type="text" name="name" class="form-control" placeholder="Mi Tienda S.A." required>
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label">Correo Empresa</label>
+                        <input type="email" name="email" class="form-control" placeholder="contacto@empresa.cl" required>
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label">Teléfono</label>
+                        <input type="text" name="phone" class="form-control" placeholder="+56 9 1234 5678">
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label">Dirección</label>
+                        <input type="text" name="address" class="form-control" placeholder="Av. Alemania 0281, Temuco">
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label">Plan de Suscripción</label>
+                        <select name="plan_name" class="form-select" required>
+                            <option value="">Seleccionar plan...</option>
+                            <option value="BASICO">Básico (1 sucursal, 2 usuarios)</option>
+                            <option value="ESTANDAR">Estándar (3 sucursales, 5 usuarios)</option>
+                            <option value="PREMIUM">Premium (Ilimitado)</option>
+                        </select>
+                    </div>
+                    <hr>
+                    <h6>Usuario Administrador</h6>
+                    <small class="text-muted">Se creará automáticamente un usuario admin_cliente para esta empresa</small>
+                    <div class="mb-3 mt-3">
+                        <label class="form-label">Usuario Admin</label>
+                        <input type="text" name="admin_username" class="form-control" placeholder="admin_mitienda" required>
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label">Correo Admin</label>
+                        <input type="email" name="admin_email" class="form-control" placeholder="admin@empresa.cl" required>
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label">Contraseña</label>
+                        <input type="password" name="admin_password" class="form-control" value="admin123" required>
+                        <small class="text-muted">Por defecto: admin123</small>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+                    <button type="submit" class="btn btn-primary">Crear Empresa</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+<!-- Modals de Edición (uno por empresa) -->
+{% for company in companies %}
+<div class="modal fade" id="editCompanyModal{{ company.id }}" tabindex="-1">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Editar: {{ company.name }}</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+            </div>
+            <form method="POST" action="{% url 'superadmin_edit_company' company.id %}">
+                {% csrf_token %}
+                <div class="modal-body">
+                    <div class="mb-3">
+                        <label class="form-label">Nombre Empresa</label>
+                        <input type="text" name="name" class="form-control" value="{{ company.name }}" required>
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label">Correo</label>
+                        <input type="email" name="email" class="form-control" value="{{ company.email }}" required>
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label">Teléfono</label>
+                        <input type="text" name="phone" class="form-control" value="{{ company.phone|default:'' }}">
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label">Dirección</label>
+                        <input type="text" name="address" class="form-control" value="{{ company.address|default:'' }}">
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label">Estado</label>
+                        <select name="is_active" class="form-select">
+                            <option value="1" {% if company.is_active %}selected{% endif %}>Activa</option>
+                            <option value="0" {% if not company.is_active %}selected{% endif %}>Inactiva</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+                    <button type="submit" class="btn btn-primary">Guardar Cambios</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+{% endfor %}
+{% endblock %}

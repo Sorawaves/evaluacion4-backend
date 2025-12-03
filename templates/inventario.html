@@ -1,0 +1,68 @@
+{% extends 'base.html' %}
+{% block title %}Inventario{% endblock %}
+
+{% block content %}
+<div class="container-fluid" style="padding: 3rem 2rem;">
+    <div class="row mb-5">
+        <div class="col-12">
+            <p style="font-size: 0.85rem; letter-spacing: 2px; text-transform: uppercase; color: #6c757d; margin-bottom: 0.5rem;">Gestión</p>
+            <h1 style="font-size: 2rem; font-weight: 300; color: #495057;">Inventario</h1>
+        </div>
+    </div>
+
+    <div class="card">
+        <div class="card-header">
+            <div class="row align-items-center">
+                <div class="col">Stock por Sucursal</div>
+                <div class="col-auto">
+                    <button class="btn btn-primary btn-sm" data-bs-toggle="modal" data-bs-target="#addModal">
+                        Ajustar Stock
+                    </button>
+                </div>
+            </div>
+        </div>
+        <div class="card-body" style="padding: 0;">
+            <table class="table" style="margin-bottom: 0;">
+                <thead>
+                    <tr>
+                        <th>Producto</th>
+                        <th>SKU</th>
+                        <th>Sucursal</th>
+                        <th>Stock</th>
+                        <th>Punto Reorden</th>
+                        <th>Estado</th>
+                        <th>Última Actualización</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for item in inventory %}
+                        <tr>
+                            <td>{{ item.product.name }}</td>
+                            <td><code style="background: var(--soft-gray); padding: 0.2rem 0.5rem;">{{ item.product.sku }}</code></td>
+                            <td>{{ item.branch.name }}</td>
+                            <td>
+                                <span class="badge" style="{% if item.stock < item.reorder_point %}background: var(--pastel-peach); color: var(--accent-rose);{% else %}background: var(--pastel-mint); color: #495057;{% endif %}">
+                                    {{ item.stock }}
+                                </span>
+                            </td>
+                            <td>{{ item.reorder_point }}</td>
+                            <td>
+                                {% if item.needs_restock %}
+                                    <span class="badge" style="background: var(--pastel-peach); color: var(--accent-rose);">Requiere restock</span>
+                                {% else %}
+                                    <span class="badge" style="background: var(--pastel-mint); color: #495057;">OK</span>
+                                {% endif %}
+                            </td>
+                            <td style="color: #6c757d; font-size: 0.9rem;">{{ item.updated_at|date:"d/m/Y H:i" }}</td>
+                        </tr>
+                    {% empty %}
+                        <tr>
+                            <td colspan="7" class="text-center" style="padding: 3rem; color: #6c757d;">No hay registros de inventario</td>
+                        </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+{% endblock %}

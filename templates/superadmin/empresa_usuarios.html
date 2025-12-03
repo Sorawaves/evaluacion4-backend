@@ -1,0 +1,235 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Usuarios de {{ company.name }}{% endblock %}
+
+{% block content %}
+<div class="container-fluid" style="padding: 3rem 2rem;">
+    <!-- Header -->
+    <div class="row mb-4">
+        <div class="col-12">
+            <a href="{% url 'superadmin_companies' %}" class="btn btn-sm btn-outline-secondary mb-3">← Volver a Empresas</a>
+            <p style="font-size: 0.85rem; letter-spacing: 2px; text-transform: uppercase; color: #6c757d; margin-bottom: 0.5rem;">{{ company.name }}</p>
+            <h1 style="font-size: 2rem; font-weight: 300; color: #495057; margin-bottom: 0.5rem;">Usuarios</h1>
+            <p style="color: #6c757d; font-size: 0.95rem;">Gestiona los usuarios de esta empresa</p>
+        </div>
+    </div>
+
+    <!-- Stats -->
+    <div class="row g-4 mb-4">
+        <div class="col-md-3">
+            <div class="stat-card">
+                <div class="stat-label">Total Usuarios</div>
+                <div class="stat-value">{{ users.count }}</div>
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="stat-card">
+                <div class="stat-label">Límite del Plan</div>
+                <div class="stat-value">{{ company.subscription.max_users|default:"∞" }}</div>
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="stat-card">
+                <div class="stat-label">Administradores</div>
+                <div class="stat-value">{{ admin_count }}</div>
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="stat-card">
+                <div class="stat-label">Usuarios Activos</div>
+                <div class="stat-value" style="color: var(--accent-mint);">{{ active_count }}</div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Nuevo Usuario Button -->
+    <div class="row mb-4">
+        <div class="col-12">
+            <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#newUserModal">
+                + Nuevo Usuario
+            </button>
+        </div>
+    </div>
+
+    <!-- Users Table -->
+    <div class="row">
+        <div class="col-12">
+            <div class="card">
+                <div class="card-header">
+                    <h5 class="mb-0">Lista de Usuarios</h5>
+                </div>
+                <div class="card-body">
+                    <div class="table-responsive">
+                        <table class="table table-hover">
+                            <thead>
+                                <tr>
+                                    <th>Usuario</th>
+                                    <th>Correo</th>
+                                    <th>RUT</th>
+                                    <th>Rol</th>
+                                    <th>Estado</th>
+                                    <th>Última Sesión</th>
+                                    <th>Acciones</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for user in users %}
+                                <tr>
+                                    <td><strong>{{ user.username }}</strong></td>
+                                    <td><small>{{ user.email }}</small></td>
+                                    <td><code>{{ user.rut|default:"-" }}</code></td>
+                                    <td>
+                                        <span class="badge" style="background: var(--pastel-{{ user.role|lower }});">
+                                            {{ user.get_role_display }}
+                                        </span>
+                                    </td>
+                                    <td>
+                                        {% if user.is_active %}
+                                            <span class="badge" style="background: var(--pastel-mint);">Activo</span>
+                                        {% else %}
+                                            <span class="badge bg-secondary">Inactivo</span>
+                                        {% endif %}
+                                    </td>
+                                    <td><small>{{ user.last_login|date:"d/m/Y H:i"|default:"Nunca" }}</small></td>
+                                    <td>
+                                        <button class="btn btn-sm btn-outline-primary" 
+                                                data-bs-toggle="modal" 
+                                                data-bs-target="#editUserModal{{ user.id }}">
+                                            Editar
+                                        </button>
+                                        <button class="btn btn-sm btn-outline-warning" 
+                                                onclick="resetPassword('{{ user.username }}')">
+                                            Reset Pass
+                                        </button>
+                                    </td>
+                                </tr>
+                                {% empty %}
+                                <tr>
+                                    <td colspan="7" class="text-center text-muted py-4">
+                                        No hay usuarios registrados
+                                    </td>
+                                </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Modal: Nuevo Usuario -->
+<div class="modal fade" id="newUserModal" tabindex="-1">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Nuevo Usuario - {{ company.name }}</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+            </div>
+            <form method="POST" action="{% url 'superadmin_create_user' company.id %}">
+                {% csrf_token %}
+                <div class="modal-body">
+                    <div class="mb-3">
+                        <label class="form-label">Nombre de Usuario</label>
+                        <input type="text" name="username" class="form-control" required>
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label">Correo Electrónico</label>
+                        <input type="email" name="email" class="form-control" required>
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label">RUT (opcional)</label>
+                        <input type="text" name="rut" class="form-control" placeholder="12.345.678-9">
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label">Rol</label>
+                        <select name="role" class="form-select" required>
+                            <option value="ADMIN_CLIENTE">Admin Cliente</option>
+                            <option value="GERENTE">Gerente</option>
+                            <option value="VENDEDOR">Vendedor</option>
+                        </select>
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label">Contraseña</label>
+                        <input type="password" name="password" class="form-control" value="admin123" required>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+                    <button type="submit" class="btn btn-primary">Crear Usuario</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+<!-- Modals de Edición -->
+{% for user in users %}
+<div class="modal fade" id="editUserModal{{ user.id }}" tabindex="-1">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Editar: {{ user.username }}</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+            </div>
+            <form method="POST" action="{% url 'superadmin_edit_user' user.id %}">
+                {% csrf_token %}
+                <div class="modal-body">
+                    <div class="mb-3">
+                        <label class="form-label">Correo Electrónico</label>
+                        <input type="email" name="email" class="form-control" value="{{ user.email }}" required>
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label">RUT</label>
+                        <input type="text" name="rut" class="form-control" value="{{ user.rut|default:'' }}">
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label">Rol</label>
+                        <select name="role" class="form-select">
+                            <option value="ADMIN_CLIENTE" {% if user.role == 'ADMIN_CLIENTE' %}selected{% endif %}>Admin Cliente</option>
+                            <option value="GERENTE" {% if user.role == 'GERENTE' %}selected{% endif %}>Gerente</option>
+                            <option value="VENDEDOR" {% if user.role == 'VENDEDOR' %}selected{% endif %}>Vendedor</option>
+                        </select>
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label">Estado</label>
+                        <select name="is_active" class="form-select">
+                            <option value="1" {% if user.is_active %}selected{% endif %}>Activo</option>
+                            <option value="0" {% if not user.is_active %}selected{% endif %}>Inactivo</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+                    <button type="submit" class="btn btn-primary">Guardar Cambios</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+{% endfor %}
+
+<script>
+function resetPassword(username) {
+    if (confirm(`¿Resetear contraseña de ${username} a "admin123"?`)) {
+        fetch(`/superadmin/usuarios/${username}/resetear-clave/`, {
+            method: 'POST',
+            headers: {
+                'X-CSRFToken': '{{ csrf_token }}',
+                'Content-Type': 'application/json'
+            }
+        })
+        .then(response => response.json())
+        .then(data => {
+            alert(data.message || '✅ Contraseña reseteada a admin123');
+            location.reload();
+        })
+        .catch(error => {
+            alert('❌ Error al resetear contraseña');
+        });
+    }
+}
+</script>
+{% endblock %}

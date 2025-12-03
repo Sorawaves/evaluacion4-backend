@@ -1,0 +1,204 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Nueva Compra{% endblock %}
+
+{% block content %}
+<div class="container" style="padding: 3rem 2rem;">
+    <div class="row justify-content-center">
+        <div class="col-md-10">
+            <div class="card">
+                <div class="card-header">
+                    <h4 style="font-weight: 300; margin: 0;">Registrar Nueva Compra</h4>
+                </div>
+                <div class="card-body" style="padding: 2.5rem;">
+                    {% if messages %}
+                        {% for message in messages %}
+                            <div class="alert alert-{{ message.tags }} alert-dismissible fade show">
+                                {{ message }}
+                                <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+                            </div>
+                        {% endfor %}
+                    {% endif %}
+                    
+                    <form method="post" id="purchase-form">
+                        {% csrf_token %}
+                        
+                        <div class="row">
+                            <div class="col-md-6 mb-3">
+                                <label class="form-label">Sucursal *</label>
+                                <select name="branch" class="form-select" required>
+                                    <option value="">Seleccionar sucursal...</option>
+                                    {% for branch in branches %}
+                                    <option value="{{ branch.id }}">{{ branch.name }}</option>
+                                    {% endfor %}
+                                </select>
+                            </div>
+                            <div class="col-md-6 mb-3">
+                                <label class="form-label">Proveedor *</label>
+                                <select name="supplier" class="form-select" required>
+                                    <option value="">Seleccionar proveedor...</option>
+                                    {% for supplier in suppliers %}
+                                    <option value="{{ supplier.id }}">{{ supplier.name }}</option>
+                                    {% endfor %}
+                                </select>
+                            </div>
+                        </div>
+                        
+                        <div class="row">
+                            <div class="col-md-12 mb-3">
+                                <label class="form-label">Fecha de Compra *</label>
+                                <input type="date" name="purchase_date" class="form-control" required>
+                            </div>
+                        </div>
+                        
+                        <hr>
+                        
+                        <h5 style="font-weight: 400; margin-bottom: 1.5rem;">Productos de la Compra</h5>
+                        
+                        <div id="purchase-items">
+                            <div class="purchase-item mb-3 p-3" style="background: var(--soft-gray); border-radius: 8px;">
+                                <div class="row">
+                                    <div class="col-md-5">
+                                        <label class="form-label">Producto *</label>
+                                        <select name="product[]" class="form-select" required>
+                                            <option value="">Seleccionar producto...</option>
+                                            {% for product in products %}
+                                            <option value="{{ product.id }}" data-price="{{ product.price }}">
+                                                {{ product.name }} - ${{ product.price|floatformat:0 }}
+                                            </option>
+                                            {% endfor %}
+                                        </select>
+                                    </div>
+                                    <div class="col-md-3">
+                                        <label class="form-label">Cantidad *</label>
+                                        <input type="number" name="quantity[]" class="form-control quantity-input" 
+                                               min="1" value="1" required onchange="calculateTotal()">
+                                    </div>
+                                    <div class="col-md-3">
+                                        <label class="form-label">Precio Unitario *</label>
+                                        <input type="number" name="unit_price[]" class="form-control price-input" 
+                                               min="0" step="0.01" required onchange="calculateTotal()">
+                                    </div>
+                                    <div class="col-md-1">
+                                        <label class="form-label">&nbsp;</label>
+                                        <button type="button" class="btn btn-outline-danger" onclick="removeItem(this)">
+                                            <i class="fas fa-trash"></i>
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <button type="button" class="btn btn-outline-primary mb-4" onclick="addItem()">
+                            <i class="fas fa-plus"></i> Agregar Producto
+                        </button>
+                        
+                        <hr>
+                        
+                        <div class="row">
+                            <div class="col-md-8">
+                                <div class="mb-3">
+                                    <label class="form-label">Notas (opcional)</label>
+                                    <textarea name="notes" class="form-control" rows="3"></textarea>
+                                </div>
+                            </div>
+                            <div class="col-md-4">
+                                <div class="card">
+                                    <div class="card-body">
+                                        <div class="d-flex justify-content-between mb-2">
+                                            <span>Subtotal:</span>
+                                            <strong id="subtotal">$0</strong>
+                                        </div>
+                                        <div class="d-flex justify-content-between mb-2">
+                                            <span>IVA (19%):</span>
+                                            <strong id="tax">$0</strong>
+                                        </div>
+                                        <hr>
+                                        <div class="d-flex justify-content-between" style="font-size: 1.2rem;">
+                                            <strong>TOTAL:</strong>
+                                            <strong id="total" style="color: var(--accent-rose);">$0</strong>
+                                        </div>
+                                        <input type="hidden" name="total_amount" id="total_amount" value="0">
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="d-grid gap-2 mt-4">
+                            <button type="submit" class="btn btn-success btn-lg">
+                                <i class="fas fa-check-circle"></i> Registrar Compra
+                            </button>
+                            <a href="{% url 'inventory' %}" class="btn btn-outline-secondary">Cancelar</a>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+function addItem() {
+    const container = document.getElementById('purchase-items');
+    const newItem = container.querySelector('.purchase-item').cloneNode(true);
+    newItem.querySelectorAll('input, select').forEach(input => {
+        if (input.type !== 'button') input.value = input.type === 'number' ? 1 : '';
+    });
+    container.appendChild(newItem);
+    calculateTotal();
+}
+
+function removeItem(button) {
+    const items = document.querySelectorAll('.purchase-item');
+    if (items.length > 1) {
+        button.closest('.purchase-item').remove();
+        calculateTotal();
+    } else {
+        alert('⚠️ Debe haber al menos un producto');
+    }
+}
+
+function calculateTotal() {
+    let subtotal = 0;
+    document.querySelectorAll('.purchase-item').forEach(item => {
+        const quantity = parseFloat(item.querySelector('.quantity-input').value) || 0;
+        const price = parseFloat(item.querySelector('.price-input').value) || 0;
+        subtotal += quantity * price;
+    });
+    
+    const tax = subtotal * 0.19;
+    const total = subtotal + tax;
+    
+    document.getElementById('subtotal').textContent = '$' + Math.round(subtotal).toLocaleString('es-CL');
+    document.getElementById('tax').textContent = '$' + Math.round(tax).toLocaleString('es-CL');
+    document.getElementById('total').textContent = '$' + Math.round(total).toLocaleString('es-CL');
+    document.getElementById('total_amount').value = Math.round(total);
+}
+
+// Auto-llenar precio cuando se selecciona producto
+document.addEventListener('change', function(e) {
+    if (e.target.name === 'product[]') {
+        const option = e.target.selectedOptions[0];
+        const price = option.getAttribute('data-price');
+        if (price) {
+            e.target.closest('.purchase-item').querySelector('.price-input').value = price;
+            calculateTotal();
+        }
+    }
+});
+
+// Validar formulario
+document.getElementById('purchase-form').addEventListener('submit', function(e) {
+    const total = parseFloat(document.getElementById('total_amount').value);
+    if (total <= 0) {
+        e.preventDefault();
+        alert('⚠️ El total de la compra debe ser mayor a $0');
+        return false;
+    }
+});
+
+// Inicializar
+calculateTotal();
+</script>
+{% endblock %}

@@ -1,0 +1,104 @@
+{% extends 'base.html' %}
+{% block title %}Checkout{% endblock %}
+
+{% block content %}
+<div class="container" style="padding: 3rem 0;">
+    <div class="row mb-5">
+        <div class="col-12">
+            <p style="font-size: 0.85rem; letter-spacing: 2px; text-transform: uppercase; color: #6c757d; margin-bottom: 0.5rem;">Compra</p>
+            <h1 style="font-size: 2rem; font-weight: 300; color: #495057;">Finalizar Compra</h1>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-md-8">
+            <div class="card mb-4">
+                <div class="card-header">Datos de Envío</div>
+                <div class="card-body">
+                    <form method="post" action="{% url 'process_order' %}">
+                        {% csrf_token %}
+                        <div class="row g-3">
+                            <div class="col-md-6">
+                                <label class="form-label" style="font-size: 0.9rem; color: #6c757d;">Nombre Completo</label>
+                                <input type="text" class="form-control" name="full_name" required>
+                            </div>
+                            <div class="col-md-6">
+                                <label class="form-label" style="font-size: 0.9rem; color: #6c757d;">Correo</label>
+                                <input type="email" class="form-control" name="email" required>
+                            </div>
+                            <div class="col-12">
+                                <label class="form-label" style="font-size: 0.9rem; color: #6c757d;">Dirección</label>
+                                <input type="text" class="form-control" name="address" required>
+                            </div>
+                            <div class="col-md-6">
+                                <label class="form-label" style="font-size: 0.9rem; color: #6c757d;">Ciudad</label>
+                                <input type="text" class="form-control" name="city" required>
+                            </div>
+                            <div class="col-md-6">
+                                <label class="form-label" style="font-size: 0.9rem; color: #6c757d;">Teléfono</label>
+                                <input type="tel" class="form-control" name="phone" required>
+                            </div>
+                        </div>
+
+                        <hr class="section-divider">
+
+                        <h5 style="font-weight: 400; margin-bottom: 1.5rem; color: #495057;">Método de Pago</h5>
+                        <div class="form-check mb-2">
+                            <input class="form-check-input" type="radio" name="payment_method" value="credit_card" id="credit" checked>
+                            <label class="form-check-label" for="credit" style="color: #495057;">Tarjeta de Crédito/Débito</label>
+                        </div>
+                        <div class="form-check mb-2">
+                            <input class="form-check-input" type="radio" name="payment_method" value="paypal" id="paypal">
+                            <label class="form-check-label" for="paypal" style="color: #495057;">PayPal</label>
+                        </div>
+                        <div class="form-check mb-4">
+                            <input class="form-check-input" type="radio" name="payment_method" value="transfer" id="transfer">
+                            <label class="form-check-label" for="transfer" style="color: #495057;">Transferencia Bancaria</label>
+                        </div>
+
+                        <button type="submit" class="btn btn-primary btn-lg w-100">Confirmar Pedido</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-4">
+            <div class="card mb-3">
+                <div class="card-header">Resumen del Pedido</div>
+                <div class="card-body">
+                    {% for item in cart_items %}
+                        <div class="d-flex justify-content-between mb-2" style="font-size: 0.9rem;">
+                            <span style="color: #495057;">{{ item.product.name }} x{{ item.quantity }}</span>
+                            <span style="color: #6c757d;">${{ item.get_subtotal }}</span>
+                        </div>
+                    {% endfor %}
+                    <hr class="section-divider">
+                    <div class="d-flex justify-content-between mb-2" style="font-size: 0.9rem; color: #6c757d;">
+                        <span>Subtotal:</span>
+                        <span>${{ total }}</span>
+                    </div>
+                    <div class="d-flex justify-content-between mb-3" style="font-size: 0.9rem; color: #6c757d;">
+                        <span>Envío:</span>
+                        <span>$5.000</span>
+                    </div>
+                    <hr class="section-divider">
+                    <div class="d-flex justify-content-between">
+                        <span style="font-weight: 400;">Total:</span>
+                        <span style="color: var(--accent-rose); font-size: 1.8rem; font-weight: 300;">${{ total|add:5000 }}</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="card" style="border-color: var(--pastel-lavender); background: var(--pastel-blush);">
+                <div class="card-body text-center" style="padding: 2rem;">
+                    <i class="fas fa-lock" style="font-size: 2rem; color: var(--accent-lavender); margin-bottom: 1rem;"></i>
+                    <p style="margin: 0; color: #495057; font-size: 0.9rem;">
+                        <strong>Compra Segura</strong><br>
+                        <span style="color: #6c757d; font-size: 0.85rem;">Tus datos están protegidos</span>
+                    </p>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
