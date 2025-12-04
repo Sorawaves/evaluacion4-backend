@@ -20,14 +20,11 @@ import os
 # ¡IMPORTANTE! Cambiar a False en producción
 DEBUG = False
 
-# Dominios permitidos - AGREGAR IP PÚBLICA DE EC2
-ALLOWED_HOSTS = [
-    'localhost',
-    '127.0.0.1',
-    # CAMBIAR: Agregar tu IP pública de EC2
-    # 'ec2-XX-XX-XX-XX.compute-1.amazonaws.com',
-    # 'tu-dominio.com',
-]
+# Dominios permitidos - IP PÚBLICA DE EC2
+ALLOWED_HOSTS = ['3.90.33.82', 'localhost', '127.0.0.1']
+
+# CSRF Origins
+CSRF_TRUSTED_ORIGINS = ['http://3.90.33.82']
 
 # Clave secreta - usar variable de entorno en producción
 SECRET_KEY = os.environ.get('DJANGO_SECRET_KEY', 'cambiar-esta-clave-en-produccion-muy-importante')
@@ -41,7 +38,7 @@ DATABASES = {
         'ENGINE': 'django.db.backends.postgresql',
         'NAME': os.environ.get('DB_NAME', 'temucosoft_db'),
         'USER': os.environ.get('DB_USER', 'temucosoft_user'),
-        'PASSWORD': os.environ.get('DB_PASSWORD', 'tu_password_seguro'),
+        'PASSWORD': os.environ.get('DB_PASSWORD', 'temuco2025'),
         'HOST': os.environ.get('DB_HOST', 'localhost'),
         'PORT': os.environ.get('DB_PORT', '5432'),
         'OPTIONS': {
