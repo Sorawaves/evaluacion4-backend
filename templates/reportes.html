@@ -40,8 +40,8 @@
                     {% else %}
                         <p style="color: #6c757d; text-align: center; padding: 2rem 0;">✅ Todo el stock está en niveles óptimos</p>
                     {% endif %}
-                    <a href="/api/reportes/stock/" class="btn btn-outline-primary w-100" target="_blank">
-                        Exportar Reporte de Stock
+                    <a href="{% url 'report_stock' %}" class="btn btn-outline-primary w-100" target="_blank">
+                        Ver Reporte Completo de Stock
                     </a>
                 </div>
             </div>
@@ -62,8 +62,8 @@
                             <div class="stat-label">Total</div>
                         </div>
                     </div>
-                    <a href="/api/reportes/ventas/" class="btn btn-outline-primary w-100" target="_blank">
-                        Exportar Reporte de Ventas
+                    <a href="{% url 'report_sales' %}" class="btn btn-outline-primary w-100" target="_blank">
+                        Ver Reporte Completo de Ventas
                     </a>
                 </div>
             </div>
@@ -80,8 +80,8 @@
                             <div class="stat-label">Proveedores Activos</div>
                         </div>
                     </div>
-                    <a href="/api/reportes/proveedores/" class="btn btn-outline-primary w-100" target="_blank">
-                        Exportar Reporte de Proveedores
+                    <a href="{% url 'report_suppliers' %}" class="btn btn-outline-primary w-100" target="_blank">
+                        Ver Reporte Completo de Proveedores
                     </a>
                 </div>
             </div>
@@ -128,8 +128,8 @@
                     {% else %}
                         <p style="color: #6c757d; text-align: center; padding: 2rem 0;">No hay movimientos de inventario registrados</p>
                     {% endif %}
-                    <a href="/api/inventory-movements/" class="btn btn-outline-primary" target="_blank">
-                        Ver todos los movimientos (API)
+                    <a href="{% url 'report_movements' %}" class="btn btn-outline-primary" target="_blank">
+                        Ver Reporte Completo de Movimientos
                     </a>
                 </div>
             </div>

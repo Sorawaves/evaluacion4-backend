@@ -1,0 +1,102 @@
+{% extends 'base.html' %}
+{% block title %}Reporte de Stock{% endblock %}
+
+{% block content %}
+<div class="container-fluid" style="padding: 3rem 2rem;">
+    <div class="row mb-4">
+        <div class="col-12">
+            <div class="d-flex justify-content-between align-items-center">
+                <div>
+                    <p style="font-size: 0.85rem; letter-spacing: 2px; text-transform: uppercase; color: #6c757d; margin-bottom: 0.5rem;">Reporte</p>
+                    <h1 style="font-size: 2rem; font-weight: 300; color: #495057;">Stock por Sucursal</h1>
+                </div>
+                <div>
+                    <a href="{% url 'reports' %}" class="btn btn-outline-primary">← Volver a Reportes</a>
+                    <button onclick="window.print()" class="btn btn-primary">🖨️ Imprimir</button>
+                </div>
+            </div>
+            <p style="color: #6c757d;">Generado: {{ fecha_generacion }}</p>
+        </div>
+    </div>
+
+    <!-- Resumen -->
+    <div class="row mb-4">
+        <div class="col-md-3">
+            <div class="stat-card">
+                <div class="stat-value">{{ total_registros }}</div>
+                <div class="stat-label">Total Registros</div>
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="stat-card" style="border-color: var(--pastel-peach);">
+                <div class="stat-value" style="color: var(--accent-rose);">{{ stock_bajo }}</div>
+                <div class="stat-label">Stock Bajo</div>
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="stat-card">
+                <div class="stat-value" style="color: var(--accent-purple);">{{ sucursales_count }}</div>
+                <div class="stat-label">Sucursales</div>
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="stat-card">
+                <div class="stat-value">{{ productos_count }}</div>
+                <div class="stat-label">Productos</div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Tabla de Stock -->
+    <div class="card">
+        <div class="card-header">Detalle de Inventario</div>
+        <div class="card-body" style="padding: 0;">
+            <table class="table" style="margin-bottom: 0;">
+                <thead>
+                    <tr>
+                        <th>Sucursal</th>
+                        <th>SKU</th>
+                        <th>Producto</th>
+                        <th>Categoría</th>
+                        <th>Stock Actual</th>
+                        <th>Punto Reorden</th>
+                        <th>Estado</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for item in datos %}
+                        <tr {% if item.requiere_restock %}style="background: #fff5f5;"{% endif %}>
+                            <td>{{ item.sucursal }}</td>
+                            <td><code>{{ item.sku }}</code></td>
+                            <td>{{ item.producto }}</td>
+                            <td>{{ item.categoria }}</td>
+                            <td><strong>{{ item.stock_actual }}</strong></td>
+                            <td>{{ item.punto_reorden }}</td>
+                            <td>
+                                {% if item.requiere_restock %}
+                                    <span class="badge bg-danger">⚠️ Requiere Restock</span>
+                                {% else %}
+                                    <span class="badge bg-success">✅ OK</span>
+                                {% endif %}
+                            </td>
+                        </tr>
+                    {% empty %}
+                        <tr>
+                            <td colspan="7" style="text-align: center; padding: 2rem; color: #6c757d;">
+                                No hay registros de inventario
+                            </td>
+                        </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+
+<style>
+@media print {
+    .navbar, footer, .btn { display: none !important; }
+    .card { box-shadow: none !important; border: 1px solid #ddd !important; }
+}
+</style>
+{% endblock %}

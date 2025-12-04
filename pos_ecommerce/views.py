@@ -3,7 +3,7 @@ Views y ViewSets para el sistema POS + E-commerce de TemucoSoft S.A.
 Implementa todos los endpoints API REST y vistas de templates requeridos.
 """
 from rest_framework import viewsets, status
-from rest_framework.decorators import action, api_view, permission_classes
+from rest_framework.decorators import action
 from rest_framework.response import Response
 from rest_framework.permissions import IsAuthenticated, AllowAny
 from django_filters.rest_framework import DjangoFilterBackend
@@ -617,17 +617,17 @@ class InventoryMovementViewSet(viewsets.ModelViewSet):
 
 
 # ============================================================================
-# Reportes API
+# Reportes (Vistas HTML)
 # ============================================================================
 
-@api_view(['GET'])
-@permission_classes([IsAuthenticated])
+@login_required
 def stock_report(request):
     """
     Reporte de stock por sucursal.
-    GET /api/reportes/stock/?branch=<id>
+    GET /reportes/stock/?branch=<id>
     """
-    branch_id = request.query_params.get('branch')
+    branch_id = request.GET.get('branch')
+    category = request.GET.get('category')
     user = request.user
     
     # Filtrar inventario
@@ -638,6 +638,9 @@ def stock_report(request):
     
     if branch_id:
         inventory = inventory.filter(branch_id=branch_id)
+    
+    if category:
+        inventory = inventory.filter(product__category=category)
     
     # Construir reporte
     report_data = []
@@ -650,27 +653,30 @@ def stock_report(request):
             'stock_actual': inv.stock,
             'punto_reorden': inv.reorder_point,
             'requiere_restock': inv.needs_restock(),
-            'ultimo_restock': inv.last_restock_date.strftime('%d/%m/%Y %H:%M') if inv.last_restock_date else None
+            'ultimo_restock': inv.last_restock_date.strftime('%d/%m/%Y %H:%M') if inv.last_restock_date else None,
+            'inventory_obj': inv  # Para template
         })
     
-    return Response({
+    context = {
         'titulo': 'Reporte de Stock por Sucursal',
         'fecha_generacion': timezone.now().strftime('%d/%m/%Y %H:%M'),
         'total_registros': len(report_data),
         'datos': report_data
-    })
+    }
+    
+    # Renderizar HTML
+    return render(request, 'reportes/stock_report.html', context)
 
 
-@api_view(['GET'])
-@permission_classes([IsAuthenticated])
+@login_required
 def sales_report(request):
     """
     Reporte de ventas por período.
-    GET /api/reportes/ventas/?branch=<id>&date_from=<date>&date_to=<date>
+    GET /reportes/ventas/?branch=<id>&date_from=<date>&date_to=<date>
     """
-    branch_id = request.query_params.get('branch')
-    date_from = request.query_params.get('date_from')
-    date_to = request.query_params.get('date_to')
+    branch_id = request.GET.get('branch')
+    date_from = request.GET.get('date_from')
+    date_to = request.GET.get('date_to')
     user = request.user
     
     # Filtrar ventas
@@ -713,7 +719,7 @@ def sales_report(request):
             'total': float(sale.total_amount)
         })
     
-    return Response({
+    context = {
         'titulo': 'Reporte de Ventas',
         'fecha_generacion': timezone.now().strftime('%d/%m/%Y %H:%M'),
         'estadisticas': {
@@ -729,15 +735,17 @@ def sales_report(request):
             for item in daily_sales
         ],
         'detalle_ventas': ventas_detalle
-    })
+    }
+    
+    # Renderizar HTML
+    return render(request, 'reportes/ventas_report.html', context)
 
 
-@api_view(['GET'])
-@permission_classes([IsAuthenticated])
+@login_required
 def supplier_report(request):
     """
     Reporte de proveedores con productos asociados y últimos pedidos.
-    GET /api/reportes/proveedores/
+    GET /reportes/proveedores/
     """
     user = request.user
     
@@ -778,12 +786,94 @@ def supplier_report(request):
             ]
         })
     
-    return Response({
+    context = {
         'titulo': 'Reporte de Proveedores',
         'fecha_generacion': timezone.now().strftime('%d/%m/%Y %H:%M'),
         'total_proveedores': len(report_data),
         'datos': report_data
-    })
+    }
+    
+    # Renderizar HTML
+    return render(request, 'reportes/proveedores_report.html', context)
+
+
+@login_required
+def inventory_movements_report(request):
+    """
+    Reporte de movimientos de inventario.
+    GET /reportes/movimientos/?tipo=<tipo>&date_from=<date>&date_to=<date>
+    """
+    user = request.user
+    tipo = request.GET.get('tipo')
+    date_from = request.GET.get('date_from')
+    date_to = request.GET.get('date_to')
+    
+    # Filtrar movimientos
+    movements = InventoryMovement.objects.select_related(
+        'inventory__product', 'inventory__branch', 'user'
+    ).all()
+    
+    if user.role != 'SUPER_ADMIN' and user.company:
+        movements = movements.filter(inventory__branch__company=user.company)
+    
+    if tipo:
+        movements = movements.filter(movement_type=tipo)
+    if date_from:
+        movements = movements.filter(created_at__gte=date_from)
+    if date_to:
+        movements = movements.filter(created_at__lte=date_to)
+    
+    # Ordenar por fecha descendente y limitar
+    movements = movements.order_by('-created_at')[:100]
+    
+    # Resumen por tipo
+    all_movements = InventoryMovement.objects.all()
+    if user.role != 'SUPER_ADMIN' and user.company:
+        all_movements = all_movements.filter(inventory__branch__company=user.company)
+    
+    resumen_tipos = all_movements.values('movement_type').annotate(
+        cantidad=Count('id'),
+        total_cantidad=Sum('quantity')
+    ).order_by('movement_type')
+    
+    # Mapear tipos a nombres legibles
+    tipo_choices = dict(InventoryMovement.MOVEMENT_TYPE_CHOICES)
+    resumen_tipos_data = [
+        {
+            'tipo': item['movement_type'],
+            'tipo_display': tipo_choices.get(item['movement_type'], item['movement_type']),
+            'cantidad': item['cantidad'],
+            'total_cantidad': item['total_cantidad'] or 0
+        }
+        for item in resumen_tipos
+    ]
+    
+    # Preparar datos de movimientos
+    movimientos_data = [
+        {
+            'fecha': mov.created_at.strftime('%d/%m/%Y %H:%M'),
+            'tipo': mov.movement_type,
+            'tipo_display': mov.get_movement_type_display(),
+            'producto': mov.inventory.product.name,
+            'sucursal': mov.inventory.branch.name,
+            'cantidad': mov.quantity,
+            'stock_anterior': mov.previous_stock,
+            'stock_nuevo': mov.new_stock,
+            'usuario': mov.user.username if mov.user else 'Sistema',
+            'notas': mov.notes
+        }
+        for mov in movements
+    ]
+    
+    context = {
+        'titulo': 'Reporte de Movimientos de Inventario',
+        'fecha_generacion': timezone.now().strftime('%d/%m/%Y %H:%M'),
+        'total_movimientos': len(movimientos_data),
+        'resumen_tipos': resumen_tipos_data,
+        'movimientos': movimientos_data
+    }
+    
+    return render(request, 'reportes/movimientos_report.html', context)
 
 
 # ============================================================================

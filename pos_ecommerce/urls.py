@@ -10,8 +10,8 @@ from .views import (
     CompanyViewSet, SubscriptionViewSet, UserViewSet, BranchViewSet,
     SupplierViewSet, ProductViewSet, InventoryViewSet, PurchaseViewSet,
     SaleViewSet, OrderViewSet, CartItemViewSet, PaymentViewSet, InventoryMovementViewSet,
-    # Reportes API
-    stock_report, sales_report, supplier_report,
+    # Reportes HTML
+    stock_report, sales_report, supplier_report, inventory_movements_report,
     # Vistas de Templates
     home, login_view, logout_view, dashboard, product_catalog, product_detail,
     cart_view, add_to_cart, checkout_view, process_order, inventory_view, suppliers_view,
@@ -47,11 +47,6 @@ urlpatterns = [
     # Endpoints CRUD (todos los ViewSets)
     path('api/', include(router.urls)),
     
-    # Reportes API
-    path('api/reportes/stock/', stock_report, name='report_stock'),
-    path('api/reportes/ventas/', sales_report, name='report_sales'),
-    path('api/reportes/proveedores/', supplier_report, name='report_suppliers'),
-    
     # ========== Vistas de Templates (Frontend) ==========
     # Páginas públicas
     path('', home, name='home'),
@@ -76,6 +71,12 @@ urlpatterns = [
     path('proveedores/', suppliers_view, name='suppliers'),
     path('ventas/', sales_view, name='sales'),
     path('reportes/', reports_view, name='reports'),
+    
+    # Reportes HTML (vistas con visualización)
+    path('reportes/stock/', stock_report, name='report_stock'),
+    path('reportes/ventas/', sales_report, name='report_sales'),
+    path('reportes/proveedores/', supplier_report, name='report_suppliers'),
+    path('reportes/movimientos/', inventory_movements_report, name='report_movements'),
     
     # Vistas específicas por rol
     path('pos/', pos_view, name='pos'),  # Vendedor

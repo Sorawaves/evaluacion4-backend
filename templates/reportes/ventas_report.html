@@ -1,0 +1,190 @@
+{% extends 'base.html' %}
+{% block title %}Reporte de Ventas{% endblock %}
+
+{% block content %}
+<div class="container-fluid" style="padding: 3rem 2rem;">
+    <div class="row mb-4">
+        <div class="col-md-8">
+            <p style="font-size: 0.85rem; letter-spacing: 2px; text-transform: uppercase; color: #6c757d; margin-bottom: 0.5rem;">Análisis</p>
+            <h1 style="font-size: 2rem; font-weight: 300; color: #495057;">Reporte de Ventas</h1>
+            <p class="text-muted">Generado: {{ fecha_generacion }}</p>
+        </div>
+        <div class="col-md-4 text-end">
+            <button class="btn btn-outline-primary" onclick="window.print()">
+                <i class="fas fa-print"></i> Imprimir
+            </button>
+            <a href="/api/reportes/ventas/?format=json" class="btn btn-outline-secondary" target="_blank">
+                <i class="fas fa-download"></i> JSON
+            </a>
+        </div>
+    </div>
+
+    <!-- Resumen Estadísticas -->
+    <div class="row mb-4">
+        <div class="col-md-6">
+            <div class="card h-100">
+                <div class="card-body text-center">
+                    <h2 class="mb-2" style="color: var(--accent-rose);">{{ estadisticas.total_ventas }}</h2>
+                    <p class="text-muted mb-0">Total de Ventas</p>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-6">
+            <div class="card h-100">
+                <div class="card-body text-center">
+                    <h2 class="mb-2" style="color: var(--accent-lavender);">${{ estadisticas.monto_total|floatformat:0 }}</h2>
+                    <p class="text-muted mb-0">Monto Total</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Filtros -->
+    <div class="row mb-4">
+        <div class="col-12">
+            <div class="card">
+                <div class="card-header">
+                    <i class="fas fa-filter"></i> Filtros
+                </div>
+                <div class="card-body">
+                    <form method="get" action="" class="row g-3">
+                        <div class="col-md-3">
+                            <label class="form-label">Sucursal</label>
+                            <select name="branch" class="form-select">
+                                <option value="">Todas las sucursales</option>
+                                <!-- Se llenarían dinámicamente -->
+                            </select>
+                        </div>
+                        <div class="col-md-3">
+                            <label class="form-label">Fecha Desde</label>
+                            <input type="date" name="date_from" class="form-control">
+                        </div>
+                        <div class="col-md-3">
+                            <label class="form-label">Fecha Hasta</label>
+                            <input type="date" name="date_to" class="form-control">
+                        </div>
+                        <div class="col-md-3 d-flex align-items-end">
+                            <button type="submit" class="btn btn-primary me-2">
+                                <i class="fas fa-search"></i> Filtrar
+                            </button>
+                            <a href="." class="btn btn-outline-secondary">
+                                <i class="fas fa-redo"></i> Limpiar
+                            </a>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Gráfico de Ventas por Día -->
+    <div class="row mb-4">
+        <div class="col-12">
+            <div class="card">
+                <div class="card-header">
+                    <i class="fas fa-chart-line"></i> Ventas por Día
+                </div>
+                <div class="card-body">
+                    {% if ventas_por_dia %}
+                        <div class="table-responsive">
+                            <table class="table table-hover">
+                                <thead class="table-light">
+                                    <tr>
+                                        <th>Fecha</th>
+                                        <th>Cantidad de Ventas</th>
+                                        <th>Total Vendido</th>
+                                        <th>Promedio por Venta</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    {% for item in ventas_por_dia %}
+                                        <tr>
+                                            <td>{{ item.dia }}</td>
+                                            <td>
+                                                <span class="badge bg-primary">{{ item.cantidad }}</span>
+                                            </td>
+                                            <td><strong>${{ item.total|floatformat:0 }}</strong></td>
+                                            <td>
+                                                {% if item.cantidad > 0 %}
+                                                    ${% widthratio item.total item.cantidad 1 %}
+                                                {% else %}
+                                                    $0
+                                                {% endif %}
+                                            </td>
+                                        </tr>
+                                    {% endfor %}
+                                </tbody>
+                            </table>
+                        </div>
+                    {% else %}
+                        <div class="text-center py-5">
+                            <i class="fas fa-chart-line fa-3x text-muted mb-3"></i>
+                            <p class="text-muted">No hay datos de ventas para el período seleccionado</p>
+                        </div>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Detalle de Ventas -->
+    <div class="row">
+        <div class="col-12">
+            <div class="card">
+                <div class="card-header">
+                    <i class="fas fa-receipt"></i> Detalle de Ventas (Últimas 50)
+                </div>
+                <div class="card-body">
+                    {% if detalle_ventas %}
+                        <div class="table-responsive">
+                            <table class="table table-hover">
+                                <thead class="table-light">
+                                    <tr>
+                                        <th>ID</th>
+                                        <th>Fecha</th>
+                                        <th>Sucursal</th>
+                                        <th>Vendedor</th>
+                                        <th>Método de Pago</th>
+                                        <th>Total</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    {% for venta in detalle_ventas %}
+                                        <tr>
+                                            <td><code>#{{ venta.id }}</code></td>
+                                            <td>{{ venta.fecha }}</td>
+                                            <td>{{ venta.sucursal }}</td>
+                                            <td>{{ venta.vendedor }}</td>
+                                            <td>
+                                                <span class="badge bg-info">{{ venta.metodo_pago }}</span>
+                                            </td>
+                                            <td><strong>${{ venta.total|floatformat:0 }}</strong></td>
+                                        </tr>
+                                    {% endfor %}
+                                </tbody>
+                            </table>
+                        </div>
+                    {% else %}
+                        <div class="text-center py-5">
+                            <i class="fas fa-receipt fa-3x text-muted mb-3"></i>
+                            <p class="text-muted">No hay ventas registradas</p>
+                        </div>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<style>
+@media print {
+    .btn, nav, footer, .card-header i {
+        display: none !important;
+    }
+    .card {
+        border: 1px solid #000 !important;
+        page-break-inside: avoid;
+    }
+}
+</style>
+{% endblock %}

@@ -1,0 +1,167 @@
+{% extends 'base.html' %}
+{% block title %}Reporte de Stock{% endblock %}
+
+{% block content %}
+<div class="container-fluid" style="padding: 3rem 2rem;">
+    <div class="row mb-4">
+        <div class="col-md-8">
+            <p style="font-size: 0.85rem; letter-spacing: 2px; text-transform: uppercase; color: #6c757d; margin-bottom: 0.5rem;">Análisis</p>
+            <h1 style="font-size: 2rem; font-weight: 300; color: #495057;">Reporte de Stock por Sucursal</h1>
+            <p class="text-muted">Generado: {{ fecha_generacion }}</p>
+        </div>
+        <div class="col-md-4 text-end">
+            <button class="btn btn-outline-primary" onclick="window.print()">
+                <i class="fas fa-print"></i> Imprimir
+            </button>
+            <a href="/api/reportes/stock/?format=json" class="btn btn-outline-secondary" target="_blank">
+                <i class="fas fa-download"></i> JSON
+            </a>
+        </div>
+    </div>
+
+    <!-- Resumen -->
+    <div class="row mb-4">
+        <div class="col-md-3">
+            <div class="card">
+                <div class="card-body text-center">
+                    <h3 class="mb-0" style="color: var(--accent-purple);">{{ total_registros }}</h3>
+                    <p class="text-muted mb-0">Total Productos</p>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="card">
+                <div class="card-body text-center">
+                    <h3 class="mb-0" style="color: var(--accent-rose);">
+                        {% for item in datos %}
+                            {% if item.requiere_restock %}1{% endif %}
+                        {% empty %}0{% endfor %}
+                    </h3>
+                    <p class="text-muted mb-0">Requiere Restock</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Filtros -->
+    <div class="row mb-4">
+        <div class="col-12">
+            <div class="card">
+                <div class="card-header">
+                    <i class="fas fa-filter"></i> Filtros
+                </div>
+                <div class="card-body">
+                    <form method="get" action="" class="row g-3">
+                        <div class="col-md-4">
+                            <label class="form-label">Sucursal</label>
+                            <select name="branch" class="form-select">
+                                <option value="">Todas las sucursales</option>
+                                {% for item in datos %}
+                                    <option value="{{ item.inventory_obj.branch.id }}">{{ item.sucursal }}</option>
+                                {% endfor %}
+                            </select>
+                        </div>
+                        <div class="col-md-4">
+                            <label class="form-label">Categoría</label>
+                            <select name="category" class="form-select">
+                                <option value="">Todas las categorías</option>
+                                <option value="ELECTRONICA">Electrónica</option>
+                                <option value="ROPA">Ropa</option>
+                                <option value="ALIMENTOS">Alimentos</option>
+                                <option value="HOGAR">Hogar</option>
+                                <option value="OTROS">Otros</option>
+                            </select>
+                        </div>
+                        <div class="col-md-4 d-flex align-items-end">
+                            <button type="submit" class="btn btn-primary me-2">
+                                <i class="fas fa-search"></i> Filtrar
+                            </button>
+                            <a href="." class="btn btn-outline-secondary">
+                                <i class="fas fa-redo"></i> Limpiar
+                            </a>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Tabla de datos -->
+    <div class="row">
+        <div class="col-12">
+            <div class="card">
+                <div class="card-header">
+                    <i class="fas fa-boxes"></i> Detalle de Stock
+                </div>
+                <div class="card-body">
+                    {% if datos %}
+                        <div class="table-responsive">
+                            <table class="table table-hover">
+                                <thead class="table-light">
+                                    <tr>
+                                        <th>Sucursal</th>
+                                        <th>Producto</th>
+                                        <th>SKU</th>
+                                        <th>Categoría</th>
+                                        <th>Stock Actual</th>
+                                        <th>Punto Reorden</th>
+                                        <th>Estado</th>
+                                        <th>Último Restock</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    {% for item in datos %}
+                                        <tr {% if item.requiere_restock %}class="table-warning"{% endif %}>
+                                            <td>{{ item.sucursal }}</td>
+                                            <td>{{ item.producto }}</td>
+                                            <td><code>{{ item.sku }}</code></td>
+                                            <td>
+                                                <span class="badge bg-secondary">{{ item.categoria }}</span>
+                                            </td>
+                                            <td>
+                                                <strong {% if item.stock_actual <= item.punto_reorden %}style="color: var(--accent-rose);"{% endif %}>
+                                                    {{ item.stock_actual }}
+                                                </strong>
+                                            </td>
+                                            <td>{{ item.punto_reorden }}</td>
+                                            <td>
+                                                {% if item.requiere_restock %}
+                                                    <span class="badge bg-warning text-dark">
+                                                        <i class="fas fa-exclamation-triangle"></i> Requiere Restock
+                                                    </span>
+                                                {% else %}
+                                                    <span class="badge bg-success">
+                                                        <i class="fas fa-check"></i> Stock OK
+                                                    </span>
+                                                {% endif %}
+                                            </td>
+                                            <td>{{ item.ultimo_restock|default:"Sin datos" }}</td>
+                                        </tr>
+                                    {% endfor %}
+                                </tbody>
+                            </table>
+                        </div>
+                    {% else %}
+                        <div class="text-center py-5">
+                            <i class="fas fa-box-open fa-3x text-muted mb-3"></i>
+                            <p class="text-muted">No hay datos de inventario para mostrar</p>
+                        </div>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<style>
+@media print {
+    .btn, nav, footer, .card-header i {
+        display: none !important;
+    }
+    .card {
+        border: 1px solid #000 !important;
+        page-break-inside: avoid;
+    }
+}
+</style>
+{% endblock %}

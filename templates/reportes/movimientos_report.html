@@ -1,0 +1,173 @@
+{% extends 'base.html' %}
+{% block title %}Reporte de Movimientos de Inventario{% endblock %}
+
+{% block content %}
+<div class="container-fluid" style="padding: 3rem 2rem;">
+    <div class="row mb-4">
+        <div class="col-md-8">
+            <p style="font-size: 0.85rem; letter-spacing: 2px; text-transform: uppercase; color: #6c757d; margin-bottom: 0.5rem;">Análisis</p>
+            <h1 style="font-size: 2rem; font-weight: 300; color: #495057;">Reporte de Movimientos de Inventario</h1>
+            <p class="text-muted">Generado: {{ fecha_generacion }}</p>
+        </div>
+        <div class="col-md-4 text-end">
+            <button class="btn btn-outline-primary" onclick="window.print()">
+                <i class="fas fa-print"></i> Imprimir
+            </button>
+        </div>
+    </div>
+
+    <!-- Resumen por Tipo de Movimiento -->
+    <div class="row mb-4">
+        <div class="col-12">
+            <div class="card">
+                <div class="card-header">
+                    <i class="fas fa-chart-pie"></i> Resumen por Tipo de Movimiento
+                </div>
+                <div class="card-body">
+                    {% if resumen_tipos %}
+                        <div class="row">
+                            {% for tipo in resumen_tipos %}
+                                <div class="col-md-3 mb-3">
+                                    <div class="card bg-light">
+                                        <div class="card-body text-center">
+                                            <h5>{{ tipo.tipo_display }}</h5>
+                                            <p class="mb-1"><strong>{{ tipo.cantidad }}</strong> movimientos</p>
+                                            <p class="mb-0 text-muted">Total: {{ tipo.total_cantidad }} unidades</p>
+                                        </div>
+                                    </div>
+                                </div>
+                            {% endfor %}
+                        </div>
+                    {% else %}
+                        <p class="text-muted text-center">No hay datos para mostrar</p>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Filtros -->
+    <div class="row mb-4">
+        <div class="col-12">
+            <div class="card">
+                <div class="card-header">
+                    <i class="fas fa-filter"></i> Filtros
+                </div>
+                <div class="card-body">
+                    <form method="get" action="" class="row g-3">
+                        <div class="col-md-3">
+                            <label class="form-label">Tipo de Movimiento</label>
+                            <select name="tipo" class="form-select">
+                                <option value="">Todos</option>
+                                <option value="COMPRA">Compra</option>
+                                <option value="VENTA">Venta</option>
+                                <option value="AJUSTE_POSITIVO">Ajuste Positivo</option>
+                                <option value="AJUSTE_NEGATIVO">Ajuste Negativo</option>
+                                <option value="DEVOLUCION">Devolución</option>
+                                <option value="TRANSFERENCIA_IN">Transferencia Entrada</option>
+                                <option value="TRANSFERENCIA_OUT">Transferencia Salida</option>
+                            </select>
+                        </div>
+                        <div class="col-md-3">
+                            <label class="form-label">Fecha Desde</label>
+                            <input type="date" name="date_from" class="form-control">
+                        </div>
+                        <div class="col-md-3">
+                            <label class="form-label">Fecha Hasta</label>
+                            <input type="date" name="date_to" class="form-control">
+                        </div>
+                        <div class="col-md-3 d-flex align-items-end">
+                            <button type="submit" class="btn btn-primary me-2">
+                                <i class="fas fa-search"></i> Filtrar
+                            </button>
+                            <a href="." class="btn btn-outline-secondary">
+                                <i class="fas fa-redo"></i> Limpiar
+                            </a>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Tabla de Movimientos -->
+    <div class="row">
+        <div class="col-12">
+            <div class="card">
+                <div class="card-header">
+                    <i class="fas fa-exchange-alt"></i> Detalle de Movimientos (Últimos {{ total_movimientos }})
+                </div>
+                <div class="card-body">
+                    {% if movimientos %}
+                        <div class="table-responsive">
+                            <table class="table table-hover">
+                                <thead class="table-light">
+                                    <tr>
+                                        <th>Fecha</th>
+                                        <th>Tipo</th>
+                                        <th>Producto</th>
+                                        <th>Sucursal</th>
+                                        <th>Cantidad</th>
+                                        <th>Stock Anterior</th>
+                                        <th>Stock Nuevo</th>
+                                        <th>Usuario</th>
+                                        <th>Notas</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    {% for mov in movimientos %}
+                                        <tr>
+                                            <td>{{ mov.fecha }}</td>
+                                            <td>
+                                                {% if 'COMPRA' in mov.tipo or 'POSITIVO' in mov.tipo or 'TRANSFERENCIA_IN' in mov.tipo or 'DEVOLUCION' in mov.tipo %}
+                                                    <span class="badge bg-success">{{ mov.tipo_display }}</span>
+                                                {% else %}
+                                                    <span class="badge bg-danger">{{ mov.tipo_display }}</span>
+                                                {% endif %}
+                                            </td>
+                                            <td>{{ mov.producto }}</td>
+                                            <td>{{ mov.sucursal }}</td>
+                                            <td>
+                                                <strong>
+                                                    {% if 'COMPRA' in mov.tipo or 'POSITIVO' in mov.tipo or 'TRANSFERENCIA_IN' in mov.tipo or 'DEVOLUCION' in mov.tipo %}
+                                                        <span class="text-success">+{{ mov.cantidad }}</span>
+                                                    {% else %}
+                                                        <span class="text-danger">-{{ mov.cantidad }}</span>
+                                                    {% endif %}
+                                                </strong>
+                                            </td>
+                                            <td>{{ mov.stock_anterior }}</td>
+                                            <td>{{ mov.stock_nuevo }}</td>
+                                            <td>{{ mov.usuario }}</td>
+                                            <td>
+                                                <small class="text-muted">{{ mov.notas|default:"-" }}</small>
+                                            </td>
+                                        </tr>
+                                    {% endfor %}
+                                </tbody>
+                            </table>
+                        </div>
+                    {% else %}
+                        <div class="text-center py-5">
+                            <i class="fas fa-exchange-alt fa-3x text-muted mb-3"></i>
+                            <p class="text-muted">No hay movimientos de inventario registrados</p>
+                        </div>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<style>
+@media print {
+    .btn, nav, footer, .card-header i {
+        display: none !important;
+    }
+    .card {
+        border: 1px solid #000 !important;
+        page-break-inside: avoid;
+    }
+}
+</style>
+{% endblock %}
