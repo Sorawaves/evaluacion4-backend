@@ -1,0 +1,2722 @@
+[
+{
+  "model": "pos_ecommerce.company",
+  "pk": 1,
+  "fields": {
+    "name": "TecnoShop Ltda.",
+    "rut": "76543210-5",
+    "address": "Av. Prat 123, Temuco",
+    "phone": "+56912345678",
+    "email": "contacto@tecnoshop.cl",
+    "is_active": true,
+    "created_at": "2025-11-28T03:14:30.190Z",
+    "updated_at": "2025-11-28T03:14:30.190Z"
+  }
+},
+{
+  "model": "pos_ecommerce.company",
+  "pk": 2,
+  "fields": {
+    "name": "MegaRetail S.A.",
+    "rut": "78901234-7",
+    "address": "Manuel Bulnes 456, Temuco",
+    "phone": "+56987654321",
+    "email": "info@megaretail.cl",
+    "is_active": true,
+    "created_at": "2025-11-28T03:14:30.194Z",
+    "updated_at": "2025-11-28T03:14:30.194Z"
+  }
+},
+{
+  "model": "pos_ecommerce.company",
+  "pk": 3,
+  "fields": {
+    "name": "Mab",
+    "rut": "19.690.968-0",
+    "address": "los forjadores",
+    "phone": "935402522",
+    "email": "mbl@mbl.com",
+    "is_active": true,
+    "created_at": "2025-11-30T00:53:57.885Z",
+    "updated_at": "2025-11-30T00:56:57.547Z"
+  }
+},
+{
+  "model": "pos_ecommerce.subscription",
+  "pk": 1,
+  "fields": {
+    "company": 1,
+    "plan_name": "ESTANDAR",
+    "start_date": "2025-11-28",
+    "end_date": "2026-11-28",
+    "active": true,
+    "max_branches": 3,
+    "max_users": 5,
+    "has_api_access": true,
+    "has_reports": true,
+    "created_at": "2025-11-28T03:14:30.198Z",
+    "updated_at": "2025-11-28T03:14:30.198Z"
+  }
+},
+{
+  "model": "pos_ecommerce.subscription",
+  "pk": 2,
+  "fields": {
+    "company": 2,
+    "plan_name": "PREMIUM",
+    "start_date": "2025-11-28",
+    "end_date": "2026-11-28",
+    "active": true,
+    "max_branches": 999,
+    "max_users": 999,
+    "has_api_access": true,
+    "has_reports": true,
+    "created_at": "2025-11-28T03:14:30.201Z",
+    "updated_at": "2025-11-28T03:14:30.201Z"
+  }
+},
+{
+  "model": "pos_ecommerce.user",
+  "pk": 1,
+  "fields": {
+    "password": "pbkdf2_sha256$1000000$8rUW4GtBpMd6HoJ4P9epqT$BO7FIsPQFRCGNjTRTQjNv6tiDWcFwbD6DIjajXDqjps=",
+    "last_login": "2025-11-30T00:26:41.213Z",
+    "is_superuser": true,
+    "username": "admin",
+    "first_name": "",
+    "last_name": "",
+    "email": "admin@temucosoft.cl",
+    "is_staff": true,
+    "is_active": true,
+    "date_joined": "2025-11-28T03:14:30.205Z",
+    "role": "SUPER_ADMIN",
+    "rut": "11111111-1",
+    "company": null,
+    "phone": "",
+    "created_at": "2025-11-28T03:14:30.565Z",
+    "updated_at": "2025-11-28T03:14:30.565Z",
+    "groups": [],
+    "user_permissions": []
+  }
+},
+{
+  "model": "pos_ecommerce.user",
+  "pk": 2,
+  "fields": {
+    "password": "pbkdf2_sha256$1000000$jqxDH2ZaD0dykBl5QTXgsP$m3ENmiZRHBg6thSUWzWJnMhHCXjWvZPQcoT4M6Q0qH4=",
+    "last_login": null,
+    "is_superuser": false,
+    "username": "admin_tecnoshop",
+    "first_name": "",
+    "last_name": "",
+    "email": "admin@tecnoshop.cl",
+    "is_staff": false,
+    "is_active": true,
+    "date_joined": "2025-11-28T03:14:30.569Z",
+    "role": "ADMIN_CLIENTE",
+    "rut": "22000001-1",
+    "company": 1,
+    "phone": "",
+    "created_at": "2025-11-28T03:14:30.928Z",
+    "updated_at": "2025-11-28T03:14:30.928Z",
+    "groups": [],
+    "user_permissions": []
+  }
+},
+{
+  "model": "pos_ecommerce.user",
+  "pk": 3,
+  "fields": {
+    "password": "pbkdf2_sha256$1000000$bSEGrobx7UnUnXECePkXoJ$LbJgyYRTOyF2fZEkNBAxydsH/+u6IRmR69RZ4XsJlKM=",
+    "last_login": null,
+    "is_superuser": false,
+    "username": "gerente_tecnoshop",
+    "first_name": "",
+    "last_name": "",
+    "email": "gerente@tecnoshop.cl",
+    "is_staff": false,
+    "is_active": true,
+    "date_joined": "2025-11-28T03:14:30.933Z",
+    "role": "GERENTE",
+    "rut": "33000001-1",
+    "company": 1,
+    "phone": "",
+    "created_at": "2025-11-28T03:14:31.319Z",
+    "updated_at": "2025-11-28T03:14:31.319Z",
+    "groups": [],
+    "user_permissions": []
+  }
+},
+{
+  "model": "pos_ecommerce.user",
+  "pk": 4,
+  "fields": {
+    "password": "pbkdf2_sha256$1000000$qC4Ld50AZaYJv62kODbri9$5B3VtzaA81p8s0ZQhAVlgxLd9lV81bbW040eBaJRkdc=",
+    "last_login": "2025-11-30T00:58:17.300Z",
+    "is_superuser": false,
+    "username": "vendedor_tecnoshop",
+    "first_name": "",
+    "last_name": "",
+    "email": "vendedor@tecnoshop.cl",
+    "is_staff": false,
+    "is_active": true,
+    "date_joined": "2025-11-28T03:14:31.323Z",
+    "role": "VENDEDOR",
+    "rut": "44000001-1",
+    "company": 1,
+    "phone": "",
+    "created_at": "2025-11-28T03:14:31.687Z",
+    "updated_at": "2025-11-28T03:14:31.687Z",
+    "groups": [],
+    "user_permissions": []
+  }
+},
+{
+  "model": "pos_ecommerce.user",
+  "pk": 5,
+  "fields": {
+    "password": "pbkdf2_sha256$1000000$UgUqwo8GNqzMx1tXnSPC99$BhXx8MxNYouMx1SOPwPeALAx2Xx/uMj7QT20Lmve6AY=",
+    "last_login": "2025-11-30T01:01:58.947Z",
+    "is_superuser": false,
+    "username": "admin_megaretail",
+    "first_name": "",
+    "last_name": "",
+    "email": "admin@megaretail.cl",
+    "is_staff": false,
+    "is_active": true,
+    "date_joined": "2025-11-28T03:14:31.691Z",
+    "role": "ADMIN_CLIENTE",
+    "rut": "22000002-2",
+    "company": 2,
+    "phone": "",
+    "created_at": "2025-11-28T03:14:32.056Z",
+    "updated_at": "2025-11-28T03:14:32.056Z",
+    "groups": [],
+    "user_permissions": []
+  }
+},
+{
+  "model": "pos_ecommerce.user",
+  "pk": 6,
+  "fields": {
+    "password": "pbkdf2_sha256$1000000$YT9E782FaUSUGtJrgiB92H$LEO+xP/1Ku7g7uKcfCwk+xzPXle3CGozwTqmjY89Ip0=",
+    "last_login": "2025-11-30T00:59:27.398Z",
+    "is_superuser": false,
+    "username": "gerente_megaretail",
+    "first_name": "",
+    "last_name": "",
+    "email": "gerente@megaretail.cl",
+    "is_staff": false,
+    "is_active": true,
+    "date_joined": "2025-11-28T03:14:32.060Z",
+    "role": "GERENTE",
+    "rut": "33000002-2",
+    "company": 2,
+    "phone": "",
+    "created_at": "2025-11-28T03:14:32.420Z",
+    "updated_at": "2025-11-28T03:14:32.420Z",
+    "groups": [],
+    "user_permissions": []
+  }
+},
+{
+  "model": "pos_ecommerce.user",
+  "pk": 7,
+  "fields": {
+    "password": "pbkdf2_sha256$1000000$4NHrdR3yKGv9MRZ7uMqke8$bkqJ3NrjDJXeLz1YuIwk8zMMuTDulLBM/nqI+ZbmiAQ=",
+    "last_login": null,
+    "is_superuser": false,
+    "username": "vendedor_megaretail",
+    "first_name": "",
+    "last_name": "",
+    "email": "vendedor@megaretail.cl",
+    "is_staff": false,
+    "is_active": true,
+    "date_joined": "2025-11-28T03:14:32.424Z",
+    "role": "VENDEDOR",
+    "rut": "44000002-2",
+    "company": 2,
+    "phone": "",
+    "created_at": "2025-11-28T03:14:32.782Z",
+    "updated_at": "2025-11-28T03:14:32.782Z",
+    "groups": [],
+    "user_permissions": []
+  }
+},
+{
+  "model": "pos_ecommerce.user",
+  "pk": 8,
+  "fields": {
+    "password": "pbkdf2_sha256$1000000$JottCiHVl4oRFxOF7CcLfq$LiE2JJAdaJnIqIbbyVQmRlKnUnlnQwO6HL7OeRCH8VQ=",
+    "last_login": null,
+    "is_superuser": false,
+    "username": "Gerente_Manuel",
+    "first_name": "Manuel",
+    "last_name": "rosas",
+    "email": "manuel@gmail.com",
+    "is_staff": false,
+    "is_active": true,
+    "date_joined": "2025-11-30T01:03:36.659Z",
+    "role": "GERENTE",
+    "rut": "19690968-0",
+    "company": 2,
+    "phone": "+56935402522",
+    "created_at": "2025-11-30T01:03:37.043Z",
+    "updated_at": "2025-11-30T01:03:37.048Z",
+    "groups": [],
+    "user_permissions": []
+  }
+},
+{
+  "model": "pos_ecommerce.branch",
+  "pk": 1,
+  "fields": {
+    "company": 1,
+    "name": "Sucursal Centro",
+    "address": "Centro, Temuco - TecnoShop Ltda.",
+    "phone": "+56911111111",
+    "is_active": true,
+    "created_at": "2025-11-28T03:14:32.786Z",
+    "updated_at": "2025-11-28T03:14:32.786Z"
+  }
+},
+{
+  "model": "pos_ecommerce.branch",
+  "pk": 2,
+  "fields": {
+    "company": 1,
+    "name": "Sucursal Norte",
+    "address": "Sector Norte, Temuco - TecnoShop Ltda.",
+    "phone": "+56922222222",
+    "is_active": true,
+    "created_at": "2025-11-28T03:14:32.789Z",
+    "updated_at": "2025-11-28T03:14:32.789Z"
+  }
+},
+{
+  "model": "pos_ecommerce.branch",
+  "pk": 3,
+  "fields": {
+    "company": 2,
+    "name": "Sucursal Centro",
+    "address": "Centro, Temuco - MegaRetail S.A.",
+    "phone": "+56911111111",
+    "is_active": true,
+    "created_at": "2025-11-28T03:14:32.792Z",
+    "updated_at": "2025-11-28T03:14:32.792Z"
+  }
+},
+{
+  "model": "pos_ecommerce.branch",
+  "pk": 4,
+  "fields": {
+    "company": 2,
+    "name": "Sucursal Norte",
+    "address": "Sector Norte, Temuco - MegaRetail S.A.",
+    "phone": "+56922222222",
+    "is_active": true,
+    "created_at": "2025-11-28T03:14:32.796Z",
+    "updated_at": "2025-11-28T03:14:32.796Z"
+  }
+},
+{
+  "model": "pos_ecommerce.supplier",
+  "pk": 1,
+  "fields": {
+    "company": 1,
+    "name": "Distribuidora Nacional S.A. - TecnoShop Ltda.",
+    "rut": "85000000-1",
+    "contact_name": "Contacto 1",
+    "contact_email": "proveedor1@76543210.cl",
+    "contact_phone": "+56956000000",
+    "address": "Dirección Proveedor 1",
+    "is_active": true,
+    "created_at": "2025-11-28T03:14:32.801Z",
+    "updated_at": "2025-11-28T03:14:32.801Z"
+  }
+},
+{
+  "model": "pos_ecommerce.supplier",
+  "pk": 2,
+  "fields": {
+    "company": 1,
+    "name": "Importadora del Sur Ltda. - TecnoShop Ltda.",
+    "rut": "85000001-2",
+    "contact_name": "Contacto 2",
+    "contact_email": "proveedor2@76543210.cl",
+    "contact_phone": "+56956100000",
+    "address": "Dirección Proveedor 2",
+    "is_active": true,
+    "created_at": "2025-11-28T03:14:32.805Z",
+    "updated_at": "2025-11-28T03:14:32.805Z"
+  }
+},
+{
+  "model": "pos_ecommerce.supplier",
+  "pk": 3,
+  "fields": {
+    "company": 1,
+    "name": "Mayorista Regional - TecnoShop Ltda.",
+    "rut": "85000002-3",
+    "contact_name": "Contacto 3",
+    "contact_email": "proveedor3@76543210.cl",
+    "contact_phone": "+56956200000",
+    "address": "Dirección Proveedor 3",
+    "is_active": true,
+    "created_at": "2025-11-28T03:14:32.809Z",
+    "updated_at": "2025-11-28T03:14:32.809Z"
+  }
+},
+{
+  "model": "pos_ecommerce.supplier",
+  "pk": 4,
+  "fields": {
+    "company": 2,
+    "name": "Distribuidora Nacional S.A. - MegaRetail S.A.",
+    "rut": "85000000-1",
+    "contact_name": "Contacto 1",
+    "contact_email": "proveedor1@78901234.cl",
+    "contact_phone": "+56956000000",
+    "address": "Dirección Proveedor 1",
+    "is_active": true,
+    "created_at": "2025-11-28T03:14:32.813Z",
+    "updated_at": "2025-11-28T03:14:32.813Z"
+  }
+},
+{
+  "model": "pos_ecommerce.supplier",
+  "pk": 5,
+  "fields": {
+    "company": 2,
+    "name": "Importadora del Sur Ltda. - MegaRetail S.A.",
+    "rut": "85000001-2",
+    "contact_name": "Contacto 2",
+    "contact_email": "proveedor2@78901234.cl",
+    "contact_phone": "+56956100000",
+    "address": "Dirección Proveedor 2",
+    "is_active": true,
+    "created_at": "2025-11-28T03:14:32.817Z",
+    "updated_at": "2025-11-28T03:14:32.817Z"
+  }
+},
+{
+  "model": "pos_ecommerce.supplier",
+  "pk": 6,
+  "fields": {
+    "company": 2,
+    "name": "Mayorista Regional - MegaRetail S.A.",
+    "rut": "85000002-3",
+    "contact_name": "Contacto 3",
+    "contact_email": "proveedor3@78901234.cl",
+    "contact_phone": "+56956200000",
+    "address": "Dirección Proveedor 3",
+    "is_active": true,
+    "created_at": "2025-11-28T03:14:32.821Z",
+    "updated_at": "2025-11-28T03:14:32.821Z"
+  }
+},
+{
+  "model": "pos_ecommerce.product",
+  "pk": 1,
+  "fields": {
+    "company": 1,
+    "sku": "76543210-NOTEBOOK-001",
+    "name": "Notebook HP 15\"",
+    "description": "Producto de calidad: Notebook HP 15\". Disponible para venta en sucursales y tienda online.",
+    "category": "ELECTRONICOS",
+    "price": "599990.00",
+    "cost": "450000.00",
+    "is_active": true,
+    "image_url": "",
+    "created_at": "2025-11-28T03:14:32.825Z",
+    "updated_at": "2025-11-28T03:14:32.825Z"
+  }
+},
+{
+  "model": "pos_ecommerce.product",
+  "pk": 2,
+  "fields": {
+    "company": 1,
+    "sku": "76543210-MOUSE-001",
+    "name": "Mouse Logitech Inalámbrico",
+    "description": "Producto de calidad: Mouse Logitech Inalámbrico. Disponible para venta en sucursales y tienda online.",
+    "category": "ELECTRONICOS",
+    "price": "19990.00",
+    "cost": "12000.00",
+    "is_active": true,
+    "image_url": "",
+    "created_at": "2025-11-28T03:14:32.828Z",
+    "updated_at": "2025-11-28T03:14:32.828Z"
+  }
+},
+{
+  "model": "pos_ecommerce.product",
+  "pk": 3,
+  "fields": {
+    "company": 1,
+    "sku": "76543210-TECLADO-001",
+    "name": "Teclado Mecánico RGB",
+    "description": "Producto de calidad: Teclado Mecánico RGB. Disponible para venta en sucursales y tienda online.",
+    "category": "ELECTRONICOS",
+    "price": "49990.00",
+    "cost": "35000.00",
+    "is_active": true,
+    "image_url": "",
+    "created_at": "2025-11-28T03:14:32.832Z",
+    "updated_at": "2025-11-28T03:14:32.832Z"
+  }
+},
+{
+  "model": "pos_ecommerce.product",
+  "pk": 4,
+  "fields": {
+    "company": 1,
+    "sku": "76543210-CELULAR-001",
+    "name": "Smartphone Samsung Galaxy",
+    "description": "Producto de calidad: Smartphone Samsung Galaxy. Disponible para venta en sucursales y tienda online.",
+    "category": "ELECTRONICOS",
+    "price": "399990.00",
+    "cost": "280000.00",
+    "is_active": true,
+    "image_url": "",
+    "created_at": "2025-11-28T03:14:32.836Z",
+    "updated_at": "2025-11-28T03:14:32.836Z"
+  }
+},
+{
+  "model": "pos_ecommerce.product",
+  "pk": 5,
+  "fields": {
+    "company": 1,
+    "sku": "76543210-POLERA-001",
+    "name": "Polera Algodón Unisex",
+    "description": "Producto de calidad: Polera Algodón Unisex. Disponible para venta en sucursales y tienda online.",
+    "category": "ROPA",
+    "price": "12990.00",
+    "cost": "8000.00",
+    "is_active": true,
+    "image_url": "",
+    "created_at": "2025-11-28T03:14:32.840Z",
+    "updated_at": "2025-11-28T03:14:32.840Z"
+  }
+},
+{
+  "model": "pos_ecommerce.product",
+  "pk": 6,
+  "fields": {
+    "company": 1,
+    "sku": "76543210-JEANS-001",
+    "name": "Jeans Clásico Azul",
+    "description": "Producto de calidad: Jeans Clásico Azul. Disponible para venta en sucursales y tienda online.",
+    "category": "ROPA",
+    "price": "29990.00",
+    "cost": "18000.00",
+    "is_active": true,
+    "image_url": "",
+    "created_at": "2025-11-28T03:14:32.845Z",
+    "updated_at": "2025-11-28T03:14:32.845Z"
+  }
+},
+{
+  "model": "pos_ecommerce.product",
+  "pk": 7,
+  "fields": {
+    "company": 1,
+    "sku": "76543210-CHAQUETA-001",
+    "name": "Chaqueta Impermeable",
+    "description": "Producto de calidad: Chaqueta Impermeable. Disponible para venta en sucursales y tienda online.",
+    "category": "ROPA",
+    "price": "45990.00",
+    "cost": "30000.00",
+    "is_active": true,
+    "image_url": "",
+    "created_at": "2025-11-28T03:14:32.850Z",
+    "updated_at": "2025-11-28T03:14:32.850Z"
+  }
+},
+{
+  "model": "pos_ecommerce.product",
+  "pk": 8,
+  "fields": {
+    "company": 1,
+    "sku": "76543210-CAFE-001",
+    "name": "Café Premium 500g",
+    "description": "Producto de calidad: Café Premium 500g. Disponible para venta en sucursales y tienda online.",
+    "category": "ALIMENTOS",
+    "price": "8990.00",
+    "cost": "6000.00",
+    "is_active": true,
+    "image_url": "",
+    "created_at": "2025-11-28T03:14:32.855Z",
+    "updated_at": "2025-11-28T03:14:32.855Z"
+  }
+},
+{
+  "model": "pos_ecommerce.product",
+  "pk": 9,
+  "fields": {
+    "company": 1,
+    "sku": "76543210-CHOCOLATE-001",
+    "name": "Chocolate Artesanal 200g",
+    "description": "Producto de calidad: Chocolate Artesanal 200g. Disponible para venta en sucursales y tienda online.",
+    "category": "ALIMENTOS",
+    "price": "5990.00",
+    "cost": "3500.00",
+    "is_active": true,
+    "image_url": "",
+    "created_at": "2025-11-28T03:14:32.859Z",
+    "updated_at": "2025-11-28T03:14:32.859Z"
+  }
+},
+{
+  "model": "pos_ecommerce.product",
+  "pk": 10,
+  "fields": {
+    "company": 1,
+    "sku": "76543210-GALLETAS-001",
+    "name": "Galletas Integrales 300g",
+    "description": "Producto de calidad: Galletas Integrales 300g. Disponible para venta en sucursales y tienda online.",
+    "category": "ALIMENTOS",
+    "price": "3990.00",
+    "cost": "2000.00",
+    "is_active": true,
+    "image_url": "",
+    "created_at": "2025-11-28T03:14:32.863Z",
+    "updated_at": "2025-11-28T03:14:32.863Z"
+  }
+},
+{
+  "model": "pos_ecommerce.product",
+  "pk": 11,
+  "fields": {
+    "company": 1,
+    "sku": "76543210-LAMPARA-001",
+    "name": "Lámpara LED Escritorio",
+    "description": "Producto de calidad: Lámpara LED Escritorio. Disponible para venta en sucursales y tienda online.",
+    "category": "HOGAR",
+    "price": "34990.00",
+    "cost": "22000.00",
+    "is_active": true,
+    "image_url": "",
+    "created_at": "2025-11-28T03:14:32.868Z",
+    "updated_at": "2025-11-28T03:14:32.868Z"
+  }
+},
+{
+  "model": "pos_ecommerce.product",
+  "pk": 12,
+  "fields": {
+    "company": 1,
+    "sku": "76543210-ALMOHADA-001",
+    "name": "Almohada Viscoelástica",
+    "description": "Producto de calidad: Almohada Viscoelástica. Disponible para venta en sucursales y tienda online.",
+    "category": "HOGAR",
+    "price": "19990.00",
+    "cost": "12000.00",
+    "is_active": true,
+    "image_url": "",
+    "created_at": "2025-11-28T03:14:32.873Z",
+    "updated_at": "2025-11-28T03:14:32.873Z"
+  }
+},
+{
+  "model": "pos_ecommerce.product",
+  "pk": 13,
+  "fields": {
+    "company": 1,
+    "sku": "76543210-SABANAS-001",
+    "name": "Juego de Sábanas 2 plazas",
+    "description": "Producto de calidad: Juego de Sábanas 2 plazas. Disponible para venta en sucursales y tienda online.",
+    "category": "HOGAR",
+    "price": "24990.00",
+    "cost": "15000.00",
+    "is_active": true,
+    "image_url": "",
+    "created_at": "2025-11-28T03:14:32.876Z",
+    "updated_at": "2025-11-28T03:14:32.876Z"
+  }
+},
+{
+  "model": "pos_ecommerce.product",
+  "pk": 14,
+  "fields": {
+    "company": 1,
+    "sku": "76543210-BALON-001",
+    "name": "Balón Fútbol Profesional",
+    "description": "Producto de calidad: Balón Fútbol Profesional. Disponible para venta en sucursales y tienda online.",
+    "category": "DEPORTES",
+    "price": "24990.00",
+    "cost": "16000.00",
+    "is_active": true,
+    "image_url": "",
+    "created_at": "2025-11-28T03:14:32.881Z",
+    "updated_at": "2025-11-28T03:14:32.881Z"
+  }
+},
+{
+  "model": "pos_ecommerce.product",
+  "pk": 15,
+  "fields": {
+    "company": 1,
+    "sku": "76543210-MANCUERNA-001",
+    "name": "Mancuerna 5kg (par)",
+    "description": "Producto de calidad: Mancuerna 5kg (par). Disponible para venta en sucursales y tienda online.",
+    "category": "DEPORTES",
+    "price": "29990.00",
+    "cost": "20000.00",
+    "is_active": true,
+    "image_url": "",
+    "created_at": "2025-11-28T03:14:32.884Z",
+    "updated_at": "2025-11-28T03:14:32.884Z"
+  }
+},
+{
+  "model": "pos_ecommerce.product",
+  "pk": 16,
+  "fields": {
+    "company": 1,
+    "sku": "76543210-COLCHONETA-001",
+    "name": "Colchoneta Yoga Premium",
+    "description": "Producto de calidad: Colchoneta Yoga Premium. Disponible para venta en sucursales y tienda online.",
+    "category": "DEPORTES",
+    "price": "19990.00",
+    "cost": "12000.00",
+    "is_active": true,
+    "image_url": "",
+    "created_at": "2025-11-28T03:14:32.889Z",
+    "updated_at": "2025-11-28T03:14:32.889Z"
+  }
+},
+{
+  "model": "pos_ecommerce.product",
+  "pk": 17,
+  "fields": {
+    "company": 1,
+    "sku": "76543210-SHAMPOO-001",
+    "name": "Shampoo Reparador 400ml",
+    "description": "Producto de calidad: Shampoo Reparador 400ml. Disponible para venta en sucursales y tienda online.",
+    "category": "SALUD",
+    "price": "8990.00",
+    "cost": "5000.00",
+    "is_active": true,
+    "image_url": "",
+    "created_at": "2025-11-28T03:14:32.893Z",
+    "updated_at": "2025-11-28T03:14:32.893Z"
+  }
+},
+{
+  "model": "pos_ecommerce.product",
+  "pk": 18,
+  "fields": {
+    "company": 1,
+    "sku": "76543210-CREMA-001",
+    "name": "Crema Facial Hidratante",
+    "description": "Producto de calidad: Crema Facial Hidratante. Disponible para venta en sucursales y tienda online.",
+    "category": "SALUD",
+    "price": "15990.00",
+    "cost": "9000.00",
+    "is_active": true,
+    "image_url": "",
+    "created_at": "2025-11-28T03:14:32.897Z",
+    "updated_at": "2025-11-28T03:14:32.897Z"
+  }
+},
+{
+  "model": "pos_ecommerce.product",
+  "pk": 19,
+  "fields": {
+    "company": 1,
+    "sku": "76543210-LIBRO-001",
+    "name": "Libro Bestseller Ficción",
+    "description": "Producto de calidad: Libro Bestseller Ficción. Disponible para venta en sucursales y tienda online.",
+    "category": "LIBROS",
+    "price": "14990.00",
+    "cost": "8000.00",
+    "is_active": true,
+    "image_url": "",
+    "created_at": "2025-11-28T03:14:32.900Z",
+    "updated_at": "2025-11-28T03:14:32.900Z"
+  }
+},
+{
+  "model": "pos_ecommerce.product",
+  "pk": 20,
+  "fields": {
+    "company": 1,
+    "sku": "76543210-LIBRO-002",
+    "name": "Manual de Programación Python",
+    "description": "Producto de calidad: Manual de Programación Python. Disponible para venta en sucursales y tienda online.",
+    "category": "LIBROS",
+    "price": "24990.00",
+    "cost": "15000.00",
+    "is_active": true,
+    "image_url": "",
+    "created_at": "2025-11-28T03:14:32.904Z",
+    "updated_at": "2025-11-28T03:14:32.904Z"
+  }
+},
+{
+  "model": "pos_ecommerce.product",
+  "pk": 21,
+  "fields": {
+    "company": 2,
+    "sku": "78901234-NOTEBOOK-001",
+    "name": "Notebook HP 15\"",
+    "description": "Producto de calidad: Notebook HP 15\". Disponible para venta en sucursales y tienda online.",
+    "category": "ELECTRONICOS",
+    "price": "599990.00",
+    "cost": "450000.00",
+    "is_active": true,
+    "image_url": "",
+    "created_at": "2025-11-28T03:14:32.908Z",
+    "updated_at": "2025-11-28T03:14:32.909Z"
+  }
+},
+{
+  "model": "pos_ecommerce.product",
+  "pk": 22,
+  "fields": {
+    "company": 2,
+    "sku": "78901234-MOUSE-001",
+    "name": "Mouse Logitech Inalámbrico",
+    "description": "Producto de calidad: Mouse Logitech Inalámbrico. Disponible para venta en sucursales y tienda online.",
+    "category": "ELECTRONICOS",
+    "price": "19990.00",
+    "cost": "12000.00",
+    "is_active": true,
+    "image_url": "",
+    "created_at": "2025-11-28T03:14:32.912Z",
+    "updated_at": "2025-11-28T03:14:32.912Z"
+  }
+},
+{
+  "model": "pos_ecommerce.product",
+  "pk": 23,
+  "fields": {
+    "company": 2,
+    "sku": "78901234-TECLADO-001",
+    "name": "Teclado Mecánico RGB",
+    "description": "Producto de calidad: Teclado Mecánico RGB. Disponible para venta en sucursales y tienda online.",
+    "category": "ELECTRONICOS",
+    "price": "49990.00",
+    "cost": "35000.00",
+    "is_active": true,
+    "image_url": "",
+    "created_at": "2025-11-28T03:14:32.917Z",
+    "updated_at": "2025-11-28T03:14:32.917Z"
+  }
+},
+{
+  "model": "pos_ecommerce.product",
+  "pk": 24,
+  "fields": {
+    "company": 2,
+    "sku": "78901234-CELULAR-001",
+    "name": "Smartphone Samsung Galaxy",
+    "description": "Producto de calidad: Smartphone Samsung Galaxy. Disponible para venta en sucursales y tienda online.",
+    "category": "ELECTRONICOS",
+    "price": "399990.00",
+    "cost": "280000.00",
+    "is_active": true,
+    "image_url": "",
+    "created_at": "2025-11-28T03:14:32.921Z",
+    "updated_at": "2025-11-28T03:14:32.921Z"
+  }
+},
+{
+  "model": "pos_ecommerce.product",
+  "pk": 25,
+  "fields": {
+    "company": 2,
+    "sku": "78901234-POLERA-001",
+    "name": "Polera Algodón Unisex",
+    "description": "Producto de calidad: Polera Algodón Unisex. Disponible para venta en sucursales y tienda online.",
+    "category": "ROPA",
+    "price": "12990.00",
+    "cost": "8000.00",
+    "is_active": true,
+    "image_url": "",
+    "created_at": "2025-11-28T03:14:32.926Z",
+    "updated_at": "2025-11-28T03:14:32.926Z"
+  }
+},
+{
+  "model": "pos_ecommerce.product",
+  "pk": 26,
+  "fields": {
+    "company": 2,
+    "sku": "78901234-JEANS-001",
+    "name": "Jeans Clásico Azul",
+    "description": "Producto de calidad: Jeans Clásico Azul. Disponible para venta en sucursales y tienda online.",
+    "category": "ROPA",
+    "price": "29990.00",
+    "cost": "18000.00",
+    "is_active": true,
+    "image_url": "",
+    "created_at": "2025-11-28T03:14:32.931Z",
+    "updated_at": "2025-11-28T03:14:32.931Z"
+  }
+},
+{
+  "model": "pos_ecommerce.product",
+  "pk": 27,
+  "fields": {
+    "company": 2,
+    "sku": "78901234-CHAQUETA-001",
+    "name": "Chaqueta Impermeable",
+    "description": "Producto de calidad: Chaqueta Impermeable. Disponible para venta en sucursales y tienda online.",
+    "category": "ROPA",
+    "price": "45990.00",
+    "cost": "30000.00",
+    "is_active": true,
+    "image_url": "",
+    "created_at": "2025-11-28T03:14:32.934Z",
+    "updated_at": "2025-11-28T03:14:32.934Z"
+  }
+},
+{
+  "model": "pos_ecommerce.product",
+  "pk": 28,
+  "fields": {
+    "company": 2,
+    "sku": "78901234-CAFE-001",
+    "name": "Café Premium 500g",
+    "description": "Producto de calidad: Café Premium 500g. Disponible para venta en sucursales y tienda online.",
+    "category": "ALIMENTOS",
+    "price": "8990.00",
+    "cost": "6000.00",
+    "is_active": true,
+    "image_url": "",
+    "created_at": "2025-11-28T03:14:32.938Z",
+    "updated_at": "2025-11-28T03:14:32.938Z"
+  }
+},
+{
+  "model": "pos_ecommerce.product",
+  "pk": 29,
+  "fields": {
+    "company": 2,
+    "sku": "78901234-CHOCOLATE-001",
+    "name": "Chocolate Artesanal 200g",
+    "description": "Producto de calidad: Chocolate Artesanal 200g. Disponible para venta en sucursales y tienda online.",
+    "category": "ALIMENTOS",
+    "price": "5990.00",
+    "cost": "3500.00",
+    "is_active": true,
+    "image_url": "",
+    "created_at": "2025-11-28T03:14:32.942Z",
+    "updated_at": "2025-11-28T03:14:32.942Z"
+  }
+},
+{
+  "model": "pos_ecommerce.product",
+  "pk": 30,
+  "fields": {
+    "company": 2,
+    "sku": "78901234-GALLETAS-001",
+    "name": "Galletas Integrales 300g",
+    "description": "Producto de calidad: Galletas Integrales 300g. Disponible para venta en sucursales y tienda online.",
+    "category": "ALIMENTOS",
+    "price": "3990.00",
+    "cost": "2000.00",
+    "is_active": true,
+    "image_url": "",
+    "created_at": "2025-11-28T03:14:32.947Z",
+    "updated_at": "2025-11-28T03:14:32.947Z"
+  }
+},
+{
+  "model": "pos_ecommerce.product",
+  "pk": 31,
+  "fields": {
+    "company": 2,
+    "sku": "78901234-LAMPARA-001",
+    "name": "Lámpara LED Escritorio",
+    "description": "Producto de calidad: Lámpara LED Escritorio. Disponible para venta en sucursales y tienda online.",
+    "category": "HOGAR",
+    "price": "34990.00",
+    "cost": "22000.00",
+    "is_active": true,
+    "image_url": "",
+    "created_at": "2025-11-28T03:14:32.951Z",
+    "updated_at": "2025-11-28T03:14:32.951Z"
+  }
+},
+{
+  "model": "pos_ecommerce.product",
+  "pk": 32,
+  "fields": {
+    "company": 2,
+    "sku": "78901234-ALMOHADA-001",
+    "name": "Almohada Viscoelástica",
+    "description": "Producto de calidad: Almohada Viscoelástica. Disponible para venta en sucursales y tienda online.",
+    "category": "HOGAR",
+    "price": "19990.00",
+    "cost": "12000.00",
+    "is_active": true,
+    "image_url": "",
+    "created_at": "2025-11-28T03:14:32.954Z",
+    "updated_at": "2025-11-28T03:14:32.954Z"
+  }
+},
+{
+  "model": "pos_ecommerce.product",
+  "pk": 33,
+  "fields": {
+    "company": 2,
+    "sku": "78901234-SABANAS-001",
+    "name": "Juego de Sábanas 2 plazas",
+    "description": "Producto de calidad: Juego de Sábanas 2 plazas. Disponible para venta en sucursales y tienda online.",
+    "category": "HOGAR",
+    "price": "24990.00",
+    "cost": "15000.00",
+    "is_active": true,
+    "image_url": "",
+    "created_at": "2025-11-28T03:14:32.957Z",
+    "updated_at": "2025-11-28T03:14:32.957Z"
+  }
+},
+{
+  "model": "pos_ecommerce.product",
+  "pk": 34,
+  "fields": {
+    "company": 2,
+    "sku": "78901234-BALON-001",
+    "name": "Balón Fútbol Profesional",
+    "description": "Producto de calidad: Balón Fútbol Profesional. Disponible para venta en sucursales y tienda online.",
+    "category": "DEPORTES",
+    "price": "24990.00",
+    "cost": "16000.00",
+    "is_active": true,
+    "image_url": "",
+    "created_at": "2025-11-28T03:14:32.962Z",
+    "updated_at": "2025-11-28T03:14:32.962Z"
+  }
+},
+{
+  "model": "pos_ecommerce.product",
+  "pk": 35,
+  "fields": {
+    "company": 2,
+    "sku": "78901234-MANCUERNA-001",
+    "name": "Mancuerna 5kg (par)",
+    "description": "Producto de calidad: Mancuerna 5kg (par). Disponible para venta en sucursales y tienda online.",
+    "category": "DEPORTES",
+    "price": "29990.00",
+    "cost": "20000.00",
+    "is_active": true,
+    "image_url": "",
+    "created_at": "2025-11-28T03:14:32.965Z",
+    "updated_at": "2025-11-28T03:14:32.965Z"
+  }
+},
+{
+  "model": "pos_ecommerce.product",
+  "pk": 36,
+  "fields": {
+    "company": 2,
+    "sku": "78901234-COLCHONETA-001",
+    "name": "Colchoneta Yoga Premium",
+    "description": "Producto de calidad: Colchoneta Yoga Premium. Disponible para venta en sucursales y tienda online.",
+    "category": "DEPORTES",
+    "price": "19990.00",
+    "cost": "12000.00",
+    "is_active": true,
+    "image_url": "",
+    "created_at": "2025-11-28T03:14:32.969Z",
+    "updated_at": "2025-11-28T03:14:32.969Z"
+  }
+},
+{
+  "model": "pos_ecommerce.product",
+  "pk": 37,
+  "fields": {
+    "company": 2,
+    "sku": "78901234-SHAMPOO-001",
+    "name": "Shampoo Reparador 400ml",
+    "description": "Producto de calidad: Shampoo Reparador 400ml. Disponible para venta en sucursales y tienda online.",
+    "category": "SALUD",
+    "price": "8990.00",
+    "cost": "5000.00",
+    "is_active": true,
+    "image_url": "",
+    "created_at": "2025-11-28T03:14:32.972Z",
+    "updated_at": "2025-11-28T03:14:32.972Z"
+  }
+},
+{
+  "model": "pos_ecommerce.product",
+  "pk": 38,
+  "fields": {
+    "company": 2,
+    "sku": "78901234-CREMA-001",
+    "name": "Crema Facial Hidratante",
+    "description": "Producto de calidad: Crema Facial Hidratante. Disponible para venta en sucursales y tienda online.",
+    "category": "SALUD",
+    "price": "15990.00",
+    "cost": "9000.00",
+    "is_active": true,
+    "image_url": "",
+    "created_at": "2025-11-28T03:14:32.977Z",
+    "updated_at": "2025-11-28T03:14:32.977Z"
+  }
+},
+{
+  "model": "pos_ecommerce.product",
+  "pk": 39,
+  "fields": {
+    "company": 2,
+    "sku": "78901234-LIBRO-001",
+    "name": "Libro Bestseller Ficción",
+    "description": "Producto de calidad: Libro Bestseller Ficción. Disponible para venta en sucursales y tienda online.",
+    "category": "LIBROS",
+    "price": "14990.00",
+    "cost": "8000.00",
+    "is_active": true,
+    "image_url": "",
+    "created_at": "2025-11-28T03:14:32.981Z",
+    "updated_at": "2025-11-28T03:14:32.981Z"
+  }
+},
+{
+  "model": "pos_ecommerce.product",
+  "pk": 40,
+  "fields": {
+    "company": 2,
+    "sku": "78901234-LIBRO-002",
+    "name": "Manual de Programación Python",
+    "description": "Producto de calidad: Manual de Programación Python. Disponible para venta en sucursales y tienda online.",
+    "category": "LIBROS",
+    "price": "24990.00",
+    "cost": "15000.00",
+    "is_active": true,
+    "image_url": "",
+    "created_at": "2025-11-28T03:14:32.985Z",
+    "updated_at": "2025-11-28T03:14:32.985Z"
+  }
+},
+{
+  "model": "pos_ecommerce.inventory",
+  "pk": 1,
+  "fields": {
+    "branch": 1,
+    "product": 1,
+    "stock": 100,
+    "reorder_point": 20,
+    "last_restock_date": null,
+    "created_at": "2025-11-28T03:14:32.989Z",
+    "updated_at": "2025-11-28T03:14:32.989Z"
+  }
+},
+{
+  "model": "pos_ecommerce.inventory",
+  "pk": 2,
+  "fields": {
+    "branch": 1,
+    "product": 2,
+    "stock": 100,
+    "reorder_point": 20,
+    "last_restock_date": null,
+    "created_at": "2025-11-28T03:14:32.993Z",
+    "updated_at": "2025-11-28T03:14:32.993Z"
+  }
+},
+{
+  "model": "pos_ecommerce.inventory",
+  "pk": 3,
+  "fields": {
+    "branch": 1,
+    "product": 3,
+    "stock": 100,
+    "reorder_point": 20,
+    "last_restock_date": null,
+    "created_at": "2025-11-28T03:14:32.997Z",
+    "updated_at": "2025-11-28T03:14:32.997Z"
+  }
+},
+{
+  "model": "pos_ecommerce.inventory",
+  "pk": 4,
+  "fields": {
+    "branch": 1,
+    "product": 4,
+    "stock": 100,
+    "reorder_point": 20,
+    "last_restock_date": null,
+    "created_at": "2025-11-28T03:14:33.001Z",
+    "updated_at": "2025-11-28T03:14:33.001Z"
+  }
+},
+{
+  "model": "pos_ecommerce.inventory",
+  "pk": 5,
+  "fields": {
+    "branch": 1,
+    "product": 5,
+    "stock": 100,
+    "reorder_point": 20,
+    "last_restock_date": null,
+    "created_at": "2025-11-28T03:14:33.006Z",
+    "updated_at": "2025-11-28T03:14:33.006Z"
+  }
+},
+{
+  "model": "pos_ecommerce.inventory",
+  "pk": 6,
+  "fields": {
+    "branch": 1,
+    "product": 6,
+    "stock": 100,
+    "reorder_point": 20,
+    "last_restock_date": null,
+    "created_at": "2025-11-28T03:14:33.010Z",
+    "updated_at": "2025-11-28T03:14:33.010Z"
+  }
+},
+{
+  "model": "pos_ecommerce.inventory",
+  "pk": 7,
+  "fields": {
+    "branch": 1,
+    "product": 7,
+    "stock": 100,
+    "reorder_point": 20,
+    "last_restock_date": null,
+    "created_at": "2025-11-28T03:14:33.014Z",
+    "updated_at": "2025-11-28T03:14:33.014Z"
+  }
+},
+{
+  "model": "pos_ecommerce.inventory",
+  "pk": 8,
+  "fields": {
+    "branch": 1,
+    "product": 8,
+    "stock": 100,
+    "reorder_point": 20,
+    "last_restock_date": null,
+    "created_at": "2025-11-28T03:14:33.019Z",
+    "updated_at": "2025-11-28T03:14:33.019Z"
+  }
+},
+{
+  "model": "pos_ecommerce.inventory",
+  "pk": 9,
+  "fields": {
+    "branch": 1,
+    "product": 9,
+    "stock": 100,
+    "reorder_point": 20,
+    "last_restock_date": null,
+    "created_at": "2025-11-28T03:14:33.023Z",
+    "updated_at": "2025-11-28T03:14:33.023Z"
+  }
+},
+{
+  "model": "pos_ecommerce.inventory",
+  "pk": 10,
+  "fields": {
+    "branch": 1,
+    "product": 10,
+    "stock": 100,
+    "reorder_point": 20,
+    "last_restock_date": null,
+    "created_at": "2025-11-28T03:14:33.027Z",
+    "updated_at": "2025-11-28T03:14:33.027Z"
+  }
+},
+{
+  "model": "pos_ecommerce.inventory",
+  "pk": 11,
+  "fields": {
+    "branch": 1,
+    "product": 11,
+    "stock": 100,
+    "reorder_point": 20,
+    "last_restock_date": null,
+    "created_at": "2025-11-28T03:14:33.031Z",
+    "updated_at": "2025-11-28T03:14:33.031Z"
+  }
+},
+{
+  "model": "pos_ecommerce.inventory",
+  "pk": 12,
+  "fields": {
+    "branch": 1,
+    "product": 12,
+    "stock": 100,
+    "reorder_point": 20,
+    "last_restock_date": null,
+    "created_at": "2025-11-28T03:14:33.035Z",
+    "updated_at": "2025-11-28T03:14:33.035Z"
+  }
+},
+{
+  "model": "pos_ecommerce.inventory",
+  "pk": 13,
+  "fields": {
+    "branch": 1,
+    "product": 13,
+    "stock": 100,
+    "reorder_point": 20,
+    "last_restock_date": null,
+    "created_at": "2025-11-28T03:14:33.038Z",
+    "updated_at": "2025-11-28T03:14:33.038Z"
+  }
+},
+{
+  "model": "pos_ecommerce.inventory",
+  "pk": 14,
+  "fields": {
+    "branch": 1,
+    "product": 14,
+    "stock": 100,
+    "reorder_point": 20,
+    "last_restock_date": null,
+    "created_at": "2025-11-28T03:14:33.041Z",
+    "updated_at": "2025-11-28T03:14:33.041Z"
+  }
+},
+{
+  "model": "pos_ecommerce.inventory",
+  "pk": 15,
+  "fields": {
+    "branch": 1,
+    "product": 15,
+    "stock": 100,
+    "reorder_point": 20,
+    "last_restock_date": null,
+    "created_at": "2025-11-28T03:14:33.044Z",
+    "updated_at": "2025-11-28T03:14:33.044Z"
+  }
+},
+{
+  "model": "pos_ecommerce.inventory",
+  "pk": 16,
+  "fields": {
+    "branch": 1,
+    "product": 16,
+    "stock": 100,
+    "reorder_point": 20,
+    "last_restock_date": null,
+    "created_at": "2025-11-28T03:14:33.048Z",
+    "updated_at": "2025-11-28T03:14:33.048Z"
+  }
+},
+{
+  "model": "pos_ecommerce.inventory",
+  "pk": 17,
+  "fields": {
+    "branch": 1,
+    "product": 17,
+    "stock": 100,
+    "reorder_point": 20,
+    "last_restock_date": null,
+    "created_at": "2025-11-28T03:14:33.051Z",
+    "updated_at": "2025-11-28T03:14:33.051Z"
+  }
+},
+{
+  "model": "pos_ecommerce.inventory",
+  "pk": 18,
+  "fields": {
+    "branch": 1,
+    "product": 18,
+    "stock": 100,
+    "reorder_point": 20,
+    "last_restock_date": null,
+    "created_at": "2025-11-28T03:14:33.054Z",
+    "updated_at": "2025-11-28T03:14:33.054Z"
+  }
+},
+{
+  "model": "pos_ecommerce.inventory",
+  "pk": 19,
+  "fields": {
+    "branch": 1,
+    "product": 19,
+    "stock": 100,
+    "reorder_point": 20,
+    "last_restock_date": null,
+    "created_at": "2025-11-28T03:14:33.059Z",
+    "updated_at": "2025-11-28T03:14:33.059Z"
+  }
+},
+{
+  "model": "pos_ecommerce.inventory",
+  "pk": 20,
+  "fields": {
+    "branch": 1,
+    "product": 20,
+    "stock": 100,
+    "reorder_point": 20,
+    "last_restock_date": null,
+    "created_at": "2025-11-28T03:14:33.062Z",
+    "updated_at": "2025-11-28T03:14:33.062Z"
+  }
+},
+{
+  "model": "pos_ecommerce.inventory",
+  "pk": 21,
+  "fields": {
+    "branch": 2,
+    "product": 1,
+    "stock": 100,
+    "reorder_point": 20,
+    "last_restock_date": null,
+    "created_at": "2025-11-28T03:14:33.067Z",
+    "updated_at": "2025-11-28T03:14:33.067Z"
+  }
+},
+{
+  "model": "pos_ecommerce.inventory",
+  "pk": 22,
+  "fields": {
+    "branch": 2,
+    "product": 2,
+    "stock": 100,
+    "reorder_point": 20,
+    "last_restock_date": null,
+    "created_at": "2025-11-28T03:14:33.070Z",
+    "updated_at": "2025-11-28T03:14:33.070Z"
+  }
+},
+{
+  "model": "pos_ecommerce.inventory",
+  "pk": 23,
+  "fields": {
+    "branch": 2,
+    "product": 3,
+    "stock": 100,
+    "reorder_point": 20,
+    "last_restock_date": null,
+    "created_at": "2025-11-28T03:14:33.075Z",
+    "updated_at": "2025-11-28T03:14:33.075Z"
+  }
+},
+{
+  "model": "pos_ecommerce.inventory",
+  "pk": 24,
+  "fields": {
+    "branch": 2,
+    "product": 4,
+    "stock": 100,
+    "reorder_point": 20,
+    "last_restock_date": null,
+    "created_at": "2025-11-28T03:14:33.079Z",
+    "updated_at": "2025-11-28T03:14:33.079Z"
+  }
+},
+{
+  "model": "pos_ecommerce.inventory",
+  "pk": 25,
+  "fields": {
+    "branch": 2,
+    "product": 5,
+    "stock": 100,
+    "reorder_point": 20,
+    "last_restock_date": null,
+    "created_at": "2025-11-28T03:14:33.083Z",
+    "updated_at": "2025-11-28T03:14:33.083Z"
+  }
+},
+{
+  "model": "pos_ecommerce.inventory",
+  "pk": 26,
+  "fields": {
+    "branch": 2,
+    "product": 6,
+    "stock": 100,
+    "reorder_point": 20,
+    "last_restock_date": null,
+    "created_at": "2025-11-28T03:14:33.087Z",
+    "updated_at": "2025-11-28T03:14:33.087Z"
+  }
+},
+{
+  "model": "pos_ecommerce.inventory",
+  "pk": 27,
+  "fields": {
+    "branch": 2,
+    "product": 7,
+    "stock": 100,
+    "reorder_point": 20,
+    "last_restock_date": null,
+    "created_at": "2025-11-28T03:14:33.091Z",
+    "updated_at": "2025-11-28T03:14:33.091Z"
+  }
+},
+{
+  "model": "pos_ecommerce.inventory",
+  "pk": 28,
+  "fields": {
+    "branch": 2,
+    "product": 8,
+    "stock": 100,
+    "reorder_point": 20,
+    "last_restock_date": null,
+    "created_at": "2025-11-28T03:14:33.096Z",
+    "updated_at": "2025-11-28T03:14:33.096Z"
+  }
+},
+{
+  "model": "pos_ecommerce.inventory",
+  "pk": 29,
+  "fields": {
+    "branch": 2,
+    "product": 9,
+    "stock": 100,
+    "reorder_point": 20,
+    "last_restock_date": null,
+    "created_at": "2025-11-28T03:14:33.100Z",
+    "updated_at": "2025-11-28T03:14:33.100Z"
+  }
+},
+{
+  "model": "pos_ecommerce.inventory",
+  "pk": 30,
+  "fields": {
+    "branch": 2,
+    "product": 10,
+    "stock": 100,
+    "reorder_point": 20,
+    "last_restock_date": null,
+    "created_at": "2025-11-28T03:14:33.104Z",
+    "updated_at": "2025-11-28T03:14:33.104Z"
+  }
+},
+{
+  "model": "pos_ecommerce.inventory",
+  "pk": 31,
+  "fields": {
+    "branch": 2,
+    "product": 11,
+    "stock": 100,
+    "reorder_point": 20,
+    "last_restock_date": null,
+    "created_at": "2025-11-28T03:14:33.107Z",
+    "updated_at": "2025-11-28T03:14:33.107Z"
+  }
+},
+{
+  "model": "pos_ecommerce.inventory",
+  "pk": 32,
+  "fields": {
+    "branch": 2,
+    "product": 12,
+    "stock": 100,
+    "reorder_point": 20,
+    "last_restock_date": null,
+    "created_at": "2025-11-28T03:14:33.112Z",
+    "updated_at": "2025-11-28T03:14:33.112Z"
+  }
+},
+{
+  "model": "pos_ecommerce.inventory",
+  "pk": 33,
+  "fields": {
+    "branch": 2,
+    "product": 13,
+    "stock": 100,
+    "reorder_point": 20,
+    "last_restock_date": null,
+    "created_at": "2025-11-28T03:14:33.116Z",
+    "updated_at": "2025-11-28T03:14:33.116Z"
+  }
+},
+{
+  "model": "pos_ecommerce.inventory",
+  "pk": 34,
+  "fields": {
+    "branch": 2,
+    "product": 14,
+    "stock": 100,
+    "reorder_point": 20,
+    "last_restock_date": null,
+    "created_at": "2025-11-28T03:14:33.120Z",
+    "updated_at": "2025-11-28T03:14:33.120Z"
+  }
+},
+{
+  "model": "pos_ecommerce.inventory",
+  "pk": 35,
+  "fields": {
+    "branch": 2,
+    "product": 15,
+    "stock": 100,
+    "reorder_point": 20,
+    "last_restock_date": null,
+    "created_at": "2025-11-28T03:14:33.124Z",
+    "updated_at": "2025-11-28T03:14:33.124Z"
+  }
+},
+{
+  "model": "pos_ecommerce.inventory",
+  "pk": 36,
+  "fields": {
+    "branch": 2,
+    "product": 16,
+    "stock": 100,
+    "reorder_point": 20,
+    "last_restock_date": null,
+    "created_at": "2025-11-28T03:14:33.128Z",
+    "updated_at": "2025-11-28T03:14:33.128Z"
+  }
+},
+{
+  "model": "pos_ecommerce.inventory",
+  "pk": 37,
+  "fields": {
+    "branch": 2,
+    "product": 17,
+    "stock": 100,
+    "reorder_point": 20,
+    "last_restock_date": null,
+    "created_at": "2025-11-28T03:14:33.131Z",
+    "updated_at": "2025-11-28T03:14:33.131Z"
+  }
+},
+{
+  "model": "pos_ecommerce.inventory",
+  "pk": 38,
+  "fields": {
+    "branch": 2,
+    "product": 18,
+    "stock": 100,
+    "reorder_point": 20,
+    "last_restock_date": null,
+    "created_at": "2025-11-28T03:14:33.134Z",
+    "updated_at": "2025-11-28T03:14:33.134Z"
+  }
+},
+{
+  "model": "pos_ecommerce.inventory",
+  "pk": 39,
+  "fields": {
+    "branch": 2,
+    "product": 19,
+    "stock": 100,
+    "reorder_point": 20,
+    "last_restock_date": null,
+    "created_at": "2025-11-28T03:14:33.138Z",
+    "updated_at": "2025-11-28T03:14:33.138Z"
+  }
+},
+{
+  "model": "pos_ecommerce.inventory",
+  "pk": 40,
+  "fields": {
+    "branch": 2,
+    "product": 20,
+    "stock": 100,
+    "reorder_point": 20,
+    "last_restock_date": null,
+    "created_at": "2025-11-28T03:14:33.141Z",
+    "updated_at": "2025-11-28T03:14:33.141Z"
+  }
+},
+{
+  "model": "pos_ecommerce.inventory",
+  "pk": 41,
+  "fields": {
+    "branch": 3,
+    "product": 21,
+    "stock": 100,
+    "reorder_point": 20,
+    "last_restock_date": null,
+    "created_at": "2025-11-28T03:14:33.145Z",
+    "updated_at": "2025-11-28T03:14:33.145Z"
+  }
+},
+{
+  "model": "pos_ecommerce.inventory",
+  "pk": 42,
+  "fields": {
+    "branch": 3,
+    "product": 22,
+    "stock": 100,
+    "reorder_point": 20,
+    "last_restock_date": null,
+    "created_at": "2025-11-28T03:14:33.148Z",
+    "updated_at": "2025-11-28T03:14:33.148Z"
+  }
+},
+{
+  "model": "pos_ecommerce.inventory",
+  "pk": 43,
+  "fields": {
+    "branch": 3,
+    "product": 23,
+    "stock": 100,
+    "reorder_point": 20,
+    "last_restock_date": null,
+    "created_at": "2025-11-28T03:14:33.151Z",
+    "updated_at": "2025-11-28T03:14:33.151Z"
+  }
+},
+{
+  "model": "pos_ecommerce.inventory",
+  "pk": 44,
+  "fields": {
+    "branch": 3,
+    "product": 24,
+    "stock": 100,
+    "reorder_point": 20,
+    "last_restock_date": null,
+    "created_at": "2025-11-28T03:14:33.155Z",
+    "updated_at": "2025-11-28T03:14:33.155Z"
+  }
+},
+{
+  "model": "pos_ecommerce.inventory",
+  "pk": 45,
+  "fields": {
+    "branch": 3,
+    "product": 25,
+    "stock": 100,
+    "reorder_point": 20,
+    "last_restock_date": null,
+    "created_at": "2025-11-28T03:14:33.160Z",
+    "updated_at": "2025-11-28T03:14:33.160Z"
+  }
+},
+{
+  "model": "pos_ecommerce.inventory",
+  "pk": 46,
+  "fields": {
+    "branch": 3,
+    "product": 26,
+    "stock": 100,
+    "reorder_point": 20,
+    "last_restock_date": null,
+    "created_at": "2025-11-28T03:14:33.164Z",
+    "updated_at": "2025-11-28T03:14:33.164Z"
+  }
+},
+{
+  "model": "pos_ecommerce.inventory",
+  "pk": 47,
+  "fields": {
+    "branch": 3,
+    "product": 27,
+    "stock": 100,
+    "reorder_point": 20,
+    "last_restock_date": null,
+    "created_at": "2025-11-28T03:14:33.168Z",
+    "updated_at": "2025-11-28T03:14:33.168Z"
+  }
+},
+{
+  "model": "pos_ecommerce.inventory",
+  "pk": 48,
+  "fields": {
+    "branch": 3,
+    "product": 28,
+    "stock": 100,
+    "reorder_point": 20,
+    "last_restock_date": null,
+    "created_at": "2025-11-28T03:14:33.173Z",
+    "updated_at": "2025-11-28T03:14:33.173Z"
+  }
+},
+{
+  "model": "pos_ecommerce.inventory",
+  "pk": 49,
+  "fields": {
+    "branch": 3,
+    "product": 29,
+    "stock": 100,
+    "reorder_point": 20,
+    "last_restock_date": null,
+    "created_at": "2025-11-28T03:14:33.176Z",
+    "updated_at": "2025-11-28T03:14:33.176Z"
+  }
+},
+{
+  "model": "pos_ecommerce.inventory",
+  "pk": 50,
+  "fields": {
+    "branch": 3,
+    "product": 30,
+    "stock": 100,
+    "reorder_point": 20,
+    "last_restock_date": null,
+    "created_at": "2025-11-28T03:14:33.180Z",
+    "updated_at": "2025-11-28T03:14:33.180Z"
+  }
+},
+{
+  "model": "pos_ecommerce.inventory",
+  "pk": 51,
+  "fields": {
+    "branch": 3,
+    "product": 31,
+    "stock": 100,
+    "reorder_point": 20,
+    "last_restock_date": null,
+    "created_at": "2025-11-28T03:14:33.185Z",
+    "updated_at": "2025-11-28T03:14:33.185Z"
+  }
+},
+{
+  "model": "pos_ecommerce.inventory",
+  "pk": 52,
+  "fields": {
+    "branch": 3,
+    "product": 32,
+    "stock": 100,
+    "reorder_point": 20,
+    "last_restock_date": null,
+    "created_at": "2025-11-28T03:14:33.189Z",
+    "updated_at": "2025-11-28T03:14:33.189Z"
+  }
+},
+{
+  "model": "pos_ecommerce.inventory",
+  "pk": 53,
+  "fields": {
+    "branch": 3,
+    "product": 33,
+    "stock": 100,
+    "reorder_point": 20,
+    "last_restock_date": null,
+    "created_at": "2025-11-28T03:14:33.192Z",
+    "updated_at": "2025-11-28T03:14:33.192Z"
+  }
+},
+{
+  "model": "pos_ecommerce.inventory",
+  "pk": 54,
+  "fields": {
+    "branch": 3,
+    "product": 34,
+    "stock": 100,
+    "reorder_point": 20,
+    "last_restock_date": null,
+    "created_at": "2025-11-28T03:14:33.195Z",
+    "updated_at": "2025-11-28T03:14:33.195Z"
+  }
+},
+{
+  "model": "pos_ecommerce.inventory",
+  "pk": 55,
+  "fields": {
+    "branch": 3,
+    "product": 35,
+    "stock": 100,
+    "reorder_point": 20,
+    "last_restock_date": null,
+    "created_at": "2025-11-28T03:14:33.198Z",
+    "updated_at": "2025-11-28T03:14:33.198Z"
+  }
+},
+{
+  "model": "pos_ecommerce.inventory",
+  "pk": 56,
+  "fields": {
+    "branch": 3,
+    "product": 36,
+    "stock": 100,
+    "reorder_point": 20,
+    "last_restock_date": null,
+    "created_at": "2025-11-28T03:14:33.202Z",
+    "updated_at": "2025-11-28T03:14:33.202Z"
+  }
+},
+{
+  "model": "pos_ecommerce.inventory",
+  "pk": 57,
+  "fields": {
+    "branch": 3,
+    "product": 37,
+    "stock": 100,
+    "reorder_point": 20,
+    "last_restock_date": null,
+    "created_at": "2025-11-28T03:14:33.205Z",
+    "updated_at": "2025-11-28T03:14:33.205Z"
+  }
+},
+{
+  "model": "pos_ecommerce.inventory",
+  "pk": 58,
+  "fields": {
+    "branch": 3,
+    "product": 38,
+    "stock": 100,
+    "reorder_point": 20,
+    "last_restock_date": null,
+    "created_at": "2025-11-28T03:14:33.208Z",
+    "updated_at": "2025-11-28T03:14:33.208Z"
+  }
+},
+{
+  "model": "pos_ecommerce.inventory",
+  "pk": 59,
+  "fields": {
+    "branch": 3,
+    "product": 39,
+    "stock": 100,
+    "reorder_point": 20,
+    "last_restock_date": null,
+    "created_at": "2025-11-28T03:14:33.213Z",
+    "updated_at": "2025-11-28T03:14:33.213Z"
+  }
+},
+{
+  "model": "pos_ecommerce.inventory",
+  "pk": 60,
+  "fields": {
+    "branch": 3,
+    "product": 40,
+    "stock": 100,
+    "reorder_point": 20,
+    "last_restock_date": null,
+    "created_at": "2025-11-28T03:14:33.216Z",
+    "updated_at": "2025-11-28T03:14:33.216Z"
+  }
+},
+{
+  "model": "pos_ecommerce.inventory",
+  "pk": 61,
+  "fields": {
+    "branch": 4,
+    "product": 21,
+    "stock": 100,
+    "reorder_point": 20,
+    "last_restock_date": null,
+    "created_at": "2025-11-28T03:14:33.220Z",
+    "updated_at": "2025-11-28T03:14:33.220Z"
+  }
+},
+{
+  "model": "pos_ecommerce.inventory",
+  "pk": 62,
+  "fields": {
+    "branch": 4,
+    "product": 22,
+    "stock": 100,
+    "reorder_point": 20,
+    "last_restock_date": null,
+    "created_at": "2025-11-28T03:14:33.224Z",
+    "updated_at": "2025-11-28T03:14:33.224Z"
+  }
+},
+{
+  "model": "pos_ecommerce.inventory",
+  "pk": 63,
+  "fields": {
+    "branch": 4,
+    "product": 23,
+    "stock": 100,
+    "reorder_point": 20,
+    "last_restock_date": null,
+    "created_at": "2025-11-28T03:14:33.229Z",
+    "updated_at": "2025-11-28T03:14:33.229Z"
+  }
+},
+{
+  "model": "pos_ecommerce.inventory",
+  "pk": 64,
+  "fields": {
+    "branch": 4,
+    "product": 24,
+    "stock": 100,
+    "reorder_point": 20,
+    "last_restock_date": null,
+    "created_at": "2025-11-28T03:14:33.232Z",
+    "updated_at": "2025-11-28T03:14:33.232Z"
+  }
+},
+{
+  "model": "pos_ecommerce.inventory",
+  "pk": 65,
+  "fields": {
+    "branch": 4,
+    "product": 25,
+    "stock": 100,
+    "reorder_point": 20,
+    "last_restock_date": null,
+    "created_at": "2025-11-28T03:14:33.238Z",
+    "updated_at": "2025-11-28T03:14:33.238Z"
+  }
+},
+{
+  "model": "pos_ecommerce.inventory",
+  "pk": 66,
+  "fields": {
+    "branch": 4,
+    "product": 26,
+    "stock": 100,
+    "reorder_point": 20,
+    "last_restock_date": null,
+    "created_at": "2025-11-28T03:14:33.241Z",
+    "updated_at": "2025-11-28T03:14:33.241Z"
+  }
+},
+{
+  "model": "pos_ecommerce.inventory",
+  "pk": 67,
+  "fields": {
+    "branch": 4,
+    "product": 27,
+    "stock": 100,
+    "reorder_point": 20,
+    "last_restock_date": null,
+    "created_at": "2025-11-28T03:14:33.244Z",
+    "updated_at": "2025-11-28T03:14:33.244Z"
+  }
+},
+{
+  "model": "pos_ecommerce.inventory",
+  "pk": 68,
+  "fields": {
+    "branch": 4,
+    "product": 28,
+    "stock": 100,
+    "reorder_point": 20,
+    "last_restock_date": null,
+    "created_at": "2025-11-28T03:14:33.247Z",
+    "updated_at": "2025-11-28T03:14:33.247Z"
+  }
+},
+{
+  "model": "pos_ecommerce.inventory",
+  "pk": 69,
+  "fields": {
+    "branch": 4,
+    "product": 29,
+    "stock": 100,
+    "reorder_point": 20,
+    "last_restock_date": null,
+    "created_at": "2025-11-28T03:14:33.250Z",
+    "updated_at": "2025-11-28T03:14:33.250Z"
+  }
+},
+{
+  "model": "pos_ecommerce.inventory",
+  "pk": 70,
+  "fields": {
+    "branch": 4,
+    "product": 30,
+    "stock": 100,
+    "reorder_point": 20,
+    "last_restock_date": null,
+    "created_at": "2025-11-28T03:14:33.254Z",
+    "updated_at": "2025-11-28T03:14:33.254Z"
+  }
+},
+{
+  "model": "pos_ecommerce.inventory",
+  "pk": 71,
+  "fields": {
+    "branch": 4,
+    "product": 31,
+    "stock": 100,
+    "reorder_point": 20,
+    "last_restock_date": null,
+    "created_at": "2025-11-28T03:14:33.257Z",
+    "updated_at": "2025-11-28T03:14:33.257Z"
+  }
+},
+{
+  "model": "pos_ecommerce.inventory",
+  "pk": 72,
+  "fields": {
+    "branch": 4,
+    "product": 32,
+    "stock": 100,
+    "reorder_point": 20,
+    "last_restock_date": null,
+    "created_at": "2025-11-28T03:14:33.260Z",
+    "updated_at": "2025-11-28T03:14:33.260Z"
+  }
+},
+{
+  "model": "pos_ecommerce.inventory",
+  "pk": 73,
+  "fields": {
+    "branch": 4,
+    "product": 33,
+    "stock": 100,
+    "reorder_point": 20,
+    "last_restock_date": null,
+    "created_at": "2025-11-28T03:14:33.263Z",
+    "updated_at": "2025-11-28T03:14:33.263Z"
+  }
+},
+{
+  "model": "pos_ecommerce.inventory",
+  "pk": 74,
+  "fields": {
+    "branch": 4,
+    "product": 34,
+    "stock": 100,
+    "reorder_point": 20,
+    "last_restock_date": null,
+    "created_at": "2025-11-28T03:14:33.267Z",
+    "updated_at": "2025-11-28T03:14:33.267Z"
+  }
+},
+{
+  "model": "pos_ecommerce.inventory",
+  "pk": 75,
+  "fields": {
+    "branch": 4,
+    "product": 35,
+    "stock": 100,
+    "reorder_point": 20,
+    "last_restock_date": null,
+    "created_at": "2025-11-28T03:14:33.270Z",
+    "updated_at": "2025-11-28T03:14:33.270Z"
+  }
+},
+{
+  "model": "pos_ecommerce.inventory",
+  "pk": 76,
+  "fields": {
+    "branch": 4,
+    "product": 36,
+    "stock": 100,
+    "reorder_point": 20,
+    "last_restock_date": null,
+    "created_at": "2025-11-28T03:14:33.275Z",
+    "updated_at": "2025-11-28T03:14:33.275Z"
+  }
+},
+{
+  "model": "pos_ecommerce.inventory",
+  "pk": 77,
+  "fields": {
+    "branch": 4,
+    "product": 37,
+    "stock": 100,
+    "reorder_point": 20,
+    "last_restock_date": null,
+    "created_at": "2025-11-28T03:14:33.318Z",
+    "updated_at": "2025-11-28T03:14:33.318Z"
+  }
+},
+{
+  "model": "pos_ecommerce.inventory",
+  "pk": 78,
+  "fields": {
+    "branch": 4,
+    "product": 38,
+    "stock": 100,
+    "reorder_point": 20,
+    "last_restock_date": null,
+    "created_at": "2025-11-28T03:14:33.322Z",
+    "updated_at": "2025-11-28T03:14:33.322Z"
+  }
+},
+{
+  "model": "pos_ecommerce.inventory",
+  "pk": 79,
+  "fields": {
+    "branch": 4,
+    "product": 39,
+    "stock": 100,
+    "reorder_point": 20,
+    "last_restock_date": null,
+    "created_at": "2025-11-28T03:14:33.325Z",
+    "updated_at": "2025-11-28T03:14:33.325Z"
+  }
+},
+{
+  "model": "pos_ecommerce.inventory",
+  "pk": 80,
+  "fields": {
+    "branch": 4,
+    "product": 40,
+    "stock": 100,
+    "reorder_point": 20,
+    "last_restock_date": null,
+    "created_at": "2025-11-28T03:14:33.328Z",
+    "updated_at": "2025-11-28T03:14:33.328Z"
+  }
+},
+{
+  "model": "pos_ecommerce.purchase",
+  "pk": 1,
+  "fields": {
+    "company": 1,
+    "supplier": 1,
+    "branch": 1,
+    "user": 3,
+    "purchase_date": "2025-11-28T03:00:00Z",
+    "total_amount": "3375000.00",
+    "notes": "",
+    "created_at": "2025-11-28T03:14:33.351Z",
+    "updated_at": "2025-11-28T03:14:33.369Z"
+  }
+},
+{
+  "model": "pos_ecommerce.purchase",
+  "pk": 2,
+  "fields": {
+    "company": 1,
+    "supplier": 1,
+    "branch": 2,
+    "user": 3,
+    "purchase_date": "2025-11-28T03:00:00Z",
+    "total_amount": "3375000.00",
+    "notes": "",
+    "created_at": "2025-11-28T03:14:33.373Z",
+    "updated_at": "2025-11-28T03:14:33.391Z"
+  }
+},
+{
+  "model": "pos_ecommerce.purchase",
+  "pk": 3,
+  "fields": {
+    "company": 2,
+    "supplier": 4,
+    "branch": 3,
+    "user": 6,
+    "purchase_date": "2025-11-28T03:00:00Z",
+    "total_amount": "3375000.00",
+    "notes": "",
+    "created_at": "2025-11-28T03:14:33.394Z",
+    "updated_at": "2025-11-28T03:14:33.411Z"
+  }
+},
+{
+  "model": "pos_ecommerce.purchase",
+  "pk": 4,
+  "fields": {
+    "company": 2,
+    "supplier": 4,
+    "branch": 4,
+    "user": 6,
+    "purchase_date": "2025-11-28T03:00:00Z",
+    "total_amount": "3375000.00",
+    "notes": "",
+    "created_at": "2025-11-28T03:14:33.415Z",
+    "updated_at": "2025-11-28T03:14:33.434Z"
+  }
+},
+{
+  "model": "pos_ecommerce.purchaseitem",
+  "pk": 1,
+  "fields": {
+    "purchase": 1,
+    "product": 12,
+    "quantity": 50,
+    "unit_cost": "12000.00"
+  }
+},
+{
+  "model": "pos_ecommerce.purchaseitem",
+  "pk": 2,
+  "fields": {
+    "purchase": 1,
+    "product": 14,
+    "quantity": 50,
+    "unit_cost": "16000.00"
+  }
+},
+{
+  "model": "pos_ecommerce.purchaseitem",
+  "pk": 3,
+  "fields": {
+    "purchase": 1,
+    "product": 8,
+    "quantity": 50,
+    "unit_cost": "6000.00"
+  }
+},
+{
+  "model": "pos_ecommerce.purchaseitem",
+  "pk": 4,
+  "fields": {
+    "purchase": 1,
+    "product": 7,
+    "quantity": 50,
+    "unit_cost": "30000.00"
+  }
+},
+{
+  "model": "pos_ecommerce.purchaseitem",
+  "pk": 5,
+  "fields": {
+    "purchase": 1,
+    "product": 9,
+    "quantity": 50,
+    "unit_cost": "3500.00"
+  }
+},
+{
+  "model": "pos_ecommerce.purchaseitem",
+  "pk": 6,
+  "fields": {
+    "purchase": 2,
+    "product": 12,
+    "quantity": 50,
+    "unit_cost": "12000.00"
+  }
+},
+{
+  "model": "pos_ecommerce.purchaseitem",
+  "pk": 7,
+  "fields": {
+    "purchase": 2,
+    "product": 14,
+    "quantity": 50,
+    "unit_cost": "16000.00"
+  }
+},
+{
+  "model": "pos_ecommerce.purchaseitem",
+  "pk": 8,
+  "fields": {
+    "purchase": 2,
+    "product": 8,
+    "quantity": 50,
+    "unit_cost": "6000.00"
+  }
+},
+{
+  "model": "pos_ecommerce.purchaseitem",
+  "pk": 9,
+  "fields": {
+    "purchase": 2,
+    "product": 7,
+    "quantity": 50,
+    "unit_cost": "30000.00"
+  }
+},
+{
+  "model": "pos_ecommerce.purchaseitem",
+  "pk": 10,
+  "fields": {
+    "purchase": 2,
+    "product": 9,
+    "quantity": 50,
+    "unit_cost": "3500.00"
+  }
+},
+{
+  "model": "pos_ecommerce.purchaseitem",
+  "pk": 11,
+  "fields": {
+    "purchase": 3,
+    "product": 32,
+    "quantity": 50,
+    "unit_cost": "12000.00"
+  }
+},
+{
+  "model": "pos_ecommerce.purchaseitem",
+  "pk": 12,
+  "fields": {
+    "purchase": 3,
+    "product": 34,
+    "quantity": 50,
+    "unit_cost": "16000.00"
+  }
+},
+{
+  "model": "pos_ecommerce.purchaseitem",
+  "pk": 13,
+  "fields": {
+    "purchase": 3,
+    "product": 28,
+    "quantity": 50,
+    "unit_cost": "6000.00"
+  }
+},
+{
+  "model": "pos_ecommerce.purchaseitem",
+  "pk": 14,
+  "fields": {
+    "purchase": 3,
+    "product": 27,
+    "quantity": 50,
+    "unit_cost": "30000.00"
+  }
+},
+{
+  "model": "pos_ecommerce.purchaseitem",
+  "pk": 15,
+  "fields": {
+    "purchase": 3,
+    "product": 29,
+    "quantity": 50,
+    "unit_cost": "3500.00"
+  }
+},
+{
+  "model": "pos_ecommerce.purchaseitem",
+  "pk": 16,
+  "fields": {
+    "purchase": 4,
+    "product": 32,
+    "quantity": 50,
+    "unit_cost": "12000.00"
+  }
+},
+{
+  "model": "pos_ecommerce.purchaseitem",
+  "pk": 17,
+  "fields": {
+    "purchase": 4,
+    "product": 34,
+    "quantity": 50,
+    "unit_cost": "16000.00"
+  }
+},
+{
+  "model": "pos_ecommerce.purchaseitem",
+  "pk": 18,
+  "fields": {
+    "purchase": 4,
+    "product": 28,
+    "quantity": 50,
+    "unit_cost": "6000.00"
+  }
+},
+{
+  "model": "pos_ecommerce.purchaseitem",
+  "pk": 19,
+  "fields": {
+    "purchase": 4,
+    "product": 27,
+    "quantity": 50,
+    "unit_cost": "30000.00"
+  }
+},
+{
+  "model": "pos_ecommerce.purchaseitem",
+  "pk": 20,
+  "fields": {
+    "purchase": 4,
+    "product": 29,
+    "quantity": 50,
+    "unit_cost": "3500.00"
+  }
+},
+{
+  "model": "pos_ecommerce.sale",
+  "pk": 1,
+  "fields": {
+    "branch": 1,
+    "user": 4,
+    "payment_method": "EFECTIVO",
+    "total_amount": "107940.00",
+    "created_at": "2025-11-28T03:14:33.438Z",
+    "updated_at": "2025-11-28T03:14:33.452Z"
+  }
+},
+{
+  "model": "pos_ecommerce.sale",
+  "pk": 2,
+  "fields": {
+    "branch": 2,
+    "user": 4,
+    "payment_method": "EFECTIVO",
+    "total_amount": "107940.00",
+    "created_at": "2025-11-28T03:14:33.456Z",
+    "updated_at": "2025-11-28T03:14:33.468Z"
+  }
+},
+{
+  "model": "pos_ecommerce.sale",
+  "pk": 3,
+  "fields": {
+    "branch": 3,
+    "user": 7,
+    "payment_method": "EFECTIVO",
+    "total_amount": "107940.00",
+    "created_at": "2025-11-28T03:14:33.472Z",
+    "updated_at": "2025-11-28T03:14:33.485Z"
+  }
+},
+{
+  "model": "pos_ecommerce.sale",
+  "pk": 4,
+  "fields": {
+    "branch": 4,
+    "user": 7,
+    "payment_method": "EFECTIVO",
+    "total_amount": "107940.00",
+    "created_at": "2025-11-28T03:14:33.488Z",
+    "updated_at": "2025-11-28T03:14:33.500Z"
+  }
+},
+{
+  "model": "pos_ecommerce.saleitem",
+  "pk": 1,
+  "fields": {
+    "sale": 1,
+    "product": 12,
+    "quantity": 2,
+    "unit_price": "19990.00"
+  }
+},
+{
+  "model": "pos_ecommerce.saleitem",
+  "pk": 2,
+  "fields": {
+    "sale": 1,
+    "product": 14,
+    "quantity": 2,
+    "unit_price": "24990.00"
+  }
+},
+{
+  "model": "pos_ecommerce.saleitem",
+  "pk": 3,
+  "fields": {
+    "sale": 1,
+    "product": 8,
+    "quantity": 2,
+    "unit_price": "8990.00"
+  }
+},
+{
+  "model": "pos_ecommerce.saleitem",
+  "pk": 4,
+  "fields": {
+    "sale": 2,
+    "product": 12,
+    "quantity": 2,
+    "unit_price": "19990.00"
+  }
+},
+{
+  "model": "pos_ecommerce.saleitem",
+  "pk": 5,
+  "fields": {
+    "sale": 2,
+    "product": 14,
+    "quantity": 2,
+    "unit_price": "24990.00"
+  }
+},
+{
+  "model": "pos_ecommerce.saleitem",
+  "pk": 6,
+  "fields": {
+    "sale": 2,
+    "product": 8,
+    "quantity": 2,
+    "unit_price": "8990.00"
+  }
+},
+{
+  "model": "pos_ecommerce.saleitem",
+  "pk": 7,
+  "fields": {
+    "sale": 3,
+    "product": 32,
+    "quantity": 2,
+    "unit_price": "19990.00"
+  }
+},
+{
+  "model": "pos_ecommerce.saleitem",
+  "pk": 8,
+  "fields": {
+    "sale": 3,
+    "product": 34,
+    "quantity": 2,
+    "unit_price": "24990.00"
+  }
+},
+{
+  "model": "pos_ecommerce.saleitem",
+  "pk": 9,
+  "fields": {
+    "sale": 3,
+    "product": 28,
+    "quantity": 2,
+    "unit_price": "8990.00"
+  }
+},
+{
+  "model": "pos_ecommerce.saleitem",
+  "pk": 10,
+  "fields": {
+    "sale": 4,
+    "product": 32,
+    "quantity": 2,
+    "unit_price": "19990.00"
+  }
+},
+{
+  "model": "pos_ecommerce.saleitem",
+  "pk": 11,
+  "fields": {
+    "sale": 4,
+    "product": 34,
+    "quantity": 2,
+    "unit_price": "24990.00"
+  }
+},
+{
+  "model": "pos_ecommerce.saleitem",
+  "pk": 12,
+  "fields": {
+    "sale": 4,
+    "product": 28,
+    "quantity": 2,
+    "unit_price": "8990.00"
+  }
+},
+{
+  "model": "pos_ecommerce.order",
+  "pk": 1,
+  "fields": {
+    "company": 1,
+    "user": null,
+    "customer_name": "Cliente E-commerce",
+    "customer_email": "cliente@example.com",
+    "customer_phone": "+56987654321",
+    "customer_address": "Dirección de entrega 123",
+    "status": "PENDIENTE",
+    "total_amount": "104960.00",
+    "shipping_cost": "5000.00",
+    "notes": "",
+    "created_at": "2025-11-28T03:14:33.503Z",
+    "updated_at": "2025-11-28T03:14:33.518Z"
+  }
+},
+{
+  "model": "pos_ecommerce.order",
+  "pk": 2,
+  "fields": {
+    "company": 2,
+    "user": null,
+    "customer_name": "Cliente E-commerce",
+    "customer_email": "cliente@example.com",
+    "customer_phone": "+56987654321",
+    "customer_address": "Dirección de entrega 123",
+    "status": "PENDIENTE",
+    "total_amount": "104960.00",
+    "shipping_cost": "5000.00",
+    "notes": "",
+    "created_at": "2025-11-28T03:14:33.522Z",
+    "updated_at": "2025-11-28T03:14:33.537Z"
+  }
+},
+{
+  "model": "pos_ecommerce.order",
+  "pk": 3,
+  "fields": {
+    "company": 1,
+    "user": 1,
+    "customer_name": "sdfds",
+    "customer_email": "asdsda@dfsd",
+    "customer_phone": "dasdsa",
+    "customer_address": "adsads, dsadsa",
+    "status": "PENDIENTE",
+    "total_amount": "24990.00",
+    "shipping_cost": "5000.00",
+    "notes": "Método de pago: credit_card",
+    "created_at": "2025-11-30T00:29:46.645Z",
+    "updated_at": "2025-11-30T00:29:46.645Z"
+  }
+},
+{
+  "model": "pos_ecommerce.orderitem",
+  "pk": 1,
+  "fields": {
+    "order": 1,
+    "product": 12,
+    "quantity": 1,
+    "unit_price": "19990.00"
+  }
+},
+{
+  "model": "pos_ecommerce.orderitem",
+  "pk": 2,
+  "fields": {
+    "order": 1,
+    "product": 14,
+    "quantity": 1,
+    "unit_price": "24990.00"
+  }
+},
+{
+  "model": "pos_ecommerce.orderitem",
+  "pk": 3,
+  "fields": {
+    "order": 1,
+    "product": 8,
+    "quantity": 1,
+    "unit_price": "8990.00"
+  }
+},
+{
+  "model": "pos_ecommerce.orderitem",
+  "pk": 4,
+  "fields": {
+    "order": 1,
+    "product": 7,
+    "quantity": 1,
+    "unit_price": "45990.00"
+  }
+},
+{
+  "model": "pos_ecommerce.orderitem",
+  "pk": 5,
+  "fields": {
+    "order": 2,
+    "product": 32,
+    "quantity": 1,
+    "unit_price": "19990.00"
+  }
+},
+{
+  "model": "pos_ecommerce.orderitem",
+  "pk": 6,
+  "fields": {
+    "order": 2,
+    "product": 34,
+    "quantity": 1,
+    "unit_price": "24990.00"
+  }
+},
+{
+  "model": "pos_ecommerce.orderitem",
+  "pk": 7,
+  "fields": {
+    "order": 2,
+    "product": 28,
+    "quantity": 1,
+    "unit_price": "8990.00"
+  }
+},
+{
+  "model": "pos_ecommerce.orderitem",
+  "pk": 8,
+  "fields": {
+    "order": 2,
+    "product": 27,
+    "quantity": 1,
+    "unit_price": "45990.00"
+  }
+},
+{
+  "model": "pos_ecommerce.orderitem",
+  "pk": 9,
+  "fields": {
+    "order": 3,
+    "product": 12,
+    "quantity": 1,
+    "unit_price": "19990.00"
+  }
+},
+{
+  "model": "pos_ecommerce.cartitem",
+  "pk": 2,
+  "fields": {
+    "user": 6,
+    "session_key": null,
+    "product": 32,
+    "quantity": 1,
+    "created_at": "2025-11-30T01:00:07.431Z",
+    "updated_at": "2025-11-30T01:00:07.431Z"
+  }
+}
+]
