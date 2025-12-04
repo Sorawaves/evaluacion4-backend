@@ -131,8 +131,8 @@ document.getElementById('supplierForm').addEventListener('submit', function(e) {
         rut: formData.get('rut'),
         name: formData.get('name'),
         contact_name: formData.get('contact_name'),
-        email: formData.get('email'),
-        phone: formData.get('phone'),
+        contact_email: formData.get('email'),
+        contact_phone: formData.get('phone'),
         address: formData.get('address')
     };
     
@@ -142,13 +142,16 @@ document.getElementById('supplierForm').addEventListener('submit', function(e) {
             'Content-Type': 'application/json',
             'X-CSRFToken': formData.get('csrfmiddlewaretoken')
         },
+        credentials: 'same-origin',
         body: JSON.stringify(data)
     })
     .then(response => {
         if (response.ok) {
             return response.json();
         }
-        throw new Error('Error al crear proveedor');
+        return response.json().then(err => {
+            throw new Error(JSON.stringify(err));
+        });
     })
     .then(data => {
         alert('✅ Proveedor creado exitosamente');

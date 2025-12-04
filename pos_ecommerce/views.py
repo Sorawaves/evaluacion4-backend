@@ -175,6 +175,10 @@ class SupplierViewSet(viewsets.ModelViewSet):
         elif self.request.user.company:
             return Supplier.objects.filter(company=self.request.user.company)
         return Supplier.objects.none()
+    
+    def perform_create(self, serializer):
+        """Auto-asignar la empresa del usuario al crear proveedor"""
+        serializer.save(company=self.request.user.company)
 
 
 class ProductViewSet(viewsets.ModelViewSet):

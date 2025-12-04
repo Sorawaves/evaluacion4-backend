@@ -163,10 +163,11 @@ class SupplierSerializer(serializers.ModelSerializer):
             'contact_name', 'contact_email', 'contact_phone', 'address',
             'is_active', 'created_at', 'updated_at'
         ]
-        read_only_fields = ['created_at', 'updated_at']
+        read_only_fields = ['company', 'created_at', 'updated_at']
     
     def validate_rut(self, value):
-        validar_rut_chileno(value)
+        if value:
+            validar_rut_chileno(value)
         return value
 
 
