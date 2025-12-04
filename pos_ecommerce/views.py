@@ -621,17 +621,17 @@ class InventoryMovementViewSet(viewsets.ModelViewSet):
 # ============================================================================
 
 @api_view(['GET'])
-@permission_classes([CanViewReports])
+@permission_classes([IsAuthenticated])
 def stock_report(request):
     """
     Reporte de stock por sucursal.
-    GET /api/reports/stock/?branch=<id>
+    GET /api/reportes/stock/?branch=<id>
     """
     branch_id = request.query_params.get('branch')
     user = request.user
     
     # Filtrar inventario
-    inventory = Inventory.objects.all()
+    inventory = Inventory.objects.select_related('branch', 'product').all()
     
     if user.role != 'SUPER_ADMIN' and user.company:
         inventory = inventory.filter(branch__company=user.company)
@@ -639,28 +639,34 @@ def stock_report(request):
     if branch_id:
         inventory = inventory.filter(branch_id=branch_id)
     
-    # Agrupar por sucursal
+    # Construir reporte
     report_data = []
     for inv in inventory:
         report_data.append({
-            'branch': inv.branch.name,
-            'product': inv.product.name,
+            'sucursal': inv.branch.name,
+            'producto': inv.product.name,
             'sku': inv.product.sku,
-            'stock': inv.stock,
-            'reorder_point': inv.reorder_point,
-            'needs_restock': inv.needs_restock(),
-            'last_restock': inv.last_restock_date
+            'categoria': inv.product.get_category_display(),
+            'stock_actual': inv.stock,
+            'punto_reorden': inv.reorder_point,
+            'requiere_restock': inv.needs_restock(),
+            'ultimo_restock': inv.last_restock_date.strftime('%d/%m/%Y %H:%M') if inv.last_restock_date else None
         })
     
-    return Response({'results': report_data})
+    return Response({
+        'titulo': 'Reporte de Stock por Sucursal',
+        'fecha_generacion': timezone.now().strftime('%d/%m/%Y %H:%M'),
+        'total_registros': len(report_data),
+        'datos': report_data
+    })
 
 
 @api_view(['GET'])
-@permission_classes([CanViewReports])
+@permission_classes([IsAuthenticated])
 def sales_report(request):
     """
     Reporte de ventas por período.
-    GET /api/reports/sales/?branch=<id>&date_from=<date>&date_to=<date>
+    GET /api/reportes/ventas/?branch=<id>&date_from=<date>&date_to=<date>
     """
     branch_id = request.query_params.get('branch')
     date_from = request.query_params.get('date_from')
@@ -668,7 +674,7 @@ def sales_report(request):
     user = request.user
     
     # Filtrar ventas
-    sales = Sale.objects.all()
+    sales = Sale.objects.select_related('branch', 'user').all()
     
     if user.role != 'SUPER_ADMIN' and user.company:
         sales = sales.filter(branch__company=user.company)
@@ -682,29 +688,56 @@ def sales_report(request):
     
     # Calcular estadísticas
     stats = sales.aggregate(
-        total_sales=Count('id'),
-        total_amount=Sum('total_amount')
+        total_ventas=Count('id'),
+        monto_total=Sum('total_amount')
     )
     
-    # Agrupar por día
-    daily_sales = sales.extra(
-        select={'day': 'date(created_at)'}
-    ).values('day').annotate(
-        count=Count('id'),
+    # Agrupar por día usando TruncDate
+    from django.db.models.functions import TruncDate
+    daily_sales = sales.annotate(
+        dia=TruncDate('created_at')
+    ).values('dia').annotate(
+        cantidad=Count('id'),
         total=Sum('total_amount')
-    ).order_by('day')
+    ).order_by('dia')
+    
+    # Detalle de ventas
+    ventas_detalle = []
+    for sale in sales[:50]:  # Limitar a 50 para no sobrecargar
+        ventas_detalle.append({
+            'id': sale.id,
+            'fecha': sale.created_at.strftime('%d/%m/%Y %H:%M'),
+            'sucursal': sale.branch.name,
+            'vendedor': sale.user.username if sale.user else 'N/A',
+            'metodo_pago': sale.get_payment_method_display(),
+            'total': float(sale.total_amount)
+        })
     
     return Response({
-        'stats': stats,
-        'daily_sales': list(daily_sales)
+        'titulo': 'Reporte de Ventas',
+        'fecha_generacion': timezone.now().strftime('%d/%m/%Y %H:%M'),
+        'estadisticas': {
+            'total_ventas': stats['total_ventas'] or 0,
+            'monto_total': float(stats['monto_total'] or 0)
+        },
+        'ventas_por_dia': [
+            {
+                'dia': item['dia'].strftime('%d/%m/%Y') if item['dia'] else None,
+                'cantidad': item['cantidad'],
+                'total': float(item['total'] or 0)
+            }
+            for item in daily_sales
+        ],
+        'detalle_ventas': ventas_detalle
     })
 
 
 @api_view(['GET'])
-@permission_classes([CanViewReports])
+@permission_classes([IsAuthenticated])
 def supplier_report(request):
     """
     Reporte de proveedores con productos asociados y últimos pedidos.
+    GET /api/reportes/proveedores/
     """
     user = request.user
     
@@ -714,25 +747,43 @@ def supplier_report(request):
     
     report_data = []
     for supplier in suppliers:
-        last_purchases = Purchase.objects.filter(supplier=supplier).order_by('-purchase_date')[:5]
+        last_purchases = Purchase.objects.filter(
+            supplier=supplier
+        ).select_related('branch').order_by('-purchase_date')[:5]
+        
+        # Contar total de compras y monto
+        purchase_stats = Purchase.objects.filter(supplier=supplier).aggregate(
+            total_compras=Count('id'),
+            monto_total=Sum('total_amount')
+        )
         
         report_data.append({
             'id': supplier.id,
-            'name': supplier.name,
+            'nombre': supplier.name,
             'rut': supplier.rut,
-            'contact': supplier.contact_name,
-            'total_purchases': Purchase.objects.filter(supplier=supplier).count(),
-            'last_purchases': [
+            'contacto': supplier.contact_name,
+            'email': supplier.contact_email,
+            'telefono': supplier.contact_phone,
+            'activo': supplier.is_active,
+            'total_compras': purchase_stats['total_compras'] or 0,
+            'monto_total_compras': float(purchase_stats['monto_total'] or 0),
+            'ultimas_compras': [
                 {
-                    'date': p.purchase_date,
-                    'total': p.total_amount,
-                    'branch': p.branch.name
+                    'id': p.id,
+                    'fecha': p.purchase_date.strftime('%d/%m/%Y'),
+                    'total': float(p.total_amount),
+                    'sucursal': p.branch.name
                 }
                 for p in last_purchases
             ]
         })
     
-    return Response({'results': report_data})
+    return Response({
+        'titulo': 'Reporte de Proveedores',
+        'fecha_generacion': timezone.now().strftime('%d/%m/%Y %H:%M'),
+        'total_proveedores': len(report_data),
+        'datos': report_data
+    })
 
 
 # ============================================================================
