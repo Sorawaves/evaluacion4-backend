@@ -479,7 +479,7 @@ class CartItemViewSet(viewsets.ModelViewSet):
         serializer = OrderSerializer(order)
         return Response(serializer.data, status=status.HTTP_201_CREATED)
     
-    @action(detail=False, methods=['delete'])
+    @action(detail=False, methods=['post', 'delete'])
     def clear(self, request):
         """Vaciar el carrito"""
         self.get_queryset().delete()
