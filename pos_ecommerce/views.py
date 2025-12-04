@@ -815,6 +815,35 @@ def add_to_cart(request):
     return redirect('cart')
 
 
+def cart_clear_view(request):
+    """Vaciar el carrito completamente"""
+    if request.method == 'POST':
+        if request.user.is_authenticated:
+            CartItem.objects.filter(user=request.user).delete()
+        else:
+            session_key = request.session.session_key
+            if session_key:
+                CartItem.objects.filter(session_key=session_key).delete()
+        messages.success(request, 'Carrito vaciado')
+    return redirect('cart')
+
+
+def cart_remove_item_view(request, item_id):
+    """Eliminar un item específico del carrito"""
+    if request.method == 'POST':
+        try:
+            if request.user.is_authenticated:
+                item = CartItem.objects.get(id=item_id, user=request.user)
+            else:
+                session_key = request.session.session_key
+                item = CartItem.objects.get(id=item_id, session_key=session_key)
+            item.delete()
+            messages.success(request, 'Producto eliminado del carrito')
+        except CartItem.DoesNotExist:
+            messages.error(request, 'Item no encontrado')
+    return redirect('cart')
+
+
 def checkout_view(request):
     """Vista de checkout"""
     if request.user.is_authenticated:

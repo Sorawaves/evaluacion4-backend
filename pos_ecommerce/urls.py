@@ -16,7 +16,7 @@ from .views import (
     home, login_view, logout_view, dashboard, product_catalog, product_detail,
     cart_view, add_to_cart, checkout_view, process_order, inventory_view, suppliers_view,
     sales_view, reports_view, pos_view, branches_view, users_create_view,
-    subscription_view, purchase_create_view,
+    subscription_view, purchase_create_view, cart_clear_view, cart_remove_item_view,
     # Vistas SUPER_ADMIN
     superadmin_companies, superadmin_create_company, superadmin_edit_company,
     superadmin_company_users, superadmin_create_user, superadmin_edit_user, reset_password
@@ -65,6 +65,8 @@ urlpatterns = [
     path('tienda/producto/<int:pk>/', product_detail, name='product_detail'),
     path('carrito/', cart_view, name='cart'),
     path('carrito/agregar/', add_to_cart, name='cart_add'),
+    path('carrito/vaciar/', cart_clear_view, name='cart_clear'),
+    path('carrito/eliminar/<int:item_id>/', cart_remove_item_view, name='cart_remove_item'),
     path('pagar/', checkout_view, name='checkout'),
     path('pagar/procesar/', process_order, name='process_order'),
     

@@ -33,9 +33,9 @@
                                         <td>{{ item.quantity }}</td>
                                         <td style="font-weight: 400;">${{ item.get_subtotal }}</td>
                                         <td>
-                                            <form method="post" action="{% url 'cart-clear' %}" style="display:inline;">
+                                            <form method="post" action="{% url 'cart_remove_item' item.id %}" style="display:inline;">
                                                 {% csrf_token %}
-                                                <button type="submit" class="btn btn-sm" style="border: 1px solid var(--medium-gray); color: #6c757d;">Eliminar</button>
+                                                <button type="submit" class="btn btn-sm btn-outline-danger">Eliminar</button>
                                             </form>
                                         </td>
                                     </tr>
@@ -63,6 +63,10 @@
                             <span style="color: var(--accent-rose); font-size: 1.8rem; font-weight: 300;">${{ total|add:5000 }}</span>
                         </div>
                         <a href="{% url 'checkout' %}" class="btn btn-primary w-100">Proceder al Pago</a>
+                        <form method="post" action="{% url 'cart_clear' %}" class="mt-2">
+                            {% csrf_token %}
+                            <button type="submit" class="btn btn-outline-danger w-100">Vaciar Carrito</button>
+                        </form>
                     </div>
                 </div>
             </div>
