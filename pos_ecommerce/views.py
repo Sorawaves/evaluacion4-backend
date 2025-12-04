@@ -1068,8 +1068,43 @@ def reports_view(request):
                 count=Count('id')
             )
             
+            # Proveedores activos
+            suppliers_count = Supplier.objects.filter(
+                company=request.user.company,
+                is_active=True
+            ).count()
+            
+            # Movimientos de inventario recientes
+            inventory_movements = InventoryMovement.objects.filter(
+                inventory__branch__company=request.user.company
+            ).select_related('inventory__product', 'inventory__branch')[:10]
+            
             context['low_stock'] = low_stock
             context['monthly_sales'] = monthly_sales
+            context['suppliers_count'] = suppliers_count
+            context['inventory_movements'] = inventory_movements
+    
+    # SUPER_ADMIN puede ver todo
+    elif request.user.role == 'SUPER_ADMIN':
+        low_stock = Inventory.objects.filter(stock__lte=F('reorder_point'))
+        
+        month_start = timezone.now().replace(day=1, hour=0, minute=0, second=0)
+        monthly_sales = Sale.objects.filter(
+            created_at__gte=month_start
+        ).aggregate(
+            total=Sum('total_amount'),
+            count=Count('id')
+        )
+        
+        suppliers_count = Supplier.objects.filter(is_active=True).count()
+        inventory_movements = InventoryMovement.objects.all().select_related(
+            'inventory__product', 'inventory__branch'
+        )[:10]
+        
+        context['low_stock'] = low_stock
+        context['monthly_sales'] = monthly_sales
+        context['suppliers_count'] = suppliers_count
+        context['inventory_movements'] = inventory_movements
     
     return render(request, 'reportes.html', context)
 

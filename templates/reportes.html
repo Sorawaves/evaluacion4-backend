@@ -12,12 +12,12 @@
 
     <div class="row g-4">
         <!-- Stock Bajo -->
-        <div class="col-md-6">
+        <div class="col-md-4">
             <div class="card h-100">
                 <div class="card-header">Stock Bajo</div>
                 <div class="card-body">
                     {% if low_stock %}
-                        <table class="table" style="margin-bottom: 0;">
+                        <table class="table" style="margin-bottom: 1rem;">
                             <thead>
                                 <tr>
                                     <th>Producto</th>
@@ -38,14 +38,17 @@
                             </tbody>
                         </table>
                     {% else %}
-                        <p style="color: #6c757d; text-align: center; padding: 2rem 0;">Todo el stock está en niveles óptimos</p>
+                        <p style="color: #6c757d; text-align: center; padding: 2rem 0;">✅ Todo el stock está en niveles óptimos</p>
                     {% endif %}
+                    <a href="/api/reportes/stock/" class="btn btn-outline-primary w-100" target="_blank">
+                        Exportar Reporte de Stock
+                    </a>
                 </div>
             </div>
         </div>
 
         <!-- Ventas del Mes -->
-        <div class="col-md-6">
+        <div class="col-md-4">
             <div class="card h-100">
                 <div class="card-header">Ventas del Mes</div>
                 <div class="card-body">
@@ -59,8 +62,74 @@
                             <div class="stat-label">Total</div>
                         </div>
                     </div>
-                    <a href="/api/reports/sales/?format=json" class="btn btn-outline-primary w-100" target="_blank">
-                        Exportar Reporte
+                    <a href="/api/reportes/ventas/" class="btn btn-outline-primary w-100" target="_blank">
+                        Exportar Reporte de Ventas
+                    </a>
+                </div>
+            </div>
+        </div>
+
+        <!-- Proveedores -->
+        <div class="col-md-4">
+            <div class="card h-100">
+                <div class="card-header">Proveedores</div>
+                <div class="card-body">
+                    <div class="row text-center" style="margin-bottom: 2rem;">
+                        <div class="col-12">
+                            <div class="stat-value" style="color: var(--accent-purple);">{{ suppliers_count|default:0 }}</div>
+                            <div class="stat-label">Proveedores Activos</div>
+                        </div>
+                    </div>
+                    <a href="/api/reportes/proveedores/" class="btn btn-outline-primary w-100" target="_blank">
+                        Exportar Reporte de Proveedores
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Movimientos de Inventario -->
+    <div class="row mt-4">
+        <div class="col-12">
+            <div class="card">
+                <div class="card-header">Movimientos de Inventario Recientes</div>
+                <div class="card-body">
+                    {% if inventory_movements %}
+                        <table class="table">
+                            <thead>
+                                <tr>
+                                    <th>Fecha</th>
+                                    <th>Producto</th>
+                                    <th>Sucursal</th>
+                                    <th>Tipo</th>
+                                    <th>Cantidad</th>
+                                    <th>Stock Anterior</th>
+                                    <th>Stock Nuevo</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for mov in inventory_movements %}
+                                    <tr>
+                                        <td>{{ mov.created_at|date:"d/m/Y H:i" }}</td>
+                                        <td>{{ mov.inventory.product.name }}</td>
+                                        <td>{{ mov.inventory.branch.name }}</td>
+                                        <td>
+                                            <span class="badge {% if 'COMPRA' in mov.movement_type or 'POSITIVO' in mov.movement_type %}bg-success{% else %}bg-danger{% endif %}">
+                                                {{ mov.get_movement_type_display }}
+                                            </span>
+                                        </td>
+                                        <td>{{ mov.quantity }}</td>
+                                        <td>{{ mov.previous_stock }}</td>
+                                        <td>{{ mov.new_stock }}</td>
+                                    </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    {% else %}
+                        <p style="color: #6c757d; text-align: center; padding: 2rem 0;">No hay movimientos de inventario registrados</p>
+                    {% endif %}
+                    <a href="/api/inventory-movements/" class="btn btn-outline-primary" target="_blank">
+                        Ver todos los movimientos (API)
                     </a>
                 </div>
             </div>
