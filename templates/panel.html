@@ -123,13 +123,20 @@
             <div class="card h-100">
                 <div class="card-header">Notificaciones</div>
                 <div class="card-body">
+                    {% if low_stock and low_stock > 0 %}
                     <div style="padding: 1rem; background: var(--pastel-peach); margin-bottom: 1rem; border-left: 3px solid var(--accent-rose);">
                         <div style="font-size: 0.9rem; color: #495057; margin-bottom: 0.3rem;">Atención</div>
-                        <div style="font-size: 0.85rem; color: #6c757d;">Hay {{ low_stock|default:5 }} productos con stock bajo. <a href="{% url 'inventory' %}" style="color: var(--accent-rose);">Ver ahora</a></div>
+                        <div style="font-size: 0.85rem; color: #6c757d;">Hay {{ low_stock }} productos con stock bajo. <a href="{% url 'inventory' %}" style="color: var(--accent-rose);">Ver ahora</a></div>
                     </div>
+                    {% else %}
+                    <div style="padding: 1rem; background: var(--pastel-mint); margin-bottom: 1rem; border-left: 3px solid #10b981;">
+                        <div style="font-size: 0.9rem; color: #495057; margin-bottom: 0.3rem;">✅ Todo en orden</div>
+                        <div style="font-size: 0.85rem; color: #6c757d;">No hay productos con stock bajo.</div>
+                    </div>
+                    {% endif %}
                     <div style="padding: 1rem; background: var(--pastel-mint); border-left: 3px solid var(--accent-lavender);">
                         <div style="font-size: 0.9rem; color: #495057; margin-bottom: 0.3rem;">Suscripción</div>
-                        <div style="font-size: 0.85rem; color: #6c757d;">Tu plan {{ user.company.subscription.plan_name }} está activo.</div>
+                        <div style="font-size: 0.85rem; color: #6c757d;">Tu plan está activo.</div>
                     </div>
                 </div>
             </div>
