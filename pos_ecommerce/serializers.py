@@ -6,7 +6,7 @@ from rest_framework import serializers
 from django.contrib.auth import get_user_model
 from django.utils import timezone
 from .models import (
-    Company, Subscription, Branch, Supplier, Product, Inventory,
+    Company, Subscription, Branch, Supplier, Product, Inventory, InventoryMovement,
     Purchase, PurchaseItem, Sale, SaleItem, Order, OrderItem, CartItem, Payment
 )
 from .validators import (
@@ -389,3 +389,41 @@ class PaymentSerializer(serializers.ModelSerializer):
     def validate_amount(self, value):
         validar_precio_positivo(value)
         return value
+
+
+class InventoryMovementSerializer(serializers.ModelSerializer):
+    """Serializer para movimientos de inventario"""
+    movement_type_display = serializers.CharField(source='get_movement_type_display', read_only=True)
+    product_name = serializers.CharField(source='inventory.product.name', read_only=True)
+    product_sku = serializers.CharField(source='inventory.product.sku', read_only=True)
+    branch_name = serializers.CharField(source='inventory.branch.name', read_only=True)
+    user_name = serializers.CharField(source='user.username', read_only=True)
+    
+    class Meta:
+        model = InventoryMovement
+        fields = [
+            'id', 'inventory', 'movement_type', 'movement_type_display',
+            'quantity', 'previous_stock', 'new_stock',
+            'product_name', 'product_sku', 'branch_name',
+            'purchase', 'sale', 'user', 'user_name',
+            'notes', 'created_at'
+        ]
+        read_only_fields = ['previous_stock', 'new_stock', 'created_at']
+    
+    def validate_quantity(self, value):
+        if value <= 0:
+            raise serializers.ValidationError("La cantidad debe ser mayor a 0")
+        return value
+    
+    def validate(self, data):
+        """Validar que haya stock suficiente para movimientos de salida"""
+        movement_type = data.get('movement_type')
+        quantity = data.get('quantity')
+        inventory = data.get('inventory')
+        
+        if movement_type in ['VENTA', 'AJUSTE_NEGATIVO', 'TRANSFERENCIA_OUT']:
+            if inventory.stock < quantity:
+                raise serializers.ValidationError(
+                    f"Stock insuficiente. Disponible: {inventory.stock}, Solicitado: {quantity}"
+                )
+        return data

@@ -18,14 +18,15 @@ from django.http import JsonResponse
 from datetime import datetime, timedelta
 
 from .models import (
-    Company, Subscription, User, Branch, Supplier, Product, Inventory,
+    Company, Subscription, User, Branch, Supplier, Product, Inventory, InventoryMovement,
     Purchase, PurchaseItem, Sale, SaleItem, Order, OrderItem, CartItem, Payment
 )
 from .serializers import (
     CompanySerializer, SubscriptionSerializer, UserSerializer, UserCreateSerializer,
     BranchSerializer, SupplierSerializer, ProductSerializer, InventorySerializer,
     PurchaseSerializer, PurchaseItemSerializer, SaleSerializer, SaleItemSerializer,
-    OrderSerializer, OrderItemSerializer, CartItemSerializer, PaymentSerializer
+    OrderSerializer, OrderItemSerializer, CartItemSerializer, PaymentSerializer,
+    InventoryMovementSerializer
 )
 from .permissions import (
     IsSuperAdmin, IsAdminCliente, IsGerente, IsVendedor,
@@ -529,6 +530,90 @@ class PaymentViewSet(viewsets.ModelViewSet):
         payment.save()
         serializer = self.get_serializer(payment)
         return Response(serializer.data)
+
+
+class InventoryMovementViewSet(viewsets.ModelViewSet):
+    """
+    ViewSet para gestión de movimientos de inventario.
+    Registra entradas, salidas y ajustes de stock.
+    
+    Tipos de movimiento:
+    - COMPRA: Ingreso por compra de proveedor
+    - VENTA: Salida por venta
+    - AJUSTE_POSITIVO: Ajuste manual positivo
+    - AJUSTE_NEGATIVO: Ajuste manual negativo
+    - DEVOLUCION: Devolución de producto
+    - TRANSFERENCIA_IN: Transferencia entrada desde otra sucursal
+    - TRANSFERENCIA_OUT: Transferencia salida hacia otra sucursal
+    """
+    queryset = InventoryMovement.objects.all()
+    serializer_class = InventoryMovementSerializer
+    permission_classes = [IsAuthenticated]
+    filter_backends = [DjangoFilterBackend, SearchFilter, OrderingFilter]
+    filterset_fields = ['movement_type', 'inventory', 'inventory__branch', 'inventory__product']
+    search_fields = ['inventory__product__name', 'inventory__product__sku', 'notes']
+    ordering_fields = ['created_at', 'quantity']
+    ordering = ['-created_at']
+    
+    def get_queryset(self):
+        user = self.request.user
+        if user.role == 'SUPER_ADMIN':
+            return InventoryMovement.objects.all()
+        elif user.company:
+            return InventoryMovement.objects.filter(
+                inventory__branch__company=user.company
+            )
+        return InventoryMovement.objects.none()
+    
+    def perform_create(self, serializer):
+        """Al crear, asignar el usuario actual"""
+        serializer.save(user=self.request.user)
+    
+    @action(detail=False, methods=['get'])
+    def by_product(self, request):
+        """Obtener movimientos filtrados por producto"""
+        product_id = request.query_params.get('product_id')
+        if not product_id:
+            return Response({'error': 'Se requiere product_id'}, status=400)
+        
+        movements = self.get_queryset().filter(inventory__product_id=product_id)
+        serializer = self.get_serializer(movements, many=True)
+        return Response(serializer.data)
+    
+    @action(detail=False, methods=['get'])
+    def by_branch(self, request):
+        """Obtener movimientos filtrados por sucursal"""
+        branch_id = request.query_params.get('branch_id')
+        if not branch_id:
+            return Response({'error': 'Se requiere branch_id'}, status=400)
+        
+        movements = self.get_queryset().filter(inventory__branch_id=branch_id)
+        serializer = self.get_serializer(movements, many=True)
+        return Response(serializer.data)
+    
+    @action(detail=False, methods=['get'])
+    def summary(self, request):
+        """Resumen de movimientos por tipo"""
+        queryset = self.get_queryset()
+        
+        # Filtros opcionales
+        date_from = request.query_params.get('date_from')
+        date_to = request.query_params.get('date_to')
+        
+        if date_from:
+            queryset = queryset.filter(created_at__gte=date_from)
+        if date_to:
+            queryset = queryset.filter(created_at__lte=date_to)
+        
+        summary = queryset.values('movement_type').annotate(
+            count=Count('id'),
+            total_quantity=Sum('quantity')
+        ).order_by('movement_type')
+        
+        return Response({
+            'summary': list(summary),
+            'total_movements': queryset.count()
+        })
 
 
 # ============================================================================

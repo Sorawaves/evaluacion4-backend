@@ -278,6 +278,98 @@ class Inventory(models.Model):
         return False
 
 
+class InventoryMovement(models.Model):
+    """
+    Modelo para movimientos de inventario.
+    Registra todas las entradas y salidas de stock:
+    - Ingreso por compra de proveedor
+    - Salida por venta
+    - Ajuste manual (positivo o negativo)
+    """
+    MOVEMENT_TYPE_CHOICES = [
+        ('COMPRA', 'Ingreso por Compra'),
+        ('VENTA', 'Salida por Venta'),
+        ('AJUSTE_POSITIVO', 'Ajuste Positivo'),
+        ('AJUSTE_NEGATIVO', 'Ajuste Negativo'),
+        ('DEVOLUCION', 'Devolución'),
+        ('TRANSFERENCIA_IN', 'Transferencia Entrada'),
+        ('TRANSFERENCIA_OUT', 'Transferencia Salida'),
+    ]
+    
+    inventory = models.ForeignKey(
+        Inventory, 
+        on_delete=models.CASCADE, 
+        related_name='movements',
+        verbose_name='Inventario'
+    )
+    movement_type = models.CharField(
+        max_length=20, 
+        choices=MOVEMENT_TYPE_CHOICES,
+        verbose_name='Tipo de Movimiento'
+    )
+    quantity = models.IntegerField(
+        validators=[validar_cantidad_positiva],
+        verbose_name='Cantidad'
+    )
+    previous_stock = models.IntegerField(verbose_name='Stock Anterior')
+    new_stock = models.IntegerField(verbose_name='Stock Nuevo')
+    
+    # Referencias opcionales a documentos relacionados
+    purchase = models.ForeignKey(
+        'Purchase', 
+        on_delete=models.SET_NULL, 
+        null=True, 
+        blank=True,
+        related_name='inventory_movements',
+        verbose_name='Compra Relacionada'
+    )
+    sale = models.ForeignKey(
+        'Sale', 
+        on_delete=models.SET_NULL, 
+        null=True, 
+        blank=True,
+        related_name='inventory_movements',
+        verbose_name='Venta Relacionada'
+    )
+    
+    user = models.ForeignKey(
+        User, 
+        on_delete=models.SET_NULL, 
+        null=True,
+        related_name='inventory_movements',
+        verbose_name='Usuario'
+    )
+    notes = models.TextField(blank=True, verbose_name='Notas')
+    created_at = models.DateTimeField(auto_now_add=True, verbose_name='Fecha de Movimiento')
+    
+    class Meta:
+        verbose_name = 'Movimiento de Inventario'
+        verbose_name_plural = 'Movimientos de Inventario'
+        ordering = ['-created_at']
+    
+    def __str__(self):
+        return f"{self.get_movement_type_display()} - {self.inventory.product.name} ({self.quantity})"
+    
+    def save(self, *args, **kwargs):
+        """
+        Al guardar, actualiza automáticamente el stock del inventario
+        """
+        if not self.pk:  # Solo en creación
+            self.previous_stock = self.inventory.stock
+            
+            # Calcular nuevo stock según tipo de movimiento
+            if self.movement_type in ['COMPRA', 'AJUSTE_POSITIVO', 'DEVOLUCION', 'TRANSFERENCIA_IN']:
+                self.new_stock = self.previous_stock + self.quantity
+            else:  # VENTA, AJUSTE_NEGATIVO, TRANSFERENCIA_OUT
+                self.new_stock = self.previous_stock - self.quantity
+            
+            # Actualizar el inventario
+            self.inventory.stock = self.new_stock
+            self.inventory.save()
+        
+        super().save(*args, **kwargs)
+
+
 class Purchase(models.Model):
     """
     Modelo para compras a proveedores.

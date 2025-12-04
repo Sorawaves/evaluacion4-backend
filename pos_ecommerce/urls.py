@@ -9,7 +9,7 @@ from .views import (
     # ViewSets API
     CompanyViewSet, SubscriptionViewSet, UserViewSet, BranchViewSet,
     SupplierViewSet, ProductViewSet, InventoryViewSet, PurchaseViewSet,
-    SaleViewSet, OrderViewSet, CartItemViewSet, PaymentViewSet,
+    SaleViewSet, OrderViewSet, CartItemViewSet, PaymentViewSet, InventoryMovementViewSet,
     # Reportes API
     stock_report, sales_report, supplier_report,
     # Vistas de Templates
@@ -36,6 +36,7 @@ router.register(r'sales', SaleViewSet, basename='sale')
 router.register(r'orders', OrderViewSet, basename='order')
 router.register(r'cart', CartItemViewSet, basename='cart')
 router.register(r'payments', PaymentViewSet, basename='payment')
+router.register(r'inventory-movements', InventoryMovementViewSet, basename='inventory-movement')
 
 urlpatterns = [
     # ========== API Endpoints ==========

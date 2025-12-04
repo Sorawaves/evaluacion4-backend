@@ -5,7 +5,7 @@ Configura todos los modelos en el panel administrativo.
 from django.contrib import admin
 from django.contrib.auth.admin import UserAdmin as BaseUserAdmin
 from .models import (
-    Company, Subscription, User, Branch, Supplier, Product, Inventory,
+    Company, Subscription, User, Branch, Supplier, Product, Inventory, InventoryMovement,
     Purchase, PurchaseItem, Sale, SaleItem, Order, OrderItem, CartItem, Payment
 )
 
@@ -214,3 +214,21 @@ class PaymentAdmin(admin.ModelAdmin):
             return f"Orden #{obj.order.id}"
         return "N/A"
     get_related.short_description = 'Relacionado a'
+
+
+@admin.register(InventoryMovement)
+class InventoryMovementAdmin(admin.ModelAdmin):
+    """Administración de movimientos de inventario"""
+    list_display = ['id', 'get_product', 'get_branch', 'movement_type', 'quantity', 'previous_stock', 'new_stock', 'user', 'created_at']
+    list_filter = ['movement_type', 'inventory__branch', 'inventory__branch__company', 'created_at']
+    search_fields = ['inventory__product__name', 'inventory__product__sku', 'notes', 'user__username']
+    ordering = ['-created_at']
+    readonly_fields = ['previous_stock', 'new_stock', 'created_at']
+    
+    def get_product(self, obj):
+        return obj.inventory.product.name
+    get_product.short_description = 'Producto'
+    
+    def get_branch(self, obj):
+        return obj.inventory.branch.name
+    get_branch.short_description = 'Sucursal'
