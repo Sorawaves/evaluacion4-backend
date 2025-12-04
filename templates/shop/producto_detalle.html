@@ -64,8 +64,9 @@
                 </div>
             </div>
 
-            <form method="post" action="{% url 'add_to_cart' product.id %}">
+            <form method="post" action="{% url 'cart_add' %}">
                 {% csrf_token %}
+                <input type="hidden" name="product" value="{{ product.id }}">
                 <div style="margin-bottom: 1.5rem;">
                     <label class="form-label" style="font-size: 0.9rem; color: #6c757d;">Cantidad</label>
                     <input type="number" class="form-control" name="quantity" value="1" min="1" max="{{ total_stock }}" style="max-width: 150px;">
