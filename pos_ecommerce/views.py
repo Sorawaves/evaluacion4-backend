@@ -1153,11 +1153,19 @@ def process_order(request):
 def inventory_view(request):
     """Vista de inventario por sucursal"""
     if request.user.company:
-        inventory = Inventory.objects.filter(branch__company=request.user.company)
+        inventory = Inventory.objects.filter(branch__company=request.user.company).select_related('product', 'branch')
+        branches = Branch.objects.filter(company=request.user.company)
+        products = Product.objects.filter(company=request.user.company)
     else:
         inventory = Inventory.objects.none()
+        branches = Branch.objects.none()
+        products = Product.objects.none()
     
-    context = {'inventory': inventory}
+    context = {
+        'inventory': inventory,
+        'branches': branches,
+        'products': products
+    }
     return render(request, 'inventario.html', context)
 
 

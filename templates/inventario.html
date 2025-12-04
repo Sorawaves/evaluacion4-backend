@@ -65,4 +65,112 @@
         </div>
     </div>
 </div>
+
+<!-- Modal Ajustar Stock -->
+<div class="modal fade" id="addModal" tabindex="-1" aria-labelledby="addModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="addModalLabel">
+                    <i class="fas fa-boxes"></i> Ajustar Stock
+                </h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <form id="stockForm" method="post">
+                {% csrf_token %}
+                <div class="modal-body">
+                    <div class="mb-3">
+                        <label for="stockProduct" class="form-label">Producto *</label>
+                        <select class="form-select" id="stockProduct" name="product" required>
+                            <option value="">Seleccione un producto...</option>
+                            {% for item in inventory %}
+                                <option value="{{ item.product.id }}" data-branch="{{ item.branch.id }}">
+                                    {{ item.product.name }} ({{ item.branch.name }}) - Stock actual: {{ item.stock }}
+                                </option>
+                            {% endfor %}
+                        </select>
+                    </div>
+                    <div class="mb-3">
+                        <label for="stockBranch" class="form-label">Sucursal *</label>
+                        <select class="form-select" id="stockBranch" name="branch" required>
+                            <option value="">Seleccione una sucursal...</option>
+                            {% for item in inventory %}
+                                {% if forloop.first or item.branch.id != prev_branch %}
+                                    <option value="{{ item.branch.id }}">{{ item.branch.name }}</option>
+                                {% endif %}
+                                {% with item.branch.id as prev_branch %}{% endwith %}
+                            {% endfor %}
+                        </select>
+                    </div>
+                    <div class="mb-3">
+                        <label for="stockAction" class="form-label">Acción *</label>
+                        <select class="form-select" id="stockAction" name="action" required>
+                            <option value="add">➕ Agregar stock (entrada)</option>
+                            <option value="remove">➖ Quitar stock (salida)</option>
+                        </select>
+                    </div>
+                    <div class="mb-3">
+                        <label for="stockQuantity" class="form-label">Cantidad *</label>
+                        <input type="number" class="form-control" id="stockQuantity" name="quantity" min="1" placeholder="Cantidad a ajustar" required>
+                    </div>
+                    <div class="mb-3">
+                        <label for="stockNotes" class="form-label">Notas (opcional)</label>
+                        <textarea class="form-control" id="stockNotes" name="notes" rows="2" placeholder="Motivo del ajuste..."></textarea>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+                    <button type="submit" class="btn btn-primary">
+                        <i class="fas fa-check"></i> Aplicar Ajuste
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+<script>
+// Auto-seleccionar sucursal cuando se selecciona producto
+document.getElementById('stockProduct').addEventListener('change', function() {
+    const selectedOption = this.options[this.selectedIndex];
+    const branchId = selectedOption.getAttribute('data-branch');
+    if (branchId) {
+        document.getElementById('stockBranch').value = branchId;
+    }
+});
+
+document.getElementById('stockForm').addEventListener('submit', function(e) {
+    e.preventDefault();
+    
+    const formData = new FormData(this);
+    const data = {
+        branch: formData.get('branch'),
+        product: formData.get('product'),
+        quantity: parseInt(formData.get('quantity')),
+        action: formData.get('action')
+    };
+    
+    fetch('/api/inventory/adjust/', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+            'X-CSRFToken': formData.get('csrfmiddlewaretoken')
+        },
+        body: JSON.stringify(data)
+    })
+    .then(response => {
+        if (response.ok) {
+            return response.json();
+        }
+        return response.json().then(err => { throw new Error(err.error || 'Error al ajustar stock'); });
+    })
+    .then(data => {
+        alert('✅ ' + data.message);
+        location.reload();
+    })
+    .catch(error => {
+        alert('❌ Error: ' + error.message);
+    });
+});
+</script>
 {% endblock %}

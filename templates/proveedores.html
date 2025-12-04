@@ -72,4 +72,91 @@
         </div>
     </div>
 </div>
+
+<!-- Modal Nuevo Proveedor -->
+<div class="modal fade" id="addSupplierModal" tabindex="-1" aria-labelledby="addSupplierModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="addSupplierModalLabel">
+                    <i class="fas fa-plus"></i> Nuevo Proveedor
+                </h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <form id="supplierForm" method="post">
+                {% csrf_token %}
+                <div class="modal-body">
+                    <div class="mb-3">
+                        <label for="supplierRut" class="form-label">RUT *</label>
+                        <input type="text" class="form-control" id="supplierRut" name="rut" placeholder="12.345.678-9" required>
+                    </div>
+                    <div class="mb-3">
+                        <label for="supplierName" class="form-label">Nombre/Razón Social *</label>
+                        <input type="text" class="form-control" id="supplierName" name="name" placeholder="Nombre del proveedor" required>
+                    </div>
+                    <div class="mb-3">
+                        <label for="supplierContact" class="form-label">Nombre de Contacto</label>
+                        <input type="text" class="form-control" id="supplierContact" name="contact_name" placeholder="Persona de contacto">
+                    </div>
+                    <div class="mb-3">
+                        <label for="supplierEmail" class="form-label">Correo Electrónico</label>
+                        <input type="email" class="form-control" id="supplierEmail" name="email" placeholder="correo@ejemplo.com">
+                    </div>
+                    <div class="mb-3">
+                        <label for="supplierPhone" class="form-label">Teléfono</label>
+                        <input type="text" class="form-control" id="supplierPhone" name="phone" placeholder="+56 9 1234 5678">
+                    </div>
+                    <div class="mb-3">
+                        <label for="supplierAddress" class="form-label">Dirección</label>
+                        <textarea class="form-control" id="supplierAddress" name="address" rows="2" placeholder="Dirección del proveedor"></textarea>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+                    <button type="submit" class="btn btn-primary">
+                        <i class="fas fa-save"></i> Guardar Proveedor
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+<script>
+document.getElementById('supplierForm').addEventListener('submit', function(e) {
+    e.preventDefault();
+    
+    const formData = new FormData(this);
+    const data = {
+        rut: formData.get('rut'),
+        name: formData.get('name'),
+        contact_name: formData.get('contact_name'),
+        email: formData.get('email'),
+        phone: formData.get('phone'),
+        address: formData.get('address')
+    };
+    
+    fetch('/api/suppliers/', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+            'X-CSRFToken': formData.get('csrfmiddlewaretoken')
+        },
+        body: JSON.stringify(data)
+    })
+    .then(response => {
+        if (response.ok) {
+            return response.json();
+        }
+        throw new Error('Error al crear proveedor');
+    })
+    .then(data => {
+        alert('✅ Proveedor creado exitosamente');
+        location.reload();
+    })
+    .catch(error => {
+        alert('❌ Error: ' + error.message);
+    });
+});
+</script>
 {% endblock %}
